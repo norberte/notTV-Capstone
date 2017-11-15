@@ -1,0 +1,106 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tv.not.mediabox</groupId>
+  <artifactId>mediabox</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <!-- Descriptions -->
+  <name>notTV MediaBox</name>
+  <description>notTV's Filesharing System and MediaBox app.</description>
+  <url>https://github.com/norberte/notTV-Capstone</url>
+
+  <!-- Developers (optional) -->
+  <developers>
+    <developer>
+      <id>levimiller</id>
+      <name>Levi Miller</name>
+      <email>levi@levimiller.ca</email>
+      <roles>
+	<role>Technical Lead</role>
+      </roles>
+    </developer>
+    <!-- I'm not doing this, insert yourself lol. -->
+  </developers>
+
+  <!-- Licences (Only apache because of bt) -->
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>https://github.com/norberte/notTV-Capstone/blob/master/LICENSE</url> <!-- update license to be Apache -->
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <!-- Dependencies -->
+  <dependencies>
+    <!-- BT Dependencies -->
+    <dependency>
+      <groupId>com.github.atomashpolskiy</groupId>
+      <artifactId>bt-core</artifactId>
+      <version>${bt-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.atomashpolskiy</groupId>
+      <artifactId>bt-dht</artifactId>
+      <version>${bt-version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Ensure that the Java Cryptography Extension is installed (required for keys > 128 bits) -->
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-enforcer-plugin</artifactId>
+	<version>1.1.1</version>
+	<executions>
+	  <execution>
+	    <id>enforce</id>
+	    <configuration>
+	      <rules>
+		<evaluateBeanshell>
+		  <condition>javax.crypto.Cipher.getMaxAllowedKeyLength("AES")>128</condition>
+		</evaluateBeanshell>
+	      </rules>
+	    </configuration>
+	    <goals>
+	      <goal>enforce</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+
+      <!-- Build plugin -->
+      <plugin>
+	<artifactID>maven-assembly-plugin</artifactID>
+	<configuration>
+	  <!-- Specify once the main class is known (do we even need one? Needed for the jar to be executable.) -->
+	  <!-- <archive> --> 
+	  <!--   <manifest> -->
+	  <!--     <mainClass>ca.levimiller.JVP.App</mainClass> -->
+	  <!--   </manifest> -->
+	  <!-- </archive> -->
+	  <descriptorRefs>
+	    <descriptorRef>jar-with-dependencies</descriptorRef>
+	  </descriptorRefs>
+	</configuration>
+	<executions>
+	  <execution>
+	    <id>make-assembly</id>
+	    <phase>package</phase>
+	    <goals>
+	      <goal>single</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
