@@ -36,6 +36,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bt-version>1.5</bt-version>
   </properties>
   
   <!-- Dependencies -->
@@ -79,7 +80,7 @@
 
       <!-- Build plugin -->
       <plugin>
-	<artifactID>maven-assembly-plugin</artifactID>
+	<artifactId>maven-assembly-plugin</artifactId>
 	<configuration>
 	  <!-- Specify once the main class is known (do we even need one? Needed for the jar to be executable.) -->
 	  <!-- <archive> --> 
