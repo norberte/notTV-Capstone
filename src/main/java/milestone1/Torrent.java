@@ -1,4 +1,4 @@
-package peertracker;
+package milestone1;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -92,7 +92,7 @@ public class Torrent {
     }
 
     public static void main(String[] args) throws Exception {
-        createTorrent(new File("/home/norbert/b.torrent"), new File("/home/norbert/Alan Walker - The Spectre.mp4"), "udp://tracker.openbittorrent.com:80/announce");
+        createTorrent(new File("/home/norbert/alanWalker.torrent"), new File("/home/norbert/Alan Walker - The Spectre.mp4"), "udp://tracker.leechers-paradise.org:6969/announce");
         
     }
 }

@@ -1,22 +1,32 @@
+package milestone1;
+
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
+
+import bt.Bt;
+import bt.data.Storage;
+import bt.data.file.FileSystemStorage;
+import bt.runtime.BtClient;
+import bt.runtime.BtRuntime;
 
 public class download {
 
 	public static void main(String[] args) {
-		Storage storage = new FileSystemStorage(/* target directory */);
+		// get download directory
+		Path targetDirectory = new File("/home/norbert/Downloads").toPath();
+		Storage storage = new FileSystemStorage(targetDirectory);
 
 		BtClient client = Bt.client().storage(storage).torrent(/* torrent source */).build();
 
 		client.startAsync().join();
 
-		Storage storage = new FileSystemStorage(/* target directory */);
-
 		BtRuntime sharedRuntime = BtRuntime.defaultRuntime();
 
-		URL url1 = /* torrent file URL #1 */,
-		    url2 = /* torrent file URL #2 */;
+		URL url1 = /* torrent file URL #1 */;
 
 		BtClient client1 = Bt.client(sharedRuntime).storage(storage).torrent(/* torrent source #1 */).build();
-		BtClient client2 = Bt.client(sharedRuntime).storage(storage).torrent(/* torrent source #2 */).build();
 
 		// wait until both clients have finished
 		CompletableFuture.allOf(client1.startAsync(), client2.startAsync()).join();
