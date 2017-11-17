@@ -1,21 +1,20 @@
 package filesharing;
 
 import java.net.InetAddress;
-
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
-import bt.Bt;
 import bt.dht.DHTConfig;
 import bt.dht.DHTModule;
 import bt.dht.MldhtService;
 import bt.net.InetPeer;
 import bt.net.Peer;
-import bt.runtime.BtClient;
 import bt.runtime.Config;
-import bt.service.IRuntimeLifecycleBinder;
 import bt.service.RuntimeLifecycleBinder;
 import lbms.plugins.mldht.DHTConfiguration;
+import bt.magnet.MagnetUri;
+import bt.magnet.MagnetUri.Builder;
+import bt.metainfo.TorrentId;
 
 public class upload {
 	public static void main(String[] args) {
@@ -45,7 +44,11 @@ public class upload {
 		service.addNode((Peer) new InetPeer(localAddress, localPort));
 		
 		
-
+		
+		
+		TorrentId tid = null;
+        Builder mlBuider = new MagnetUri.Builder(tid);
+        MagnetUri newMagnet = mlBuider.buildUri();
 	}
 
 }
