@@ -1,4 +1,4 @@
-package milestone1;
+package filesharing;
 
 import java.io.File;
 import java.net.URL;

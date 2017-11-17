@@ -1,4 +1,4 @@
-package milestone1;
+package filesharing;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
