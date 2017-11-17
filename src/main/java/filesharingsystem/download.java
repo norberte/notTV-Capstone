@@ -1,4 +1,4 @@
-package filesharing;
+package filesharingsystem;
 
 import java.io.File;
 import java.net.URL;
@@ -18,17 +18,17 @@ public class download {
 		Path targetDirectory = new File("/home/norbert/Downloads").toPath();
 		Storage storage = new FileSystemStorage(targetDirectory);
 
-		BtClient client = Bt.client().storage(storage).torrent(/* torrent source */).build();
+		// BtClient client = Bt.client().storage(storage).torrent(/* torrent source */).build();
 
-		client.startAsync().join();
+		// client.startAsync().join();
 
-		BtRuntime sharedRuntime = BtRuntime.defaultRuntime();
+		// BtRuntime sharedRuntime = BtRuntime.defaultRuntime();
 
-		URL url1 = /* torrent file URL #1 */;
+		// URL url1 = /* torrent file URL #1 */;
 
-		BtClient client1 = Bt.client(sharedRuntime).storage(storage).torrent(/* torrent source #1 */).build();
+		// BtClient client1 = Bt.client(sharedRuntime).storage(storage).torrent(/* torrent source #1 */).build();
 
 		// wait until both clients have finished
-		CompletableFuture.allOf(client1.startAsync(), client2.startAsync()).join();
+		// CompletableFuture.allOf(client1.startAsync(), client2.startAsync()).join();
 	}
 }

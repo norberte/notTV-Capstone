@@ -1,4 +1,4 @@
-package filesharing;
+package filesharingsystem;
 
 import bt.Bt;
 import bt.data.Storage;

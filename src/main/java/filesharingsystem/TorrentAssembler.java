@@ -1,80 +1,70 @@
-package filesharing;
-import java.io.File;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+package filesharingsystem;
 
-import javax.crypto.Mac;
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 import bt.metainfo.Torrent;
-import bt.bencoding.model.BEObject;
-
 
 /**
+ * TorrentAssemblers are responsible for creating Torrent objects from a given collection of files.
  *
- *
+ * @author Levi Miller
  * @author
+ * @version
  */
-class TorrentAssembler {
+interface TorrentAssembler {
+    /**
+     * Represents a single node in the bittorrent network.
+     * E.g., the seeders or peers of the torrent.
+     */
+    static class Node {
+	private String host;
+	private int port;
+
+	public Node(String host, int port) {
+	    this.host = host;
+	    this.port = port;
+	}
+
+	public String getHost() {
+	    return host;
+	}
+
+	public int getPort() {
+	    return port;
+	}
+    }
+
     /**
      * Creates a Torrent object from the collection of files.
-     * 
+     *
+     * @param nodes
+     *            - nodes used to join the network. Should be set to the K closest
+     *            nodes in the torrent generating client's routing table.<br>
+     *            Alternatively, the key could be set to a known good node such as
+     *            one operated by the person generating the torrent.
      * @param files
+     *            - files in the torrent. 
+     *            List instead of Collection because files needs to be ordered, 
+     *            since the files need to be hashed in the order they appear in the info Dict.
+     * @param dirname
+     *            - the suggested directory name if there are multiple files
+     *            (ignored if only one file).
      * @return
-    */
-    public static Torrent makeTorrent(Collection<File> files) {
-	if(files.size() < 1)
-	    throw new IllegalArgumentException("Must supply at least one file."));
-	Map<String, BEObject<?>> torrent = new HashMap<>();
+     */
+    Torrent makeTorrent(Collection<Node> nodes, List<File> files, String dirname);
 
-	// The key could be set to a known good node such as one operated by the person generating the torrent.
-	List<BEList<BEObject<?>>> nodes = new ArrayList<>();
-
-        // Get info dict for file(s).
-        Map<String, BEObject<?>> info = files.size() > 1 ? multiFileInfoDict(files) : singleFileInfoDict(files.iterator().next());
-
-        // number of bytes per piece. This is commonly 28 KiB = 256 KiB = 262,144 B.
-        info.put("piece length", new BEInteger(null, BigInteger.valueOf(262144)))
-
-	// a hash list, i.e., a concatenation of each piece's SHA-1 hash. As SHA-1 returns a 160-bit hash,
-        // pieces will be a string whose length is a multiple of 160-bits. If the torrent contains multiple files,
-        // the pieces are formed by concatenating the files in the order they appear in the files dictionary
-        // (i.e. all pieces in the torrent are the full piece length except for the last piece, which may be shorter).
-	info.put("pieces", getHash(files));
-    }
-    
     /**
      * Creates a Torrent object from a single file.
      *
-     * @param file
+     * @param nodes 
+     *            - nodes used to join the network. <br>
+     *            Should be set to the K closest nodes in the torrent generating 
+     *            client's routing table.<br> Alternatively, the key could be set 
+     *            to a known good node such as one operated by the person generating the torrent.   
+     * @param file - the file downloaded by the torrent.
      * @return
      */
-    public static Torrent makeTorrent(File file) {
-
-    }
-
-    private BEString getHash(Collection<File> files) {
-    }
-
-    private static Map<String, BEObject<?>> singleFileInfoDict(File file) {
-	Map<String, BEObject<?>> info = new HashMap<>();
-	info.put("name", file.getName());
-	// size of the file in bytes (only when one file is being shared)
-	info.put("length", new BEInteger(null, BigInteger.valueOf(file.length()));
-    }
-
-    private static Map<String, BEObject<?>> multiFileInfoDict(Collection<File> files) {
-	// Create description of the torrent content. 
-	Map<String, BEObject<?>> info = new HashMap<>();
-	info.put("files", files.stream().map((File f) -> {
-	    Map<String, BEObject<?>> h = new HashMap<>();
-	    h.put("length", new BEInteger(null, BigInteger.valueOf(f.length())));
-	    h.put("path", new BEString(f.getAbsolutePath().getBytes()));
-	    return h;
-	}).collect(Collectors.toList()));
-    }
+     Torrent makeTorrent(Collection<Node> nodes, File file);
 }

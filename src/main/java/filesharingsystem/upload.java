@@ -1,4 +1,4 @@
-package filesharing;
+package filesharingsystem;
 
 import java.net.InetAddress;
 import com.google.inject.Binder;
