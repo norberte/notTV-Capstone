@@ -49,6 +49,8 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	    throw new IllegalArgumentException("Must supply at least one file.");
 
 	Map<String, BEObject<?>> torrent = new HashMap<>();
+	// Required for mdService.
+	torrent.put("announce", new BEString("".getBytes()));
 	// Private?
 	torrent.put("private", new BEInteger(null, BigInteger.valueOf(1)));
 	// The key could be set to a known good node such as one operated by the person generating the torrent.
@@ -72,6 +74,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	// (i.e. all pieces in the torrent are the full piece length except for the last piece, which may be shorter).
 	info.put("pieces", getHash(files));
 
+	torrent.put("info", new BEMap(null, info));
 	// Write the torrent Dict to a byte array.
 	ByteArrayOutputStream torrentBytes = new ByteArrayOutputStream();
 	try {
