@@ -51,9 +51,11 @@ interface TorrentAssembler {
      * @param dirname
      *            - the suggested directory name if there are multiple files
      *            (ignored if only one file).
+     * @param savedTorrentFile
+     *            - saves the Torrent file to this path 
      * @return
      */
-    Torrent makeTorrent(Collection<Node> nodes, List<File> files, String dirname);
+    Torrent makeTorrent(Collection<Node> nodes, List<File> files, String dirname, String savedTorrentFile);
 
     /**
      * Creates a Torrent object from a single file.
@@ -64,7 +66,9 @@ interface TorrentAssembler {
      *            client's routing table.<br> Alternatively, the key could be set 
      *            to a known good node such as one operated by the person generating the torrent.   
      * @param file - the file downloaded by the torrent.
+     * @param savedTorrentFile
+     *            - saves the Torrent file to this path 
      * @return
      */
-     Torrent makeTorrent(Collection<Node> nodes, File file);
+     Torrent makeTorrent(Collection<Node> nodes, File file, String savedTorrentFile);
 }

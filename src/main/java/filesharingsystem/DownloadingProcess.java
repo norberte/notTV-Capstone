@@ -5,18 +5,18 @@ import bt.data.Storage;
 import bt.data.file.FileSystemStorage;
 import bt.dht.DHTConfig;
 import bt.dht.DHTModule;
+import bt.magnet.MagnetUri;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
 import com.google.inject.Module;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
 
 
 public class DownloadingProcess {	
 	
-	public void downloadFiles(String magnetUri, String downloadDirectory) {
+	public static void downloadFiles(MagnetUri magnetUri, String downloadDirectory) {
 		// enable multi-threaded verification of torrent data
 		Config config = new Config() {
 			@Override
