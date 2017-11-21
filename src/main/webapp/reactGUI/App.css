@@ -18,9 +18,14 @@
 .App-video {
   text-align: left;
   background-color: #CCC;
-  width: 10%;
+  width: 25%;
   padding-top: 1em;
   padding-bottom: 1em;
+  list-style-type: none;
+}
+
+li:hover{
+  background-color: #DDD
 }
 
 /* This is commented out because I was jsut trying things

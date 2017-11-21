@@ -16,8 +16,10 @@
     </div>
     <script type="text/jsx">
         class ListItem extends React.Component {
+          //I was thinking I would get an id for a video and launch the web player and give the web player the id to play the video
+          //var videoId = Do something to have an ID for a video. Probably Database ID.
             render() {
-                return <li>{this.props.value}</li>
+                return <li className="App-video"><a href="webPlayer?id=JUNK"/*videoId*/>{this.props.value}</a></li>
             }
         }
 
@@ -44,10 +46,13 @@
                     <header className="App-header">
                       <img className="App-logo" src="notTV_logo_white.png" alt="notTV"/>
                       <h1>Torrent Prototype</h1>
+                      <input type="text" onChange={this.textChange}></input>
+
                     </header>
                     <div>
-                        <input type="text" onChange={this.textChange}></input>
-                        <ul className="App-video">
+                    <p> This is a test. Milestone 1 Peer-to-peer filesharing system using torrent protocol implemented in Java.</p>
+
+                        <ul>
                         {
                             this.state.filteredList.map((item, key) => {
                                 return (
@@ -64,7 +69,7 @@
         }
 
         const List = [
-            "Alpha", "Beta", "Gamma", "Delta"
+            "A Neat Video", "Title of Title Thing and Junk", "Blah and Also Blah", "More Junk and Things"
         ];
 
         ReactDOM.render(
