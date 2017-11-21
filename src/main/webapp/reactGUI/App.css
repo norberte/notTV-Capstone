@@ -16,14 +16,11 @@
 }
 
 .App-video {
+  text-align: left;
   background-color: #CCC;
-  height: 10em;
-  width: 15%;
-  margin-top: 1em;
-  margin-left: 1em;
-  color: black;
-  border-style: dashed;
-  float: left;
+  width: 10%;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 /* This is commented out because I was jsut trying things
