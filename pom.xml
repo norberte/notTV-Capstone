@@ -63,27 +63,27 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-  
-	<dependency>
-	   <groupId>org.slf4j</groupId>
-	   <artifactId>slf4j-simple</artifactId>
-	   <version>1.6.6</version>
-	   <scope>compile</scope>
-	</dependency>
-	
-	<dependency>
-	   <groupId>org.slf4j</groupId>
-	   <artifactId>slf4j-log4j12</artifactId>
-	   <version>1.6.6</version>
-	   <scope>compile</scope>
-	</dependency>
-	
-	<dependency>
-	   <groupId>org.slf4j</groupId>
-	   <artifactId>slf4j-jdk14</artifactId>
-	   <version>1.6.6</version>
-	   <scope>compile</scope>
-	</dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.6.6</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.6.6</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>1.6.6</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -117,7 +117,7 @@
 	  <!-- Specify once the main class is known (do we even need one? Needed for the jar to be executable.) -->
 	  <archive> 
 	    <manifest>
-	      <mainClass>main.java.filesharingsystem.UploadingProcess</mainClass>
+	      <mainClass>filesharingsystem.UploadingProcess</mainClass>
 	    </manifest>
 	  </archive>
 	  <descriptorRefs>
@@ -137,22 +137,22 @@
     </plugins>
   </build>
   <dependencyManagement>
-  	<dependencies>
-  		<dependency>
-  			<groupId>org.slf4j</groupId>
-  			<artifactId>slf4j-simple</artifactId>
-  			<version></version>
-  		</dependency>
-  		<dependency>
-  			<groupId>org.slf4j</groupId>
-  			<artifactId>slf4j-log4j12</artifactId>
-  			<version></version>
-  		</dependency>
-  		<dependency>
-  			<groupId>org.slf4j</groupId>
-  			<artifactId>slf4j-jdk14</artifactId>
-  			<version></version>
-  		</dependency>
-  	</dependencies>
+    <dependencies>
+      <dependency>
+  	<groupId>org.slf4j</groupId>
+  	<artifactId>slf4j-simple</artifactId>
+  	<version></version>
+      </dependency>
+      <dependency>
+  	<groupId>org.slf4j</groupId>
+  	<artifactId>slf4j-log4j12</artifactId>
+  	<version></version>
+      </dependency>
+      <dependency>
+  	<groupId>org.slf4j</groupId>
+  	<artifactId>slf4j-jdk14</artifactId>
+  	<version></version>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
 </project>

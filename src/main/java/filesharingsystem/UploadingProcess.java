@@ -1,8 +1,13 @@
 package filesharingsystem;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import com.google.inject.Module;
 
@@ -37,9 +42,19 @@ public class UploadingProcess {
 	Node us = new Node(args[0], Integer.parseInt(args[1]));
 	
 	// create file system based backend for torrent data
-	Storage storage = new FileSystemStorage(new File("~/").toPath());
-	File file1 = new File("file1.txt");
-	    
+	Storage storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
+
+	// BS temporary code to read the damn resource file.
+	InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream("cat.txt");
+	Scanner scan = new Scanner(in);
+	File file1 = new File(System.clearProperty("user.home"), "cat.txt");
+	try(FileWriter out = new FileWriter(file1)) {
+	    while (scan.hasNextLine())
+		out.write(scan.nextLine() + "\n");
+	    scan.close();
+	} catch(IOException e) {
+	    e.printStackTrace();
+	}
 	   
 	TorrentAssembler ta = new DefaultTorrentAssembler();
 	File torr = ta.makeTorrent(Arrays.asList(us), file1);
@@ -55,7 +70,7 @@ public class UploadingProcess {
 		    // get Torrent ID from torrent file
 		    Builder mlBuider = new MagnetUri.Builder(t.getTorrentId());
 		    MagnetUri newMagnet = mlBuider.buildUri();
-		    System.out.println(newMagnet);
+		    System.out.println("********** " + newMagnet);
 		    // String badMagnetLink = "magnet:?" + newMagnet.getTorrentId() + "&" + newMagnet.getDisplayName() +
 		    // "&" + newMagnet.getTrackerUrls() + "&" + newMagnet.getPeerAddresses();
 		}).build();

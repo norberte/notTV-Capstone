@@ -37,11 +37,13 @@ import bt.bencoding.model.BEString;
 class DefaultTorrentAssembler implements TorrentAssembler {
     private static Logger log = LoggerFactory.getLogger(TorrentAssembler.class);
     private static final Charset defaultCharset = Charset.forName("UTF-8");
-    private static final File torrentDir = new File("/usr/share");
+    private static final File torrentDir = new File(System.getProperty("user.home"), "torrents");
     private final int pieceLength;
 
     DefaultTorrentAssembler() {
 	pieceLength = 262144;
+	if(!torrentDir.isDirectory())
+	    torrentDir.mkdirs();
     }
 
     public File makeTorrent(Collection<Node> nodes, List<File> files, String dirname) {
