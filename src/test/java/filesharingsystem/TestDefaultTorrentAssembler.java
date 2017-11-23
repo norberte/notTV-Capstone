@@ -19,6 +19,8 @@ public class TestDefaultTorrentAssembler {
     public void testSingleFileTorrentAssembler() {
 	// TorrentAssembler ta = new DefaultTorrentAssembler();
 	// Torrent torr = ta.makeTorrent(Arrays.asList(peer1), file1);
+	TorrentAssembler ta = new DefaultTorrentAssembler();
+	File torr = ta.makeTorrent(Arrays.asList(peer1), file1);
 	//Testing stuff, I'm done for tonight lol.
 	Assert.assertTrue(true);
     }

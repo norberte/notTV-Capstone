@@ -43,7 +43,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
     DefaultTorrentAssembler() {
 	pieceLength = 262144;
     }
-    
+
     public File makeTorrent(Collection<Node> nodes, List<File> files, String dirname) {
 	if(files.size() < 1) 
 	    throw new IllegalArgumentException("Must supply at least one file.");
@@ -64,7 +64,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 
 	// Get info dict for file(s).
 	Map<String, BEObject<?>> info = files.size() > 1 ? multiFileInfoDict(files, dirname) : singleFileInfoDict(files.iterator().next());
-	
+
 	// number of bytes per piece. This is commonly 28 KiB = 256 KiB = 262,144 B.
 	info.put("piece length", new BEInteger(null, BigInteger.valueOf(pieceLength)));
 
@@ -76,25 +76,25 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	info.put("pieces", hash);
 
 	torrent.put("info", new BEMap(null, info));
-
+	
 	// Write torrent to file.
-	File outFile = new File(torrentDir, hash.getValue(defaultCharset) + ".torrent");
+	File outFile = new File(torrentDir, Math.abs(hash.hashCode()) + ".torrent");
 	try(OutputStream out = new FileOutputStream(outFile)) {
 	    new BEMap(null, torrent).writeTo(out);
 	} catch (IOException e) {
 	    log.error("Unable to create", e);
 	}
-	
+
 	log.info(String.format("Created torrent file: %s", torrent.toString()));
 	return outFile;
     }
-    
+
     public File makeTorrent(Collection<Node> nodes, File file) {
 	// Kind of hacky, but reduces code redundancy.
 	return makeTorrent(nodes, Arrays.asList(file), null);
     }
 
-    
+
     /**
      * Hashes all of the pieces of all of the files.
      *
@@ -103,12 +103,12 @@ class DefaultTorrentAssembler implements TorrentAssembler {
      */
     private BEString getHash(Collection<File> files) {	
 	MessageDigest sha1;
-        try {
-            sha1 = MessageDigest.getInstance("SHA");
-        } catch (NoSuchAlgorithmException e) {
+	try {
+	    sha1 = MessageDigest.getInstance("SHA");
+	} catch (NoSuchAlgorithmException e) {
 	    log.error("SHA1 not supported");
 	    return new BEString("".getBytes());
-        }
+	}
 
 	try {
 	    ByteArrayOutputStream hash = new ByteArrayOutputStream();
@@ -181,7 +181,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	    m.put("path", new BEList(null, path));
 	    return new BEMap(null, m);
 	}).collect(Collectors.toList())));
-	
+
 	// suggested directory name where the files are to be saved (if multiple files)
 	info.put("name", new BEString(dirname.getBytes()));
 	log.debug(String.format("Created multi-file info dict: %s", info.toString()));
