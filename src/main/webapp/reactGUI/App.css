@@ -23,9 +23,19 @@
   padding-bottom: 1em;
   list-style-type: none;
 }
+li {
+  margin: 1em;
+  padding: 1em;
+  float: left;
+}
 
 li:hover{
   background-color: #DDD
+}
+
+input {
+  background-color: #BBB;
+  width: 25%;
 }
 
 /* This is commented out because I was jsut trying things

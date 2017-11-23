@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="App.css">
 </head>
 
@@ -19,7 +20,7 @@
           //I was thinking I would get an id for a video and launch the web player and give the web player the id to play the video
           //var videoId = Do something to have an ID for a video. Probably Database ID.
             render() {
-                return <li className="App-video"><a href="webPlayer?id=JUNK"/*videoId*/>{this.props.value}</a></li>
+                return <li className="App-video"><a href="/webPlayer.jsp?id=JUNK"/*videoId*/>{this.props.value}</a></li>
             }
         }
 
@@ -46,11 +47,18 @@
                     <header className="App-header">
                       <img className="App-logo" src="notTV_logo_white.png" alt="notTV"/>
                       <h1>Torrent Prototype</h1>
-                      <input type="text" onChange={this.textChange}></input>
-
                     </header>
+
                     <div>
                     <p> This is a test. Milestone 1 Peer-to-peer filesharing system using torrent protocol implemented in Java.</p>
+                    <p>Refine Search for a Video: (WIP)</p>
+                    <input type="text" onChange={this.textChange}></input>
+
+                    <form action="/webPlayer.jsp?id=JUNK">
+                      <p> Or, Enter a magnet link directly to download a video </p>
+                      <input type="text" className="magnetLink"></input>
+                      <input type="submit" value="Submit Magnet Link"></input>
+                    </form>
 
                         <ul>
                         {
@@ -69,7 +77,9 @@
         }
 
         const List = [
-            "A Neat Video", "Title of Title Thing and Junk", "Blah and Also Blah", "More Junk and Things"
+            "A Neat Video", "Title of Title Thing and Junk", "Blah and Also Blah", "More Junk and Things", "Bleh Blah Junk"
+            ,"Something that happens to be a really long example that is super stupid please don't.", "More Things"
+            ,"A", "!@#$%^&*()_+~", "Norbert", "Levi", "Nick", "Daniel", "Levi is short", "Levi the Linux Guy"
         ];
 
         ReactDOM.render(
