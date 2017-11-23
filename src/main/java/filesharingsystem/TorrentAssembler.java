@@ -55,7 +55,7 @@ interface TorrentAssembler {
      *            - saves the Torrent file to this path 
      * @return
      */
-    Torrent makeTorrent(Collection<Node> nodes, List<File> files, String dirname, String savedTorrentFile);
+    File makeTorrent(Collection<Node> nodes, List<File> files, String dirname);
 
     /**
      * Creates a Torrent object from a single file.
@@ -70,5 +70,5 @@ interface TorrentAssembler {
      *            - saves the Torrent file to this path 
      * @return
      */
-     Torrent makeTorrent(Collection<Node> nodes, File file, String savedTorrentFile);
+     File makeTorrent(Collection<Node> nodes, File file);
 }
