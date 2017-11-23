@@ -40,19 +40,18 @@ public class DownloadingProcess {
 		Storage storage = new FileSystemStorage(targetDirectory);
 
 		// create client with a private runtime
-		BtClient client = Bt.client()
+		BtClient client1 = Bt.client()
 				 .config(config)
 				 .storage(storage)
 				 .magnet(magnetUri)
 				 .autoLoadModules()
 				 .module(dhtModule)
-				 .stopWhenDownloaded()
 				 .build();
 
 		// launch
-		client.startAsync(state -> {
+		client1.startAsync(state -> {
 			if(state.getPiecesRemaining() == 0) {
-				client.stop();
+				client1.stop();
 			}
 		}, 1000).join();
 	}
