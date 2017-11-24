@@ -39,52 +39,50 @@
 
   <build>
     <plugins>
-      <!-- Uploader Build plugin -->
       <plugin>
 	<artifactId>maven-assembly-plugin</artifactId>
-	<configuration>
-	  <archive> 
-	    <manifest>
-	      <mainClass>filesharingsystem.UploadingProcess</mainClass>
-	    </manifest>
-	  </archive>
-	  <descriptorRefs>
-	    <descriptorRef>jar-with-dependencies</descriptorRef>
-	  </descriptorRefs>
-	</configuration>
 	<executions>
+	  <!-- Uploader Build plugin -->
 	  <execution>
-	    <id>make-assembly</id>
+	    <id>Upload</id>
+	    <configuration>
+	      <archive> 
+		<manifest>
+		  <mainClass>filesharingsystem.UploadingProcess</mainClass>
+		</manifest>
+	      </archive>
+	      <descriptorRefs>
+		<descriptorRef>jar-with-dependencies</descriptorRef>
+	      </descriptorRefs>
+	      <finalName>Upload</finalName>
+	    </configuration>
 	    <phase>package</phase>
-	    <goals>
-	      <goal>single</goal>
-	    </goals>
+      	    <goals>
+      	      <goal>single</goal>
+      	    </goals>
+	  </execution>
+	  
+	  <!-- Downloader Build plugin -->
+	  <execution>
+	    <id>Download</id>
+	    <configuration>
+	      <archive> 
+		<manifest>
+		  <mainClass>filesharingsystem.DownloadingProcess</mainClass>
+		</manifest>
+	      </archive>
+	      <descriptorRefs>
+		<descriptorRef>jar-with-dependencies</descriptorRef>
+	      </descriptorRefs>
+	      <finalName>Download</finalName>
+	    </configuration>
+	    <phase>package</phase>
+      	    <goals>
+      	      <goal>single</goal>
+      	    </goals>
 	  </execution>
 	</executions>
       </plugin>
-      <!-- Downloader Build plugin -->
-      <!-- <plugin> -->
-      <!-- 	<artifactId>maven-assembly-plugin</artifactId> -->
-      <!-- 	<configuration> -->
-      <!-- 	  <archive>  -->
-      <!-- 	    <manifest> -->
-      <!-- 	      <mainClass>filesharingsystem.DownloadProcess</mainClass> -->
-      <!-- 	    </manifest> -->
-      <!-- 	  </archive> -->
-      <!-- 	  <descriptorRefs> -->
-      <!-- 	    <descriptorRef>downloader</descriptorRef> -->
-      <!-- 	  </descriptorRefs> -->
-      <!-- 	</configuration> -->
-      <!-- 	<executions> -->
-      <!-- 	  <execution> -->
-      <!-- 	    <id>make-assembly</id> -->
-      <!-- 	    <phase>package</phase> -->
-      <!-- 	    <goals> -->
-      <!-- 	      <goal>single</goal> -->
-      <!-- 	    </goals> -->
-      <!-- 	  </execution> -->
-      <!-- 	</executions> -->
-      <!-- </plugin> -->
     </plugins>
   </build>
 </project>
