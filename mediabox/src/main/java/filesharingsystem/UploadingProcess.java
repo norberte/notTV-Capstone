@@ -22,7 +22,6 @@ import bt.metainfo.Torrent;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
 
-import filesharingsystem.TorrentAssembler.Node;
 
 public class UploadingProcess {
     public static void main(String[] args) {
@@ -38,8 +37,6 @@ public class UploadingProcess {
 		return true;
 	    }
 	});
-
-	Node us = new Node(args[0], Integer.parseInt(args[1]));
 	
 	// create file system based backend for torrent data
 	Storage storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
@@ -57,7 +54,7 @@ public class UploadingProcess {
 	}
 	   
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(Arrays.asList(us), file1);
+	File torr = ta.makeTorrent(file1);
         
         // create client with a private runtime
 	try {

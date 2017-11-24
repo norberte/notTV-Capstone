@@ -1,4 +1,5 @@
 package filesharingsystem;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -39,31 +42,34 @@ class DefaultTorrentAssembler implements TorrentAssembler {
     private static final Charset defaultCharset = Charset.forName("UTF-8");
     private static final File torrentDir = new File(System.getProperty("user.home"), "torrents");
     private final int pieceLength;
-
+    private final String announce;
+    
     DefaultTorrentAssembler() {
 	pieceLength = 262144;
+	// Fine for default assembler to hardcode tracker.
+	// If other trackers become available in the future, just implement TorrentAssembler.
+	URL ann = null;
+	try {
+	    ann = new URL("http", "35.160.102.229", 2357, "announce");
+	} catch (MalformedURLException e) {
+	    log.error("Shouldn't ever happen, this is hardcoded.", e);
+	    e.printStackTrace();
+	} // http://35.160.102.229:2357/announce
+	announce = ann.toString();
 	if(!torrentDir.isDirectory())
 	    torrentDir.mkdirs();
     }
 
-    public File makeTorrent(Collection<Node> nodes, List<File> files, String dirname) {
+    public File makeTorrent(List<File> files, String dirname) {
 	if(files.size() < 1) 
 	    throw new IllegalArgumentException("Must supply at least one file.");
 
 	Map<String, BEObject<?>> torrent = new HashMap<>();
 	// Required for mdService.
-	torrent.put("announce", new BEString("".getBytes()));
+	torrent.put("announce", new BEString(announce.getBytes()));
 	// Private?
 	torrent.put("private", new BEInteger(null, BigInteger.valueOf(1)));
-	// The key could be set to a known good node such as one operated by the person generating the torrent.
-	// 'nodes': [["<host>", <port>]], [["<host>", <port>], ...]
-	torrent.put("nodes", new BEList(null, nodes.stream().map((Node n) ->
-	new BEList(null, Arrays.asList(
-	    new BEString(n.getHost().getBytes()),
-	    new BEInteger(null, BigInteger.valueOf(n.getPort())))
-	)
-	).collect(Collectors.toList())));
-
+	
 	// Get info dict for file(s).
 	Map<String, BEObject<?>> info = files.size() > 1 ? multiFileInfoDict(files, dirname) : singleFileInfoDict(files.iterator().next());
 
@@ -91,9 +97,9 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	return outFile;
     }
 
-    public File makeTorrent(Collection<Node> nodes, File file) {
+    public File makeTorrent(File file) {
 	// Kind of hacky, but reduces code redundancy.
-	return makeTorrent(nodes, Arrays.asList(file), null);
+	return makeTorrent(Arrays.asList(file), null);
     }
 
 
