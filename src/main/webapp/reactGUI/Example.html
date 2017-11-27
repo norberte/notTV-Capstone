@@ -20,7 +20,7 @@
           //I was thinking I would get an id for a video and launch the web player and give the web player the id to play the video
           //var videoId = Do something to have an ID for a video. Probably Database ID.
             render() {
-                return <li className="App-video"><a href="/webPlayer.jsp?id=JUNK"/*videoId*/>{this.props.value}</a></li>
+                return <li className="App-video"><a href="webPlayer.html?link=video1.mp4">{this.props.value}</a></li>
             }
         }
 
@@ -54,12 +54,6 @@
                     <p>Refine Search for a Video: (WIP)</p>
                     <input type="text" onChange={this.textChange}></input>
 
-                    <form action="/webPlayer.jsp?id=JUNK">
-                      <p> Or, Enter a magnet link directly to download a video </p>
-                      <input type="text" className="magnetLink"></input>
-                      <input type="submit" value="Submit Magnet Link"></input>
-                    </form>
-
                         <ul>
                         {
                             this.state.filteredList.map((item, key) => {
@@ -70,6 +64,7 @@
                         }
                         </ul>
                     </div>
+
                   </div>
 
                 );
@@ -77,9 +72,7 @@
         }
 
         const List = [
-            "A Neat Video", "Title of Title Thing and Junk", "Blah and Also Blah", "More Junk and Things", "Bleh Blah Junk"
-            ,"Something that happens to be a really long example that is super stupid please don't.", "More Things"
-            ,"A", "!@#$%^&*()_+~", "Norbert", "Levi", "Nick", "Daniel", "Levi is short", "Levi the Linux Guy"
+            "Test Video!", "a", "24y29hu", "dfshskd"
         ];
 
         ReactDOM.render(
