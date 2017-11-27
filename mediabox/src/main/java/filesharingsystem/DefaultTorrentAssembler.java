@@ -50,7 +50,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	// If other trackers become available in the future, just implement TorrentAssembler.
 	URL ann = null;
 	try {
-	    ann = new URL("http", "35.160.102.229", 2357, "announce");
+	    ann = new URL("http", "35.160.102.229", 2357, "/announce");
 	} catch (MalformedURLException e) {
 	    log.error("Shouldn't ever happen, this is hardcoded.", e);
 	    e.printStackTrace();
@@ -84,10 +84,10 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	info.put("pieces", hash);
 
 	torrent.put("info", new BEMap(null, info));
-	
 	// Write torrent to file.
 	File outFile = new File(torrentDir, Math.abs(hash.hashCode()) + ".torrent");
 	try(OutputStream out = new FileOutputStream(outFile)) {
+		log.info(torrent.toString());
 	    new BEMap(null, torrent).writeTo(out);
 	} catch (IOException e) {
 	    log.error("Unable to create", e);
@@ -173,6 +173,7 @@ class DefaultTorrentAssembler implements TorrentAssembler {
      * @param dirname - suggested directory name.
      * @return
      */
+    
     private Map<String, BEObject<?>> multiFileInfoDict(Collection<File> files, String dirname) {
 	// Create description of the torrent content. 
 	Map<String, BEObject<?>> info = new HashMap<>();
