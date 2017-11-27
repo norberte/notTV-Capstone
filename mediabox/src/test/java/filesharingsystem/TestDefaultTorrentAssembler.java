@@ -7,7 +7,7 @@ import org.junit.Test;
 
 
 public class TestDefaultTorrentAssembler {
-    private File file1 = new File(this.getClass().getResource("/file1.txt").getFile());
+    private File file1 = new File(this.getClass().getResource("/cat.txt").getFile());
     
     @Test
     public void testSingleFileTorrentAssembler() {
