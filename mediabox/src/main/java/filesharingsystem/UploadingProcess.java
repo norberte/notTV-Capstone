@@ -15,6 +15,8 @@ import bt.metainfo.Torrent;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
 
+import filesharingsystem.TorrentAssembler.Node;
+
 
 public class UploadingProcess {
     public static void main(String[] args) {
@@ -38,7 +40,7 @@ public class UploadingProcess {
 	File file1 = new File(System.getProperty("user.home"), "cat.txt");
 	   
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(Arrays.asList(), file1);
+	File torr = ta.makeTorrent(Arrays.asList(new Node(args[0], 6891)), file1);
         
         // create client with a private runtime
 	
