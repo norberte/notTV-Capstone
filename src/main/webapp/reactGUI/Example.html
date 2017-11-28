@@ -51,8 +51,18 @@
 
                     <div>
                     <p> This is a test. Milestone 1 Peer-to-peer filesharing system using torrent protocol implemented in Java.</p>
-                    <p>Refine Search for a Video: (WIP)</p>
-                    <input type="text" onChange={this.textChange}></input>
+
+                    <form action = "Dan's Spring Thing" method = "post">
+                    {/*My hope is that this will go to the back end, use the magnet link and button
+                    to download a video file, place the video file somewhere, and then launch theadweb webPlayer
+                    with parameter ?link=video*/}
+                    <label>
+                      Enter a Magnet Link Here:
+                      <input type = "text" name="magnetLink" />
+                    </label>
+                      <br/>
+                      <input id="submitButton" type = "submit" value = "submit" />
+                    </form>
 
                         <ul>
                         {
@@ -72,7 +82,7 @@
         }
 
         const List = [
-            "Test Video!", "a", "24y29hu", "dfshskd"
+            //"Test Video!", "a", "24y29hu", "dfshskd"
         ];
 
         ReactDOM.render(
@@ -82,3 +92,4 @@
         </script>
 </body>
 </html>
+<!-- <input type="text" onChange={this.textChange}></input> -->
