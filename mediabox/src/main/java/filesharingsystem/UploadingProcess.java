@@ -2,11 +2,7 @@ package filesharingsystem;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Arrays;
 
 import com.google.inject.Module;
 
@@ -15,74 +11,56 @@ import bt.data.Storage;
 import bt.data.file.FileSystemStorage;
 import bt.dht.DHTConfig;
 import bt.dht.DHTModule;
+import bt.metainfo.Torrent;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
 
+import filesharingsystem.TorrentAssembler.Node;
+
+
 public class UploadingProcess {
-    private static Logger log;
-    private Config config;
-    private Module DHT;
-    private Storage storage;
+    public static void main(String[] args) {
+	Config config = new Config() {
+	    public int getNumOfHashingThreads() {
+		return Runtime.getRuntime().availableProcessors() * 2;
+	    }
+	};
 
-    public UploadingProcess() {
-        // logger system
-        log = LoggerFactory.getLogger(UploadingProcess.class);
+	// enable bootstrapping from public routers
+	Module DHT = new DHTModule(new DHTConfig() {
+	    public boolean shouldUseRouterBootstrap() {
+		return true;
+	    }
+	});
+	
+	// create file system based backend for torrent data
+	Storage storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
 
-        // enable multi-threaded verification of torrent data
-        config = new Config() {
-            public int getNumOfHashingThreads() {
-                return Runtime.getRuntime().availableProcessors() * 2;
-            }
-        };
-
-        // enable bootstrapping from public routers
-        DHT = new DHTModule(new DHTConfig() {
-            public boolean shouldUseRouterBootstrap() {
-                return true;
-            }
-        });
-
-        // create file system based backend for torrent data
-        storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
-    }
-
-    public BtClient upload(File fileToBeUploaded) {
-        // create .torrent file using notTV's own tracker link
-        TorrentAssembler ta = new DefaultTorrentAssembler();
-        File torr = ta.makeTorrent(fileToBeUploaded);
-
+	// BS temporary code to read the damn resource file.
+	File file1 = new File(System.getProperty("user.home"), "cat.txt");
+	   
+	TorrentAssembler ta = new DefaultTorrentAssembler();
+	File torr = ta.makeTorrent(Arrays.asList(new Node(args[0], 6891)), file1);
+        
         // create client with a private runtime
-        BtClient client = null;
-        try {
-            client = Bt.client().config(config).storage(storage).torrent(torr.toURI().toURL()).autoLoadModules()
-                    .module(DHT).build();
-            // launch
-            client.startAsync();
-        } catch (MalformedURLException e) {
-            log.error("Malformed URL not supported.");
-            e.printStackTrace();
-            return null;
-        }
-        return client;
-    }
-
-    public BtClient upload(List<File> files, String dirname) {
-        // create .torrent file using notTV's own tracker link
-        TorrentAssembler ta = new DefaultTorrentAssembler();
-        File torr = ta.makeTorrent(files, dirname);
-
-        // create client with a private runtime
-        BtClient client = null;
-        try {
-            client = Bt.client().config(config).storage(storage).torrent(torr.toURI().toURL()).autoLoadModules()
-                    .module(DHT).build();
-            // launch
-            client.startAsync();
-        } catch (MalformedURLException e) {
-            log.error("Malformed URL not supported.");
-            e.printStackTrace();
-            return null;
-        }
-        return client;
+	
+	try {
+	    BtClient client = Bt.client()
+		.config(config)
+		.storage(storage)
+		.torrent(torr.toURI().toURL())
+		.autoLoadModules()
+		.module(DHT).afterTorrentFetched((Torrent t) -> {
+		    // get Torrent ID from torrent file (for magnet link)
+		    // TODO: send this to the server.
+		    System.out.println(t.getTorrentId());
+		}).build();
+	    // launch
+	    client.startAsync();
+	} catch (MalformedURLException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 }
+

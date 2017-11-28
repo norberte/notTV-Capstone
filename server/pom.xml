@@ -16,6 +16,10 @@
   <artifactId>server</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
+
+  <properties>
+    <org.springframework.version>5.0.1.RELEASE</org.springframework.version>
+  </properties>
   
   <!-- Descriptions -->
   <name>notTV Server</name>
@@ -35,6 +39,14 @@
       <artifactId>bt-dht</artifactId>
       <version>${bt-version}</version>
     </dependency>
+
+    <!-- Spring web framework. -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+    
   </dependencies>
 
   <build>
