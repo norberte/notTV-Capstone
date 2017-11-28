@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class DownloadController {
 
-    @RequestMapping("/")
+    @RequestMapping({"/","/home"})
     public String download(){
         return "react-gui";
     }
