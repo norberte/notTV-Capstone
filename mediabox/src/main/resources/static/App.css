@@ -16,14 +16,30 @@
 }
 
 .App-video {
+  text-align: left;
   background-color: #CCC;
-  height: 10em;
-  width: 15%;
-  margin-top: 1em;
-  margin-left: 1em;
-  color: black;
-  border-style: dashed;
+  width: 25%;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  list-style-type: none;
+}
+li {
+  margin: 1em;
+  padding: 1em;
   float: left;
+}
+
+li:hover{
+  background-color: #DDD
+}
+
+input {
+  background-color: #BBB;
+  width: 75%;
+}
+
+#submitButton{
+  width: 10%;
 }
 
 /* This is commented out because I was jsut trying things
