@@ -1,13 +1,8 @@
 package filesharingsystem;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import com.google.inject.Module;
 
@@ -16,8 +11,6 @@ import bt.data.Storage;
 import bt.data.file.FileSystemStorage;
 import bt.dht.DHTConfig;
 import bt.dht.DHTModule;
-import bt.magnet.MagnetUri;
-import bt.magnet.MagnetUri.Builder;
 import bt.metainfo.Torrent;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
@@ -42,21 +35,13 @@ public class UploadingProcess {
 	Storage storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
 
 	// BS temporary code to read the damn resource file.
-	InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream("cat.txt");
-	Scanner scan = new Scanner(in);
-	File file1 = new File(System.clearProperty("user.home"), "cat.txt");
-	try(FileWriter out = new FileWriter(file1)) {
-	    while (scan.hasNextLine())
-		out.write(scan.nextLine() + "\n");
-	    scan.close();
-	} catch(IOException e) {
-	    e.printStackTrace();
-	}
+	File file1 = new File(System.getProperty("user.home"), "cat.txt");
 	   
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(file1);
+	File torr = ta.makeTorrent(Arrays.asList(), file1);
         
         // create client with a private runtime
+	
 	try {
 	    BtClient client = Bt.client()
 		.config(config)
@@ -64,12 +49,9 @@ public class UploadingProcess {
 		.torrent(torr.toURI().toURL())
 		.autoLoadModules()
 		.module(DHT).afterTorrentFetched((Torrent t) -> {
-		    // get Torrent ID from torrent file
-		    Builder mlBuider = new MagnetUri.Builder(t.getTorrentId());
-		    MagnetUri newMagnet = mlBuider.buildUri();
-		    System.out.println("********** " + newMagnet);
-		    // String badMagnetLink = "magnet:?" + newMagnet.getTorrentId() + "&" + newMagnet.getDisplayName() +
-		    // "&" + newMagnet.getTrackerUrls() + "&" + newMagnet.getPeerAddresses();
+		    // get Torrent ID from torrent file (for magnet link)
+		    // TODO: send this to the server.
+		    System.out.println(t.getTorrentId());
 		}).build();
 	    // launch
 	    client.startAsync();
@@ -79,3 +61,4 @@ public class UploadingProcess {
 	}
     }
 }
+

@@ -33,7 +33,7 @@ public class DownloadingProcess {
 	});
 
 	// get download directory
-	Path targetDirectory = new File("~/downloads").toPath();
+	Path targetDirectory = new File(System.getProperty("user.home")).toPath();
 				
 	// create file system based backend for torrent data
 	Storage storage = new FileSystemStorage(targetDirectory);

@@ -1,20 +1,20 @@
 package filesharingsystem;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 
 public class TestDefaultTorrentAssembler {
-    private File file1 = new File(this.getClass().getResource("/file1.txt").getFile());
+    private final File file1 = new File(System.getProperty("user.home"), "cat.txt");
     
     @Test
     public void testSingleFileTorrentAssembler() {
-	// TorrentAssembler ta = new DefaultTorrentAssembler();
-	// Torrent torr = ta.makeTorrent(Arrays.asList(peer1), file1);
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(file1);
+	File torr = ta.makeTorrent(Arrays.asList(), file1);
+	
 	//Testing stuff, I'm done for tonight lol.
 	Assert.assertTrue(true);
     }

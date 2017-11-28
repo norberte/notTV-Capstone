@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -30,6 +28,8 @@ import bt.bencoding.model.BEList;
 import bt.bencoding.model.BEMap;
 import bt.bencoding.model.BEObject;
 import bt.bencoding.model.BEString;
+import bt.metainfo.TorrentId;
+import bt.service.CryptoUtil;
 
 /**
  * Default implementation of TorrentAssembler.
@@ -39,36 +39,38 @@ import bt.bencoding.model.BEString;
  */
 class DefaultTorrentAssembler implements TorrentAssembler {
     private static Logger log = LoggerFactory.getLogger(TorrentAssembler.class);
-    private static final Charset defaultCharset = Charset.forName("UTF-8");
     private static final File torrentDir = new File(System.getProperty("user.home"), "torrents");
     private final int pieceLength;
-    private final String announce;
+    // private final String announce;
     
     DefaultTorrentAssembler() {
 	pieceLength = 262144;
-	// Fine for default assembler to hardcode tracker.
-	// If other trackers become available in the future, just implement TorrentAssembler.
-	URL ann = null;
-	try {
-	    ann = new URL("http", "35.160.102.229", 2357, "announce");
-	} catch (MalformedURLException e) {
-	    log.error("Shouldn't ever happen, this is hardcoded.", e);
-	    e.printStackTrace();
-	} // http://35.160.102.229:2357/announce
-	announce = ann.toString();
 	if(!torrentDir.isDirectory())
 	    torrentDir.mkdirs();
     }
 
-    public File makeTorrent(List<File> files, String dirname) {
+    public File makeTorrent(Collection<Node> nodes, List<File> files, String dirname) {
+	// Check parameters.
+	Objects.requireNonNull(nodes, "nodes cannot be null.");
+	Objects.requireNonNull(files, "files cannot be null.");
 	if(files.size() < 1) 
 	    throw new IllegalArgumentException("Must supply at least one file.");
 
 	Map<String, BEObject<?>> torrent = new HashMap<>();
 	// Required for mdService.
-	torrent.put("announce", new BEString(announce.getBytes()));
+	torrent.put("announce", new BEString("".getBytes())); //new BEString(announce.getBytes()));
+
+	// Nodes for magnet link
+	torrent.put("nodes", new BEList(null, nodes.stream().map((Node n) -> {
+	    // Map Node objects to BEList:  'nodes': [["127.0.0.1", 6881]], [["your.router.node", 4804]]
+	    return new BEList(null, Arrays.asList(
+		new BEString(n.getHost().getBytes()),
+		new BEInteger(null, BigInteger.valueOf(n.getPort())))
+	    );
+	}).collect(Collectors.toList())));
+	
 	// Private?
-	torrent.put("private", new BEInteger(null, BigInteger.valueOf(1)));
+	// torrent.put("private", new BEInteger(null, BigInteger.valueOf(1)));
 	
 	// Get info dict for file(s).
 	Map<String, BEObject<?>> info = files.size() > 1 ? multiFileInfoDict(files, dirname) : singleFileInfoDict(files.iterator().next());
@@ -80,13 +82,23 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	// pieces will be a string whose length is a multiple of 160-bits. If the torrent contains multiple files,
 	// the pieces are formed by concatenating the files in the order they appear in the files dictionary
 	// (i.e. all pieces in the torrent are the full piece length except for the last piece, which may be shorter).
-	BEString hash = getHash(files);
-	info.put("pieces", hash);
+	info.put("pieces", getHash(files));
 
-	torrent.put("info", new BEMap(null, info));
-	
+	BEMap BEinfo = new BEMap(null, info);
+	torrent.put("info", BEinfo);
+
+	// Kind of clunky, but it's nice to have the torrentId as the filename.
+	ByteArrayOutputStream infoBytes = new ByteArrayOutputStream();
+	try {
+	    BEinfo.writeTo(infoBytes);
+	} catch (IOException e1) {
+	    // Shouldn't ever happen
+	    e1.printStackTrace();
+	}
+	// Use torrentId as filename (Taken from MetadataService.java)
+	TorrentId name = TorrentId.fromBytes(CryptoUtil.getSha1Digest(infoBytes.toByteArray()));
 	// Write torrent to file.
-	File outFile = new File(torrentDir, Math.abs(hash.hashCode()) + ".torrent");
+	File outFile = new File(torrentDir, name + ".torrent");
 	try(OutputStream out = new FileOutputStream(outFile)) {
 	    new BEMap(null, torrent).writeTo(out);
 	} catch (IOException e) {
@@ -97,9 +109,9 @@ class DefaultTorrentAssembler implements TorrentAssembler {
 	return outFile;
     }
 
-    public File makeTorrent(File file) {
+    public File makeTorrent(Collection<Node> nodes, File file) {
 	// Kind of hacky, but reduces code redundancy.
-	return makeTorrent(Arrays.asList(file), null);
+	return makeTorrent(nodes, Arrays.asList(file), null);
     }
 
 
