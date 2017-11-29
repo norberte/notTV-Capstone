@@ -8,10 +8,10 @@ public class ViewController {
 
     @RequestMapping({"/","/home"})
     public String home(){
-        return "react-gui";
+        return "Example";
     }
-    @RequestMapping("single")
+    @RequestMapping("player")
     public String singleFile(){
-        return "single-file-example";
+        return "webPlayer";
     }
 }
