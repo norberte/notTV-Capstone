@@ -18,7 +18,7 @@ import bt.runtime.Config;
 import filesharingsystem.TorrentAssembler.Node;
 
 
-public class UploadingProcess {
+public class UploadProcess {
     public static void main(String[] args) {
 	Config config = new Config() {
 	    public int getNumOfHashingThreads() {
