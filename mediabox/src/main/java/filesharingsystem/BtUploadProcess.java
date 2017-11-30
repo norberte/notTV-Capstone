@@ -21,7 +21,7 @@ import bt.runtime.Config;
 import filesharingsystem.TorrentAssembler.Node;
 
 
-public class BtUploadProcess {
+public class BtUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(BtUploadProcess.class);
     private Config config;
     private String host;
@@ -56,18 +56,18 @@ public class BtUploadProcess {
 	this.port = port;
     }
 
-    public BtClient upload(String dirname, File... files) {
+    public void upload(File parent, File... files) {
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	return uploadHelper(ta.makeTorrent(
+	uploadHelper(ta.makeTorrent(
 	    Arrays.asList(new Node(host, port)),
 	    Arrays.asList(files),
-	    dirname
+	    parent.getName()
 	));
     }
     
-    public BtClient upload(File f) {
+    public void upload(File f) {
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	return uploadHelper(ta.makeTorrent(Arrays.asList(new Node(host, port)), f));
+	uploadHelper(ta.makeTorrent(Arrays.asList(new Node(host, port)), f));
     }
 
     private BtClient uploadHelper(File torr) {

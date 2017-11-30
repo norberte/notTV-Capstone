@@ -1,28 +1,53 @@
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.security.NoSuchAlgorithmException;
 
-import bt.module.ServiceModule;
-import bt.runtime.Config;
-import bt.tracker.Tracker;
-import bt.tracker.udp.UdpTrackerFactory;
+import com.turn.ttorrent.tracker.TrackedTorrent;
+import com.turn.ttorrent.tracker.Tracker;
 
 
 class NotTVTracker {
-    Tracker tracker;
-
+    private Tracker tracker;
+    
     /**
-     * Creates a tracker for notTV clients.
-     * Config should have the following properties:
-     * getAcceptorAddress(), 
-     * getAcceptorPort(),
-     * getNumberOfPeersToRequestFromTracker()
-     *
-     * @param config
-     * @param trackerUrl
-     */
-    NotTVTracker(Config config, String trackerUrl) {
-	Injector i = Guice.createInjector(new ServiceModule(config));
-	tracker = i.getInstance(UdpTrackerFactory.class).getTracker(trackerUrl);
+	 * Creates a tracker for notTV clients.
+	 * Config should have the following properties:
+	 * getAcceptorAddress(), 
+	 * getAcceptorPort(),
+	 * getNumberOfPeersToRequestFromTracker()
+	 *
+	 * @param config
+	 * @param trackerUrl
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 */
+	NotTVTracker(File torrentDir) throws NoSuchAlgorithmException, IOException {
+	// First, instantiate a Tracker object with the port you want it to listen on.
+	// The default tracker port recommended by the BitTorrent protocol is 6969.
+	Tracker tracker = new Tracker(new InetSocketAddress(6969));
+
+	// Then, for each torrent you wish to announce on this tracker, simply created
+	// a TrackedTorrent object and pass it to the tracker.announce() method:
+	FilenameFilter filter = new FilenameFilter() {
+	      @Override
+	      public boolean accept(File dir, String name) {
+		  return name.endsWith(".torrent");
+	      }
+	};
+
+	for (File f : torrentDir.listFiles(filter)) {
+	    tracker.announce(TrackedTorrent.load(f));
+	}
+    }
+
+    public void start() {
+	tracker.start();
+    }
+
+    public void stop() {
+	tracker.stop();
     }
 }
