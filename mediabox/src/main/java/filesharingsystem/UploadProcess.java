@@ -38,7 +38,7 @@ public class UploadProcess {
 
 	this.host = config.getAcceptorAddress().getHostAddress();
 	this.port = config.getAcceptorPort();
-	log.info("%s:%d", host, port);
+	log.info("{}:{}", host, port);
 	// enable bootstrapping from public routers
 	DHT = new DHTModule(new DHTConfig() {
 	    public boolean shouldUseRouterBootstrap() {
@@ -55,12 +55,23 @@ public class UploadProcess {
 	this.host = host;
 	this.port = port;
     }
-    
-    public void upload(File f) {
+
+    public BtClient upload(String dirname, File... files) {
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(Arrays.asList(new Node(host, port)), f);
-        
-        // create client with a private runtime
+	return uploadHelper(ta.makeTorrent(
+	    Arrays.asList(new Node(host, port)),
+	    Arrays.asList(files),
+	    dirname
+	));
+    }
+    
+    public BtClient upload(File f) {
+	TorrentAssembler ta = new DefaultTorrentAssembler();
+	return uploadHelper(ta.makeTorrent(Arrays.asList(new Node(host, port)), f));
+    }
+
+    private BtClient uploadHelper(File torr) {
+	// create client with a private runtime
 	try {
 	    BtClient client = Bt.client()
 		.config(config)
@@ -75,9 +86,11 @@ public class UploadProcess {
 	    
 	    // launch
 	    client.startAsync();
+	    return client;
 	} catch (MalformedURLException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	    return null;
 	}
     }
 
