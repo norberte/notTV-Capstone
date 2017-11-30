@@ -6,7 +6,6 @@
   <body>
     <video id="vid" width="960" height="540" controls>
       <script type="text/jsx">
-
         var parseQueryString = function(url) {
           var urlParams = {};
           url.replace(
@@ -17,7 +16,6 @@
           );
         return urlParams;
         }
-
         var urlToParse = location.search;
         var result = parseQueryString(urlToParse);
         console.info(JSON.stringify(result));
