@@ -95,16 +95,18 @@ public class UploadProcess {
     }
 
     public static void main(String args[]) {
+	if(args.length == 0)
+	    System.out.println("Usage: file [host] [port]");
 	UploadProcess up;
-	String host = args.length > 0 ? args[0] : null;
-	int port = args.length > 1 ?
-	    Integer.parseInt(args[1]) :
+	String host = args.length > 1 ? args[1] : null;
+	int port = args.length > 2 ?
+	    Integer.parseInt(args[2]) :
 	    6891;
 	if(host != null)
 	    up = new UploadProcess(host, port);
 	else
 	    up = new UploadProcess();
-	up.upload(new File(System.getProperty("user.home"), "cat.txt"));
+	up.upload(new File(System.getProperty("user.home"), args[0]));
     }
 }
 

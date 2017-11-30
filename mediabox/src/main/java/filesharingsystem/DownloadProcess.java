@@ -53,6 +53,13 @@ public class DownloadProcess {
 	    public boolean shouldUseRouterBootstrap() {
 		return true;
 	    }
+
+	    // // Temporary code (I know, I'm a hypocrite).
+	    // // home.levimiller.ca goes to the raspberry Pis.
+	    // @Override
+	    // public Collection<InetPeerAddress> getBootstrapNodes() {
+	    // 	return Collections.singletonList(new InetPeerAddress("home.levimiller.ca", 6891));
+	    // }
 	});
 
 	// get download directory
