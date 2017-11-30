@@ -48,7 +48,7 @@
 	    <configuration>
 	      <archive> 
 		<manifest>
-		  <mainClass>filesharingsystem.UploadingProcess</mainClass>
+		  <mainClass>filesharingsystem.UploadProcess</mainClass>
 		</manifest>
 	      </archive>
 	      <descriptorRefs>
@@ -68,7 +68,7 @@
 	    <configuration>
 	      <archive> 
 		<manifest>
-		  <mainClass>filesharingsystem.DownloadingProcess</mainClass>
+		  <mainClass>filesharingsystem.DownloadProcess</mainClass>
 		</manifest>
 	      </archive>
 	      <descriptorRefs>
