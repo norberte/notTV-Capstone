@@ -33,26 +33,75 @@
       <artifactId>ttorrent-core</artifactId>
       <version>1.5</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.7.1</version>
+    </dependency> 
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Uploader Build plugin -->
       <plugin>
-	<artifactId>maven-assembly-plugin</artifactId>
-	<configuration>
-	  <archive> 
-	    <manifest>
-	      <mainClass>Main</mainClass>
-	    </manifest>
-	  </archive>
-	  <descriptorRefs>
-	    <descriptorRef>jar-with-dependencies</descriptorRef>
-	  </descriptorRefs>
-	</configuration>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-maven-plugin</artifactId>
 	<executions>
 	  <execution>
-	    <id>make-assembly</id>
+	    <goals>
+	      <goal>repackage</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+      <!-- Jar Build plugin -->
+      <plugin>
+	<artifactId>maven-assembly-plugin</artifactId>
+	<executions>
+	  <!-- Spring -->
+	  <execution>
+	    <id>Spring</id>
+	    <configuration>
+	      <archive> 
+		<manifest>
+		  <mainClass>spring.Application</mainClass>
+		</manifest>
+	      </archive>
+	      <descriptorRefs>
+		<descriptorRef>jar-with-dependencies</descriptorRef>
+	      </descriptorRefs>
+	      <finalName>spring</finalName>
+	    </configuration>
+	    <phase>package</phase>
+	    <goals>
+	      <goal>single</goal>
+	    </goals>
+	  </execution>
+	  <!-- Tracker -->
+	  <execution>
+	    <id>Tracker</id>
+	    <configuration>
+	      <archive> 
+		<manifest>
+		  <mainClass>tracker.Main</mainClass>
+		</manifest>
+	      </archive>
+	      <descriptorRefs>
+		<descriptorRef>jar-with-dependencies</descriptorRef>
+	      </descriptorRefs>
+	      <finalName>tracker</finalName>
+	    </configuration>
 	    <phase>package</phase>
 	    <goals>
 	      <goal>single</goal>

@@ -25,6 +25,11 @@
   <!-- Dependencies -->
   <dependencies>
     <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <version>4.4.8</version>
+    </dependency>
+    <dependency>
       <groupId>com.turn</groupId>
       <artifactId>ttorrent-core</artifactId>
       <version>1.5</version>
@@ -48,7 +53,7 @@
 	<artifactId>maven-assembly-plugin</artifactId>
 	<executions>
 	  <execution>
-	    <id>Upload</id>
+	    <id>Test</id>
 	    <configuration>
 	      <archive>
 	  	<manifest>
