@@ -31,7 +31,7 @@ public class UploadProcess {
 	System.out.println(host);
 	int port = args.length > 1 ?
 	    Integer.parseInt(args[1]) :
-	    config.getAcceptorPort()
+	    config.getAcceptorPort();
 	// enable bootstrapping from public routers
 	Module DHT = new DHTModule(new DHTConfig() {
 	    public boolean shouldUseRouterBootstrap() {
