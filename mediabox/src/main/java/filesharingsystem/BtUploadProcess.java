@@ -21,15 +21,15 @@ import bt.runtime.Config;
 import filesharingsystem.TorrentAssembler.Node;
 
 
-public class UploadProcess {
-    private static final Logger log = LoggerFactory.getLogger(UploadProcess.class);
+public class BtUploadProcess {
+    private static final Logger log = LoggerFactory.getLogger(BtUploadProcess.class);
     private Config config;
     private String host;
     private int port;
     private Module DHT;
     private Storage storage;
 
-    public UploadProcess() {
+    public BtUploadProcess() {
 	config = new Config() {
 	    public int getNumOfHashingThreads() {
 		return Runtime.getRuntime().availableProcessors() * 2;
@@ -50,7 +50,7 @@ public class UploadProcess {
 	storage = new FileSystemStorage(new File(System.getProperty("user.home")).toPath());
     }
 
-    public UploadProcess(String host, int port) {
+    public BtUploadProcess(String host, int port) {
 	this();
 	this.host = host;
 	this.port = port;
@@ -97,15 +97,15 @@ public class UploadProcess {
     public static void main(String args[]) {
 	if(args.length == 0)
 	    System.out.println("Usage: file [host] [port]");
-	UploadProcess up;
+	BtUploadProcess up;
 	String host = args.length > 1 ? args[1] : null;
 	int port = args.length > 2 ?
 	    Integer.parseInt(args[2]) :
 	    6891;
 	if(host != null)
-	    up = new UploadProcess(host, port);
+	    up = new BtUploadProcess(host, port);
 	else
-	    up = new UploadProcess();
+	    up = new BtUploadProcess();
 	up.upload(new File(System.getProperty("user.home"), args[0]));
     }
 }
