@@ -26,6 +26,12 @@ public class UploadProcess {
 	    }
 	};
 
+	
+	String host = args.length > 0 ? args[0] : config.getAcceptorAddress().getHostAddress();
+	System.out.println(host);
+	int port = args.length > 1 ?
+	    Integer.parseInt(args[1]) :
+	    config.getAcceptorPort()
 	// enable bootstrapping from public routers
 	Module DHT = new DHTModule(new DHTConfig() {
 	    public boolean shouldUseRouterBootstrap() {
@@ -40,10 +46,9 @@ public class UploadProcess {
 	File file1 = new File(System.getProperty("user.home"), "cat.txt");
 	   
 	TorrentAssembler ta = new DefaultTorrentAssembler();
-	File torr = ta.makeTorrent(Arrays.asList(new Node(args[0], 6891)), file1);
+	File torr = ta.makeTorrent(Arrays.asList(new Node(host, 6891)), file1);
         
         // create client with a private runtime
-	
 	try {
 	    BtClient client = Bt.client()
 		.config(config)
@@ -55,6 +60,7 @@ public class UploadProcess {
 		    // TODO: send this to the server.
 		    System.out.println(t.getTorrentId());
 		}).build();
+	    
 	    // launch
 	    client.startAsync();
 	} catch (MalformedURLException e) {
