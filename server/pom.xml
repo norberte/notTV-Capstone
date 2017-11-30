@@ -28,25 +28,11 @@
 
   <!-- Dependencies -->
   <dependencies>
-    <!-- BT Dependencies -->
     <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-core</artifactId>
-      <version>${bt-version}</version>
+      <groupId>com.turn</groupId>
+      <artifactId>ttorrent-core</artifactId>
+      <version>1.5</version>
     </dependency>
-    <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-dht</artifactId>
-      <version>${bt-version}</version>
-    </dependency>
-
-    <!-- Spring web framework. -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>${org.springframework.version}</version>
-    </dependency>
-    
   </dependencies>
 
   <build>
@@ -57,7 +43,7 @@
 	<configuration>
 	  <archive> 
 	    <manifest>
-	      <mainClass>server.Tracker</mainClass>
+	      <mainClass>Main</mainClass>
 	    </manifest>
 	  </archive>
 	  <descriptorRefs>

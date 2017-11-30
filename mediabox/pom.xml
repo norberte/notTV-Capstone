@@ -24,6 +24,11 @@
   
   <!-- Dependencies -->
   <dependencies>
+    <dependency>
+      <groupId>com.turn</groupId>
+      <artifactId>ttorrent-core</artifactId>
+      <version>1.5</version>
+    </dependency>
     <!-- BT Dependencies -->
     <dependency>
       <groupId>com.github.atomashpolskiy</groupId>
@@ -42,45 +47,24 @@
       <plugin>
 	<artifactId>maven-assembly-plugin</artifactId>
 	<executions>
-	  <!-- Uploader Build plugin -->
 	  <execution>
 	    <id>Upload</id>
 	    <configuration>
-	      <archive> 
-		<manifest>
-		  <mainClass>filesharingsystem.UploadProcess</mainClass>
-		</manifest>
+	      <archive>
+	  	<manifest>
+	  	  <mainClass>filesharingsystem.Test</mainClass>
+	  	</manifest>
 	      </archive>
 	      <descriptorRefs>
-		<descriptorRef>jar-with-dependencies</descriptorRef>
+	  	<descriptorRef>jar-with-dependencies</descriptorRef>
 	      </descriptorRefs>
-	      <finalName>Upload</finalName>
+	      <finalName>Test</finalName>
 	    </configuration>
 	    <phase>package</phase>
       	    <goals>
       	      <goal>single</goal>
       	    </goals>
-	  </execution>
-	  
-	  <!-- Downloader Build plugin -->
-	  <execution>
-	    <id>Download</id>
-	    <configuration>
-	      <archive> 
-		<manifest>
-		  <mainClass>filesharingsystem.DownloadProcess</mainClass>
-		</manifest>
-	      </archive>
-	      <descriptorRefs>
-		<descriptorRef>jar-with-dependencies</descriptorRef>
-	      </descriptorRefs>
-	      <finalName>Download</finalName>
-	    </configuration>
-	    <phase>package</phase>
-      	    <goals>
-      	      <goal>single</goal>
-      	    </goals>
-	  </execution>
+	  </execution>  
 	</executions>
       </plugin>
     </plugins>
