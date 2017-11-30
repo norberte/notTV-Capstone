@@ -90,6 +90,6 @@ public class DownloadProcess {
     
 
     public static void main(String args[]) {
-	new DownloadProcess(args[0]);
+	new DownloadProcess(args[0]).download();
     }
 }
