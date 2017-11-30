@@ -23,15 +23,15 @@ public class DownloadProcess {
     private final String magnetURI;
     private final Consumer<List<File>> fileHook;
     public DownloadProcess(String magnetURI) {
-	this(magnetURI, null);
+	this(magnetURI, f->{});
     }
 
    
     /**
-     * 
+     * Creates a download process.
      *
      * @param magnetURI
-     * @param fileHook
+     * @param fileHook - runs the given method with a list of Files in the torrent.
      */
     public DownloadProcess(String magnetURI, Consumer<List<File>> fileHook) {
 	this.magnetURI = magnetURI;
@@ -77,7 +77,7 @@ public class DownloadProcess {
 		    List<String> relPath = tf.getPathElements();
 		    files.add(Paths.get(
 			targetDirectory.toAbsolutePath().toString(),
-			relPath.toArray(new String[relPath.size()]);
+			relPath.toArray(new String[relPath.size()])
 		    ).toFile());
 		}
 		this.fileHook.accept(files);
