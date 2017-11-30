@@ -22,11 +22,11 @@ import bt.runtime.Config;
 public class DownloadProcess {
     private final String magnetURI;
     private final Consumer<List<File>> fileHook;
+    
     public DownloadProcess(String magnetURI) {
 	this(magnetURI, f->{});
     }
 
-   
     /**
      * Creates a download process.
      *
@@ -56,7 +56,7 @@ public class DownloadProcess {
 	});
 
 	// get download directory
-	Path targetDirectory = new File(System.getProperty("user.home")).toPath();
+	Path targetDirectory = new File("public").toPath();
 				
 	// create file system based backend for torrent data
 	Storage storage = new FileSystemStorage(targetDirectory);
