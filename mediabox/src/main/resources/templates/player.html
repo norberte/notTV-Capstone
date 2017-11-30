@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <body>
+    <video id="vid" width="960" height="540" controls="true">
+ 		<source th:src="${source}" th:type="${type}" />
+ 		<source th:src="${source}" type="video/webm" />
+ 		Your browser does not support the video tag.
+    </video> 
+  </body>
+</html>

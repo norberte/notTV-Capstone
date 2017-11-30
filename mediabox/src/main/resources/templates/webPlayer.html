@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+  <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+  <body>
+    <video id="vid" width="960" height="540" controls>
+      <script type="text/jsx">
+        var parseQueryString = function(url) {
+          var urlParams = {};
+          url.replace(
+            new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+            function($0, $1, $2, $3) {
+              urlParams[$1] = $3;
+            }
+          );
+        return urlParams;
+        }
+        var urlToParse = location.search;
+        var result = parseQueryString(urlToParse);
+        console.info(JSON.stringify(result));
+        document.getElementById("vid").innerHTML = "<source src='/home/testVideo/" + result[Object.keys(result)[0]] + "'>";
+        // file:///home/testVideo/video1.mp4 <- this is where the videos are stored, I suppose.
+      </script>
+    </video>
+  </body>
+</html>
