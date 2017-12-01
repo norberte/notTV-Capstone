@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.turn.ttorrent.client.SharedTorrent;
 
 
-
 public class TtorrentDownloadProcess implements DownloadProcess {
+    private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
     private final File torrent, downloadDir;
     public TtorrentDownloadProcess(File torrent, File downloadDir) {
 	this.torrent = torrent;
@@ -45,13 +48,14 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 		
 		@Override
 		public List<File> files() {
-		    return Arrays.asList(downloadDir.listFiles());
+		    return client.getTorrent().getFilenames().stream().map(fn -> {
+			return new File(downloadDir, fn);
+		    }).collect(Collectors.toList());
 		}
 
 	    };
 	} catch (NoSuchAlgorithmException | IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    log.error("Error downloading torrent.", e);
 	}
 	return null;
     }

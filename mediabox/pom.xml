@@ -37,6 +37,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>fluent-hc</artifactId>
+      <version>4.5.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
       <version>4.5.3</version>
     </dependency>
@@ -66,7 +71,7 @@
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
 	<configuration>
-	  <mainClass>filesharingsystem.Main</mainClass>
+	  <mainClass>springbackend.Application</mainClass> <!-- filesharingsystem.Main -->
 	</configuration>
 	<executions>
 	  <execution>

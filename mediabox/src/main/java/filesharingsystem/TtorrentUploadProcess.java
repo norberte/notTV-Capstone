@@ -3,6 +3,7 @@ package filesharingsystem;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.turn.ttorrent.client.Client;
+import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
 public class TtorrentUploadProcess implements UploadProcess {
@@ -61,13 +63,13 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    CloseableHttpResponse response = httpClient.execute(uploadFile);
 	    int code = response.getStatusLine().getStatusCode();
 	    if(code == 200) {
-		System.out.println("Success!");
+		log.info("Successfully uploaded torrent to the server, seeding...");
 		// start seeding.
-		// client = new Client(
-		// 	InetAddress.getLocalHost(),
-		// 	new SharedTorrent(t, parent, true)
-		// );
-		// client.share();
+		client = new Client(
+			InetAddress.getLocalHost(),
+			new SharedTorrent(t, parent, true)
+		);
+		client.share();
 	    } else {
 		throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
 	    }
@@ -86,6 +88,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 
     @Override
     public void stop() {
+	log.info("Stopping all uploads...");
 	if(client != null) {
 	    client.stop();
 	    client = null;

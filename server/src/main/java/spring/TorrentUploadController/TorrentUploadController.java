@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.storage.StorageService;
 
 
+@CrossOrigin
 @Controller
 public class TorrentUploadController {
     private final StorageService storageService;
@@ -40,6 +42,7 @@ public class TorrentUploadController {
      *
      * @throws IOException
      */
+    @CrossOrigin
     @GetMapping("/list-torrents")
     @ResponseBody
     public List<String> listUploadedFiles(Model model) throws IOException {
