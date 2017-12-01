@@ -58,7 +58,7 @@ public class BtUploadProcess implements UploadProcess {
 	this.port = port;
     }
 
-    public void upload(File parent, File... files) {
+    public void upload(String name, File parent, File... files) {
 	TorrentAssembler ta = new DefaultTorrentAssembler();
 	uploadHelper(ta.makeTorrent(
 	    Arrays.asList(new Node(host, port)),
@@ -67,7 +67,7 @@ public class BtUploadProcess implements UploadProcess {
 	));
     }
     
-    public void upload(File f) {
+    public void upload(String name, File f) {
 	TorrentAssembler ta = new DefaultTorrentAssembler();
 	uploadHelper(ta.makeTorrent(Arrays.asList(new Node(host, port)), f));
     }
@@ -115,7 +115,7 @@ public class BtUploadProcess implements UploadProcess {
 	    up = new BtUploadProcess(host, port);
 	else
 	    up = new BtUploadProcess();
-	up.upload(new File(System.getProperty("user.home"), args[0]));
+	up.upload(args[0], new File(System.getProperty("user.home"), args[0]));
     }
 }
 

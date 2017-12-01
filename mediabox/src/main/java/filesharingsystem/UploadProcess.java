@@ -4,14 +4,19 @@ import java.io.File;
 
 
 public interface UploadProcess {
-    
+    public class UploadException extends Exception {
+	public UploadException(String string) {
+	    super(string);
+	}
+	private static final long serialVersionUID = 5135331814835498558L;
+    }
     /**
      * Uploads a list of files into the given directory.
      *
      * @param dirname
      * @param files
      */
-    void upload(File parent, File... files);
+    void upload(String name, File parent, File... files) throws UploadException;
 
     
     /**
@@ -19,7 +24,7 @@ public interface UploadProcess {
      *
      * @param f
      */
-    void upload(File f);
+    void upload(String name, File f) throws UploadException;
 
     
     /**

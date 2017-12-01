@@ -32,7 +32,15 @@ public class TorrentUploadController {
 	this.storageService = storageService;
     }
 
-    @GetMapping("/list-files")
+    /**
+     * Lists all torrents on the server.
+     *
+     * @param model
+     * @return
+     *
+     * @throws IOException
+     */
+    @GetMapping("/list-torrents")
     @ResponseBody
     public List<String> listUploadedFiles(Model model) throws IOException {
 	// Return json/xml/whatever list.
@@ -42,19 +50,35 @@ public class TorrentUploadController {
 	    .collect(Collectors.toList());
     }
 
-    @GetMapping("/files/{filename:.+}")
+    
+    /**
+     * Fetches a torrent from the server.
+     *
+     * @param filename
+     * @return
+     */
+    @GetMapping("/get-torrent/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
 	Resource file = storageService.loadAsResource(filename);
-	return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-	"attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	HttpHeaders responseHeaders = new HttpHeaders();
+	responseHeaders.add(
+	    HttpHeaders.CONTENT_DISPOSITION,
+	    "attachment; filename=" + file.getFilename()
+	);
+	responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/torrent");
+	return ResponseEntity.ok().headers(responseHeaders).body(file);
     }
 
-    @PostMapping("/upload")
+    /**
+     * Uploads a file to the server.
+     *
+     * @param file
+     * @param redirectAttributes
+     */
+    @PostMapping("/upload-torrent")
     @ResponseStatus(value = HttpStatus.OK)
-    public void handleFileUpload(@RequestParam("file") MultipartFile file,
-    RedirectAttributes redirectAttributes) {
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 	storageService.store(file);
     }
 }

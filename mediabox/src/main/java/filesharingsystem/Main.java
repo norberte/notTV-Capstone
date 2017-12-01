@@ -12,9 +12,11 @@ import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
+import filesharingsystem.UploadProcess.UploadException;
+
 public class Main {
     public static void main(String args[])
-	throws URISyntaxException, UnknownHostException, NoSuchAlgorithmException, IOException {
+	throws URISyntaxException, UnknownHostException, NoSuchAlgorithmException, IOException, UploadException {
 	if(args[0].equals("download")) {
 	    DownloadProcess dp = new TtorrentDownloadProcess(new File(args[1]));
 	    DownloadProcess.Client c = dp.download();
@@ -23,10 +25,11 @@ public class Main {
 		System.out.println(f);
 	    }
 	} else if(args[0].equals("upload")) {
-	    UploadProcess up = new TtorrentUploadProcess(new URI(
-		args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"
-	    ));
-	    up.upload(new File(args[1]));
+	    UploadProcess up = new TtorrentUploadProcess(
+		new URI(args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"),
+		new URI(args.length > 3 ? args[3] : "http://notTV.levimiller.ca/upload-torrent")
+	    );
+	    up.upload(args[1], new File(args[1]));
 	} else if (args[0].equals("seed")) {
 	    Client client = new Client(
 		InetAddress.getLocalHost(),
