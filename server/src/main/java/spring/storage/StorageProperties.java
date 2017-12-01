@@ -1,4 +1,4 @@
-package spring;
+package spring.storage;
 
 import java.nio.file.Paths;
 

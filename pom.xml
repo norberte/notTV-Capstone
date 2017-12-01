@@ -15,6 +15,7 @@
   <modules>
     <module>mediabox</module>
     <module>server</module>
+    <module>tracker</module>
   </modules>
   
   <!-- Developers (optional) -->

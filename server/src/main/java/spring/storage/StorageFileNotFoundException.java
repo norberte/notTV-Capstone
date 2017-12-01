@@ -1,4 +1,4 @@
-package spring;
+package spring.storage;
 
 public class StorageFileNotFoundException extends StorageException {
 

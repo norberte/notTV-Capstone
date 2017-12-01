@@ -1,4 +1,3 @@
-package tracker;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -8,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import com.turn.ttorrent.tracker.TrackedTorrent;
 import com.turn.ttorrent.tracker.Tracker;
 
-
+    
 class NotTVTracker {
     private Tracker tracker;
     

@@ -20,4 +20,11 @@ public interface UploadProcess {
      * @param f
      */
     void upload(File f);
+
+    
+    /**
+     * Stops the seeding process.
+     *
+     */
+    void stop();
 }

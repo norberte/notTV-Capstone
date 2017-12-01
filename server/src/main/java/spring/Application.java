@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import spring.storage.StorageProperties;
+import spring.storage.StorageService;
+
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class Application {

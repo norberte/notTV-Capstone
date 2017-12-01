@@ -10,4 +10,8 @@ public class TrivialUploadProcess implements UploadProcess {
     @Override
     public void upload(File f) {
     }
+
+    @Override
+    public void stop() {
+    }
 }

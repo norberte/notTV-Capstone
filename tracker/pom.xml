@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 			http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <!-- Inherit from parent for default/shared values -->
+  <!-- Inherit from notTV for default/shared values -->
   <parent>
     <groupId>tv.not</groupId>
     <artifactId>notTV</artifactId>
@@ -13,19 +13,15 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>tv.not</groupId>
-  <artifactId>server</artifactId>
+  <artifactId>tracker</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
 
-  <properties>
-    <org.springframework.version>5.0.1.RELEASE</org.springframework.version>
-  </properties>
-  
   <!-- Descriptions -->
-  <name>notTV Server</name>
-  <description>notTV's Server app.</description>
+  <name>notTV Tracker</name>
+  <description>notTV's Filesharing System Tracker.</description>
   <url>https://github.com/norberte/notTV-Capstone</url>
-
+  
   <!-- Dependencies -->
   <dependencies>
     <dependency>
@@ -33,33 +29,15 @@
       <artifactId>ttorrent-core</artifactId>
       <version>1.5</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.7.1</version>
-    </dependency> 
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Jar Build plugin -->
       <plugin>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
 	<configuration>
-	  <mainClass>Application</mainClass>
+	  <mainClass>Main</mainClass>
 	</configuration>
 	<executions>
 	  <execution>

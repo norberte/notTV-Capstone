@@ -28,8 +28,10 @@ public class BtUploadProcess implements UploadProcess {
     private int port;
     private Module DHT;
     private Storage storage;
-
+    private BtClient client;
+    
     public BtUploadProcess() {
+	client = null;
 	config = new Config() {
 	    public int getNumOfHashingThreads() {
 		return Runtime.getRuntime().availableProcessors() * 2;
@@ -91,6 +93,13 @@ public class BtUploadProcess implements UploadProcess {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
+	}
+    }
+
+    public void stop() {
+	if(client != null) {
+	    client.stop();
+	    client = null;
 	}
     }
 

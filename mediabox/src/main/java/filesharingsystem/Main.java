@@ -24,7 +24,7 @@ public class Main {
 	    }
 	} else if(args[0].equals("upload")) {
 	    UploadProcess up = new TtorrentUploadProcess(new URI(
-		args.length > 2 ? args[2] : "udp://levimiller.ca/announce"
+		args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"
 	    ));
 	    up.upload(new File(args[1]));
 	} else if (args[0].equals("seed")) {

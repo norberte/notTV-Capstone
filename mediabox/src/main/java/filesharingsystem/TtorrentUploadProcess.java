@@ -3,6 +3,7 @@ package filesharingsystem;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -10,13 +11,17 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.turn.ttorrent.client.Client;
+import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
 public class TtorrentUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
     private final URI announce;
+    private Client client;
     public TtorrentUploadProcess(URI announce) {
 	this.announce = announce;
+	client = null;
     }
     
     @Override
@@ -41,6 +46,12 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    // post.setEntity(entity);
 	    // HttpResponse response = client.execute(post);
 	    // client.close();
+
+	    client = new Client(
+		InetAddress.getLocalHost(),
+		new SharedTorrent(t, parent, true)
+	    );
+	    client.share();
 	} catch (NoSuchAlgorithmException | InterruptedException | IOException e) {
 	    log.error("Error creating Torrent file.", e);
 	}
@@ -49,5 +60,13 @@ public class TtorrentUploadProcess implements UploadProcess {
     @Override
     public void upload(File f) {
 	this.upload(new File(""), f);
+    }
+
+    @Override
+    public void stop() {
+	if(client != null) {
+	    client.stop();
+	    client = null;
+	}
     }
 }
