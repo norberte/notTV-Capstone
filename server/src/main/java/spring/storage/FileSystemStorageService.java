@@ -44,7 +44,8 @@ public class FileSystemStorageService implements StorageService {
 	    StandardCopyOption.REPLACE_EXISTING);
 	}
 	catch (IOException e) {
-	    throw new StorageException("Failed to store file " + filename, e);
+	    System.out.println("**" + e.getMessage() + e.toString());
+	    // throw new StorageException("Failed to store file " + filename, e);
 	}
     }
 

@@ -38,7 +38,7 @@ class NotTVTracker {
      */
     NotTVTracker(File torrentDir) throws NoSuchAlgorithmException, IOException {
 	// Sanity check - Check torrentDir is a folder.
-	if(!torrentDir.isFile())
+	if(torrentDir.isFile())
 	    throw new IllegalArgumentException("torrentDir cannot be a file.");
 	if(!torrentDir.exists())
 	    if(!torrentDir.mkdirs())
@@ -100,6 +100,7 @@ class NotTVTracker {
 				if(StandardWatchEventKinds.ENTRY_CREATE == kind) {
 				    try {
 					Path p = ((WatchEvent<Path>) event).context();
+					log.info("File added: {}", p);
 					tracker.announce(
 					    TrackedTorrent.load(p.toFile())
 					);
@@ -111,6 +112,7 @@ class NotTVTracker {
 				// Deleted file, try to unannounce it.
 				if(StandardWatchEventKinds.ENTRY_DELETE == kind) {
 				    Path p = ((WatchEvent<Path>) event).context();
+				    log.info("File deleted: {}", p);
 				    try {
 					tracker.remove(Torrent.load(p.toFile()));
 				    } catch (NoSuchAlgorithmException | IOException e) {

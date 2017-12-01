@@ -1,15 +1,12 @@
 package filesharingsystem;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.net.URI;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -33,19 +30,21 @@ public class TtorrentUploadProcess implements UploadProcess {
     }
     
     /**
+     * @param name - name of the torrent. Can't be a path. 
      * @param parent
      * @param files
      */
     @Override
-    public void upload(String name, File parent, File... files) throws UploadException{
+    public void upload(String name, File parent, File... files) throws UploadException {
+	File tempFile = null;
 	try {
+	    tempFile = File.createTempFile(name, ".tmp");
 	    // Create torrent from announce/files.
 	    Torrent t = Torrent.create(parent, Arrays.asList(files), announce, "notTV");
-
+	    t.save(new FileOutputStream(tempFile));
 	    // send file to the server.
-	    PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
-	    t.save(filePipe);
-
+	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
+	    
 	    // Create request
 	    CloseableHttpClient httpClient = HttpClients.createDefault();
 	    HttpPost uploadFile = new HttpPost(this.uploadURI);
@@ -53,10 +52,11 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    // This attaches the file to the POST:
 	    builder.addBinaryBody(
 		"file",
-		new PipedInputStream(filePipe),
+		tempFile, 
 		ContentType.APPLICATION_OCTET_STREAM,
 		name
 	    );
+	    
 	    uploadFile.setEntity(builder.build());
 	    CloseableHttpResponse response = httpClient.execute(uploadFile);
 	    int code = response.getStatusLine().getStatusCode();
@@ -73,6 +73,9 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    }
 	} catch (NoSuchAlgorithmException | InterruptedException | IOException e) {
 	    log.error("Error creating Torrent file.", e);
+	} finally {
+	    if(tempFile != null)
+		tempFile.delete();
 	}
     }
     
