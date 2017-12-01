@@ -75,13 +75,11 @@ public class FileSystemStorageService implements StorageService {
 		return resource;
 	    }
 	    else {
-		throw new FileNotFoundException(
-		    "Could not read file: " + filename);
-
+		throw new StorageFileNotFoundException( "Could not read file: " + filename);
 	    }
 	}
 	catch (MalformedURLException e) {
-	    throw new FileNotFoundException("Could not read file: " + filename);
+	    throw new StorageFileNotFoundException("Could not read file: " + filename);
 	}
     }
 

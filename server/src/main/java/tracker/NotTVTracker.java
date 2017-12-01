@@ -27,8 +27,8 @@ class NotTVTracker {
     NotTVTracker(File torrentDir) throws NoSuchAlgorithmException, IOException {
 	// First, instantiate a Tracker object with the port you want it to listen on.
 	// The default tracker port recommended by the BitTorrent protocol is 6969.
-	Tracker tracker = new Tracker(new InetSocketAddress(6969));
-
+	tracker = new Tracker(new InetSocketAddress(6969));
+	System.out.println(tracker.getAnnounceUrl());
 	// Then, for each torrent you wish to announce on this tracker, simply created
 	// a TrackedTorrent object and pass it to the tracker.announce() method:
 	FilenameFilter filter = new FilenameFilter() {
