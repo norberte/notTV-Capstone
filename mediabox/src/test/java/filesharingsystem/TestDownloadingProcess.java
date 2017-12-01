@@ -1,33 +1,57 @@
 package filesharingsystem;
 
-import java.io.File;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import bt.runtime.BtClient;
+
+import filesharingsystem.DownloadProcess.Client;
+import filesharingsystem.UploadProcess.UploadException;
 
 public class TestDownloadingProcess {
-    // private File torrentFile = new File(this.getClass().getResource("/957580847.torrent").getFile());
-    // private File downloadDirectory = new File(this.getClass().getResource("/directory").getFile());
+    private File contentFile, torrFile;
+    private UploadProcess up;
+    
+    @Before
+    public void setup() {
+	torrFile = new File(System.getProperty("user.home"), "cat.torrent");  
+	contentFile = new File(System.getProperty("user.home"), "cat.txt");
+	try(PrintWriter out = new PrintWriter( contentFile )){
+	    out.println("  )\\._.,--....,'``.");
+	    out.println(" /,   _.. \\   _\\  (`._ ,.");
+	    out.println("`._.-(,_..'--(,_..'`-.;.'");
+	    out.flush();
 
-    // @Test
-    // public void testIfDownloadProcessEnded() {
-    //     DownloadingProcess down = new DownloadingProcess(downloadDirectory.getPath());
-    //     BtClient client = down.download(torrentFile);
+	    //Test if a .torrent file can be created during the upload process
+	    up = new TtorrentUploadProcess(
+		new URI("http://levimiller.ca:6969/announce"),
+		new URI("http://notTV.levimiller.ca/upload-torrent")
+	    );
+	    up.upload("cat", contentFile);
+	} catch (FileNotFoundException | URISyntaxException | UploadException e) {
+	    e.printStackTrace();
+	}
+    }
 
-    //     Assert.assertFalse(client.isStarted()); // check if client stopped running, because it ended the downloading
-    //                                             // process
-    // }
+    @After
+    public void tearDown() {
+	up.stop();
+	torrFile.delete();
+    }
 
-    // @Test
-    // public void testIfNewFileGotDownloaded() {
-    //     File[] beforeFiles = downloadDirectory.listFiles();
-
-    //     DownloadingProcess down = new DownloadingProcess(downloadDirectory.getPath());
-    //     BtClient client = down.download(torrentFile);
-
-    //     File[] afterFiles = downloadDirectory.listFiles();
-
-    //     Assert.assertNotEquals(beforeFiles.length, afterFiles.length);
-    // }
+    @Test
+    public void testDownload() {
+	// Test if the download process can download video content using the file sharing system
+	DownloadProcess dp = new TtorrentDownloadProcess(torrFile);
+	Client c = dp.download();
+	c.waitForDownload();
+	assertTrue(new File(System.getProperty("user.home"), "cat.txt").exists());
+    }
 }
