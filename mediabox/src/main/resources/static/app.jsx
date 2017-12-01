@@ -2,7 +2,11 @@
           //I was thinking I would get an id for a video and launch the web player and give the web player the id to play the video
           //var videoId = Do something to have an ID for a video. Probably Database ID.
             render() {
-                return <li className="App-video"><a href="webPlayer.html?link=video1.mp4">{this.props.value}</a></li>
+                return <li className="App-video"><a onClick={() => this.updateFormAndSubmit()}>{this.props.value}</a></li>
+            }
+            updateFormAndSubmit() {
+                document.getElementById('torrentInput').value = this.props.value; 
+                document.getElementById('selectTorrent').submit();
             }
         }
 
@@ -36,16 +40,16 @@
 
                     <form action = "/download" method = "post">
                     {/*My hope is that this will go to the back end, use the magnet link and button
-                    to download a video file, place the video file somewhere, and then launch theadweb webPlayer
+                    to download a video file, place the video file somewhere, and then launch the web webPlayer
                     with parameter ?link=video*/}
                     <label>
-                      Enter a Magnet Link Here:
-                    	  <input type = "text" name="magnetLink" />
+                      Enter a .torrent File Here:
+                    	  <input type = "text" name="torrentFile" />
                     </label>
                       <br/>
                       <input id="submitButton" type = "submit" value = "submit" />
                     </form>
-
+					<form id="selectTorrent" action="/download" method="post">
                         <ul>
                         {
                             this.state.filteredList.map((item, key) => {
@@ -55,6 +59,8 @@
                             })
                         }
                         </ul>
+                        <input id="torrentInput" type="hidden" name="torrentFile"/>
+                    </form>
                     </div>
 
                   </div>
@@ -63,9 +69,7 @@
             }
         }
 
-        const List = [
-            //"Test Video!", "a", "24y29hu", "dfshskd"
-        ];
+        //const List = ["Test Video!", "a", "24y29hu", "dfshskd" ];
 
         ReactDOM.render(
             <FilterList list={List}/>,
