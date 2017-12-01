@@ -25,9 +25,11 @@ public class TtorrentUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
     private final URI announce, uploadURI;
     private Client client;
+    private File uploadDir;
     public TtorrentUploadProcess(URI announce, URI uploadURI) {
 	this.announce = announce;
 	this.uploadURI = uploadURI;
+	this.uploadDir = new File(System.getProperty("user.home"), "uploads");
 	client = null;
     }
     
@@ -38,12 +40,11 @@ public class TtorrentUploadProcess implements UploadProcess {
      */
     @Override
     public void upload(String name, File parent, File... files) throws UploadException {
-	File tempFile = null;
 	try {
-	    tempFile = File.createTempFile(name, ".tmp");
+	    File torrentFile = new File(String.format("%s.torrent", name));
 	    // Create torrent from announce/files.
 	    Torrent t = Torrent.create(parent, Arrays.asList(files), announce, "notTV");
-	    t.save(new FileOutputStream(tempFile));
+	    t.save(new FileOutputStream(torrentFile));
 	    // send file to the server.
 	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
 	    
@@ -54,9 +55,9 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    // This attaches the file to the POST:
 	    builder.addBinaryBody(
 		"file",
-		tempFile, 
+		torrentFile, 
 		ContentType.APPLICATION_OCTET_STREAM,
-		name
+		torrentFile.getName()
 	    );
 	    
 	    uploadFile.setEntity(builder.build());
@@ -66,8 +67,8 @@ public class TtorrentUploadProcess implements UploadProcess {
 		log.info("Successfully uploaded torrent to the server, seeding...");
 		// start seeding.
 		client = new Client(
-			InetAddress.getLocalHost(),
-			new SharedTorrent(t, parent, true)
+		    InetAddress.getLocalHost(),
+		    new SharedTorrent(t, new File(this.uploadDir.getAbsolutePath(), parent.getPath()), true)
 		);
 		client.share();
 	    } else {
@@ -75,9 +76,6 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    }
 	} catch (NoSuchAlgorithmException | InterruptedException | IOException e) {
 	    log.error("Error creating Torrent file.", e);
-	} finally {
-	    if(tempFile != null)
-		tempFile.delete();
 	}
     }
     

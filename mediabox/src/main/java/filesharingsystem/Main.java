@@ -6,8 +6,9 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
@@ -30,13 +31,13 @@ public class Main {
 		new URI(args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"),
 		new URI(args.length > 3 ? args[3] : "http://notTV.levimiller.ca/upload-torrent")
 	    );
-	    up.upload(Paths.get(args[1]).getFileName().toString(), new File(args[1]));
+	    up.upload(FilenameUtils.getBaseName(args[1]), new File(args[1]));
 	} else if (args[0].equals("seed")) {
 	    Client client = new Client(
 		InetAddress.getLocalHost(),
 		new SharedTorrent(
 		    Torrent.load(new File(args[1]), true),
-		    new File(System.getProperty("user.home"), "downloads"),
+		    new File(System.getProperty("user.home"), "uploads"),
 		    true
 		)
 	    );

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
@@ -64,7 +65,7 @@ class NotTVTracker {
 
 	// watch torrentDir for changes.
 	Executors.newSingleThreadExecutor().execute(
-	    newWatchTask(torrentDir.toPath())
+	    newWatchTask(torrentDir.getAbsoluteFile().toPath())
 	);
     }
     
@@ -76,13 +77,14 @@ class NotTVTracker {
      * @param p
      * @return
      */
-    private Runnable newWatchTask(Path p) {
+    private Runnable newWatchTask(Path torrentDir) {
 	return new Runnable() {
 	    @Override
 	    public void run() {
+		log.info(torrentDir.toString());
 		try (WatchService service = FileSystems.getDefault().newWatchService()) {
 		    // register what changes to detect.
-		    p.register(
+		    torrentDir.register(
 			service,
 			StandardWatchEventKinds.ENTRY_CREATE,
 			StandardWatchEventKinds.ENTRY_MODIFY,
@@ -99,19 +101,19 @@ class NotTVTracker {
 				// New file, try to announce it.
 				if(StandardWatchEventKinds.ENTRY_CREATE == kind) {
 				    try {
-					Path p = ((WatchEvent<Path>) event).context();
+					Path p = torrentDir.resolve(((WatchEvent<Path>) event).context());
 					log.info("File added: {}", p);
 					tracker.announce(
 					    TrackedTorrent.load(p.toFile())
 					);
 				    } catch (NoSuchAlgorithmException | IOException e) {
-					log.error("Unable to announce new file: " + p, e);
+					log.error("Unable to announce new file. " , e);
 				    }
 				}
 
 				// Deleted file, try to unannounce it.
 				if(StandardWatchEventKinds.ENTRY_DELETE == kind) {
-				    Path p = ((WatchEvent<Path>) event).context();
+				    Path p = ((WatchEvent<Path>) event).context().toAbsolutePath();
 				    log.info("File deleted: {}", p);
 				    try {
 					tracker.remove(Torrent.load(p.toFile()));
