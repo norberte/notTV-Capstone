@@ -87,29 +87,59 @@
 
 
   class tabForm extends React.Component {
-      const formList =
+    constructor(props) {
+      super(props);
+      this.state = {
+        curr: 0
+      }
 
+      this.next = this.next.bind(this);
+      this.prev = this.prev.bind(this);
+    }
+
+    next() {
+      if(this.state.curr < this.props.parts.length - 1)
+        this.setState({
+          curr: this.state.curr + 1
+        });
+    }
+
+    prev() {
+      if(this.state.curr > 0)
+        this.setState({
+          curr: this.state.curr - 1
+        });
+    }
 
       render() {
           return (
             <form id="uploadVideo" action="">
-
+            {
+              this.props.parts[this.state.curr]
+            }
             <div>
-              <button type="button" id="prevBtn">Previous</button>
-              <button type="button" id="nextBtn">Next</button>
+              <button type="button" onClick={this.prev} id="prevBtn">Previous</button>
+              <button type="button" onClick={this.next} id="nextBtn">Next</button>
             </div>
 
             </form>
           );
       }
   }
+
+FORM_PARTS = [
+  <selectVideo/>,
+  <videoPoster/>,
+  <videoDetails/>
+];
+
   ReactDOM.render(
-      <TabForm />,
+      <tabForm parts={FORM_PARTS}/>,
       document.getElementById('root')
   );
   </script>
 
-  <div id="formRoot">
+  <div id="root">
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
