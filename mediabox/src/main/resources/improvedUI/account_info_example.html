@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notTV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="assets/css/Features-Boxed.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-default navigation-clean" style="background-color:rgb(0,0,0);margin:0px;background-image:url(&quot;null&quot;);border:0px;">
+            <div class="container">
+                <div class="navbar-header">
+                  <a class="navbar-brand navbar-link" href="#"><img src="assets/img/notTV_logo_white.png" alt="notTV Logo"></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <form class="navbar-form navbar-left" target="_self" style="width:362px;margin:8px 0px 0 40px;padding:0;">
+                        <div class="form-group" style="width:359px;">
+                            <input class="form-control search-field" type="search" name="search" placeholder="Search" id="search-field" style="width:414px;">
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active" role="presentation"><a href="#" style="background-color:rgb(0,0,0);background-image:url(&quot;null&quot;);">Watch </a></li>
+                        <li role="presentation"><a href="#">Search </a></li>
+                        <li role="presentation"><a href="#">Submit Video</a></li>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">Account </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li role="presentation"><a href="#">First Item</a></li>
+                                <li role="presentation"><a href="#">Second Item</a></li>
+                                <li role="presentation"><a href="#">Third Item</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="features-boxed" style="background-color:#424342;height:100vh;">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center" style="margin:0px;padding:20px 0px 0px 0px;color:rgb(254,255,255);">Account Info</h2></div>
+            <div class="row features" style="background-color:#c8c8c8;margin:16px 0px 16px 0px;padding:0px;">
+                <div class="col-md-12">
+                    <h3>Account Details</h3></div>
+                <div class="col-md-4">
+                    <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;height:auto;">
+                        <div class="caption">
+                            <h3>Thumbnail label</h3>
+                            <p>dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8" style="height:324px;">
+                    <input class="input-lg" type="text" name="username" placeholder="Username" style="width:100%;margin:4px;">
+                    <input class="input-lg" type="email" placeholder="Email" style="width:100%;margin:4px;">
+                    <input class="input-lg" type="password" placeholder="New Password" style="width:100%;margin:4px;">
+                    <input class="input-lg" type="password" placeholder="Confirm Password" style="width:100%;margin:4px;">
+                    <button class="btn btn-primary" type="button" style="width:100%;">Save </button>
+                </div>
+            </div>
+            <div class="row features" style="background-color:#c8c8c8;margin:16px 0px 16px 0px;padding:0px;">
+                <div class="col-md-12">
+                    <h3 style="margin:10px 0px 10px 0px;">Settings </h3></div>
+                <div class="col-md-12" style="height:324px;">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox">Automatically Download Newest</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Bandwidth Limit: </label>
+                        <input type="text" style="width:100%;">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Upload Schedule:</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row features" style="background-color:#c8c8c8;margin:16px 0px 16px 0px;padding:0px;">
+                <div class="col-md-12">
+                    <h3 style="margin:10px 0px 10px 0px;">Stats </h3></div>
+                <div class="col-md-12" style="height:324px;"></div>
+            </div>
+            <div class="row features" style="background-color:#c8c8c8;margin:16px 0px 16px 0px;padding:0px;">
+                <div class="col-md-3">
+                    <h3 style="width:200px;font-size:30px;margin:10px 0px 10px 0px;">Subscriptions </h3></div>
+                <div class="col-md-4 col-md-offset-5">
+                    <div class="btn-toolbar" style="margin:10px 0px 10px 0px;float:right;">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary" type="button" id="select-all">Select All</button>
+                            <button class="btn btn-primary" type="button">Remove </button>
+                            <button class="btn btn-primary" type="button">Undo </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="height:324px;overflow-y: auto;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row features" style="background-color:#c8c8c8;margin:16px 0px 16px 0px;padding:0px;">
+                <div class="col-md-3">
+                    <h3 style="width:200px;font-size:30px;margin:10px 0px 10px 0px;">Saved Videos</h3></div>
+                <div class="col-md-4 col-md-offset-5">
+                    <div class="btn-toolbar" style="margin:10px 0px 10px 0px;float:right;">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary" type="button" id="select-all">Select All</button>
+                            <button class="btn btn-primary" type="button">Remove </button>
+                            <button class="btn btn-primary" type="button">Undo </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="height:324px;overflow-y: auto;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail"><img src="assets/img/default-placeholder-300x300.png" style="width:100%;">
+                                <div class="caption" style="padding:0px;">
+                                    <h3 style="width:100%; text-align: center;">Username </h3></div>
+                            </div>
+                            <div class="check hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/js/select.js"></script>
+</body>
+
+</html>
