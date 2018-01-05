@@ -14,7 +14,13 @@ import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
-import filesharingsystem.UploadProcess.UploadException;
+import filesharingsystem.process.DownloadProcess;
+import filesharingsystem.process.TtorrentDownloadProcess;
+import filesharingsystem.process.TtorrentUploadProcess;
+import filesharingsystem.process.UploadProcess;
+import filesharingsystem.process.UploadProcess.UploadException;
+
+
 
 public class Main {
     public static void main(String args[])

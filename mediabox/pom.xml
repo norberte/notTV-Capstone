@@ -46,6 +46,13 @@
       <version>4.5.3</version>
     </dependency>
 
+    <!-- Upnp -->
+    <dependency>
+      <groupId>org.bitlet</groupId>
+      <artifactId>weupnp</artifactId>
+      <version>0.1.4</version>
+    </dependency>
+    
     <!-- ttorrent  -->
     <dependency>
       <groupId>com.turn</groupId>

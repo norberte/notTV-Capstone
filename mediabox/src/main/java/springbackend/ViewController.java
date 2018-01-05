@@ -25,8 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import filesharingsystem.DownloadProcess;
-import filesharingsystem.TtorrentDownloadProcess;
+import filesharingsystem.process.DownloadProcess;
+import filesharingsystem.process.TtorrentDownloadProcess;
+
 
 @Controller
 public class ViewController {
@@ -103,7 +104,7 @@ public class ViewController {
 	    // download file.
 	    DownloadProcess dp = new TtorrentDownloadProcess(
 		torrentFile, new File(System.getProperty("user.home"), "videos"));
-	    filesharingsystem.DownloadProcess.Client client = dp.download();
+	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
 	    client.waitForDownload();
 	    String filename = client.files().get(0).getName();
 	    //removes ".torrent" from delete this if not using TrivialDownloadProcess

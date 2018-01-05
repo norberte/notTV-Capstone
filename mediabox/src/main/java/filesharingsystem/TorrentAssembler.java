@@ -11,7 +11,7 @@ import java.util.List;
  * @author
  * @version
  */
-interface TorrentAssembler {
+public interface TorrentAssembler {
     /**
      * Represents a single node in the bittorrent network.
      * E.g., the seeders or peers of the torrent.
