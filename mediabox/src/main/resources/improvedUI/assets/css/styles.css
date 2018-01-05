@@ -41,3 +41,10 @@
   height: 125%;
   width:  125%;
 }
+
+.formTabs{
+  margin: 1em;
+  width: 25%;
+  height: 10%;
+  background-color: white;
+}

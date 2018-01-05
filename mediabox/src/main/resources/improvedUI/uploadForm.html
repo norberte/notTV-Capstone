@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="assets/css/Features-Boxed.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
 </head>
 
 <body style="background-color:#c8c8c8;">
@@ -42,16 +45,71 @@
       </nav>
   </div>
 
-  <div class="row display-flex" style="height:100%;margin:0px;">
-          <div class="panel-group" role="tablist" aria-multiselectable="false" id="accordion-1" style="margin:0px;">
-            <div class="panel panel-default" style="margin:0px;">
-                <div class="panel-collapse collapse in item-1" role="tabpanel">
-                    <div class="panel-body"><span>Select Video File</span></div>
-                    <div class="panel-body"><span>Video Poster</span></div>
-                    <div class="panel-body"><span>Video Details</span></div>
-                </div>
+  <script type="text/babel">
+
+  class selectVideo extends React.Component {
+      render() {
+          return (
+            <div className="tab">Select Video File
+              <p><input type="file" name="videoFile" accept="video/*"/></p>
             </div>
-          </div>
+          );
+      }
+  }
+
+  class videoPoster extends React.Component {
+      render() {
+          return (
+            <div className="tab">Video Poster
+              <p><input type = "file" name="videoPoster" accept="image/*"/></p>
+            </div>
+          );
+      }
+  }
+
+  class videoDetails extends React.Component {
+      render() {
+          return (
+            <div className="tab">Video Details
+              <p>Video Title<input type = "text" name="videoTitle"/></p>
+              <p>Genre/Category
+              <select name = "videoCategory">
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Some Junk">Some Junk</option>
+              </select>
+              </p>
+            </div>
+          );
+      }
+  }
+
+
+  class tabForm extends React.Component {
+      const formList =
+
+
+      render() {
+          return (
+            <form id="uploadVideo" action="">
+
+            <div>
+              <button type="button" id="prevBtn">Previous</button>
+              <button type="button" id="nextBtn">Next</button>
+            </div>
+
+            </form>
+          );
+      }
+  }
+  ReactDOM.render(
+      <TabForm />,
+      document.getElementById('root')
+  );
+  </script>
+
+  <div id="formRoot">
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
