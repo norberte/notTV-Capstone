@@ -85,6 +85,14 @@
       }
   }
 
+  const Tabs = React.createClass({
+    displayName: 'Tabs',
+    render(){
+      return(
+        <div className="tabs"></div>
+      )
+    }
+  })
 
   class tabForm extends React.Component {
     constructor(props) {
@@ -127,7 +135,7 @@
       }
   }
 
-FORM_PARTS = [
+var FORM_PARTS = [
   <selectVideo/>,
   <videoPoster/>,
   <videoDetails/>
