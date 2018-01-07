@@ -47,21 +47,21 @@
 
   <script type="text/babel">
 
-
-
-
   const Tabs = React.createClass({
     displayName: 'Tabs',
+
     getDefaultProps(){
       return{
         selected: 0
       };
     },
+
     getInitialState(){
       return{
         selected: this.props.selected
       };
     },
+
     _renderContent(){
       return(
         <div className="tab__content">
@@ -69,6 +69,7 @@
         </div>
       );
     },
+
     _renderTitles(){
       function labels(child, index){
         let activeClass = (this.state.selected === index ? 'active' : '');
@@ -77,23 +78,25 @@
             <a href="#"
               className={activeClass}
               onClick={this.handleClick.bind(this, index)}>
-              {child.props.lebel}
+              {child.props.label}
             </a>
           </li>
         );
       }
       return(
-        <ul className="tabs__labels">
-        {this.props.children.map(labels.bind(this))}
-        </ul>
+          <ul className="tabs__labels">
+            {this.props.children.map(labels.bind(this))}
+          </ul>
       );
     },
+
     handleClick(index, event){
       event.preventDefault();
       this.setState({
         selected: index
       });
     },
+
     propTypes:{
       selected: React.PropTypes.number,
       children: React.PropTypes.oneOfType([
@@ -101,9 +104,11 @@
         React.PropTypes.element
       ]).isRequired
     },
+
     render(){
       return(
         <div className="tabs">
+          {this._renderTitles()}
           {this._renderContent()}
         </div>
       );
@@ -117,6 +122,7 @@ const Pane = React.createClass({
     label: React.PropTypes.string.isRequired,
     children: React.PropTypes.element.isRequired
   },
+
   render(){
     return(
       <div>
@@ -130,20 +136,21 @@ const Pane = React.createClass({
 const App = React.createClass({
   render(){
     return(
-      <div>
+
+      <div id="formDiv">
       <form id="uploadVideo" action="">
         <Tabs selected={2}>
-          <Pane label="Tab 1">
+          <Pane label="Select Video File">
           <div className="tab">Select Video File
             <p><input type="file" name="videoFile" accept="video/*"/></p>
           </div>
           </Pane>
-          <Pane label="Tab 2">
+          <Pane label="Select Video Poster">
           <div className="tab">Video Poster
             <p><input type = "file" name="videoPoster" accept="image/*"/></p>
           </div>
           </Pane>
-          <Pane label="Tab 3">
+          <Pane label="Add Video Details">
           <div className="tab">Video Details
             <p>Video Title<input type = "text" name="videoTitle"/></p>
             <p>Genre/Category
@@ -180,7 +187,6 @@ const App = React.createClass({
               <option value="NC-17">NC-17</option>
             </select>
             </p>
-
           </div>
           </Pane>
         </Tabs>
