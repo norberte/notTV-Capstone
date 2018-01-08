@@ -139,7 +139,8 @@ const App = React.createClass({
 
       <div id="formDiv">
       <form id="uploadVideo" action="">
-        <Tabs selected={2}>
+      <fieldset>
+        <Tabs selected={0}>
           <Pane label="Select Video File">
           <div className="tab">Select Video File
             <p><input type="file" name="videoFile" accept="video/*"/></p>
@@ -190,8 +191,16 @@ const App = React.createClass({
           </div>
           </Pane>
         </Tabs>
+        </fieldset>
       </form>
+
+        <div id="subCrit">
+          <p>Video Submission Criteria</p><br />
+        </div>
+
       </div>
+
+
     );
   }
 });

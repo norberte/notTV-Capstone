@@ -50,12 +50,12 @@
 }
 
 ul{
-  border: 1px solid #e7e7e7
+  border: 1px solid #494949
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #abcdef
+  background-color: #232323;
 }
 
 li{
@@ -64,16 +64,39 @@ li{
 
 li a{
   display: block;
-  color: #666;
+  color: white;
   text-align: center;
   padding: 14px 16px;
-  text-decoration: none;
+  text-decoration: none !important;
+}
+
+li a:visited{
+  color: white;
+}
+
+li a:focus{
+  color: white;
 }
 
 li a:hover{
-  background-color: #111;
+  color: white;
+  background-color: #3e473d;
+}
+
+li a{
+  color: white;
 }
 
 .active {
-  background-color: #4CAF50;
+  background-color: #727a71;
+}
+
+#formDiv{
+  border-radius: 5px;
+  border-color: black;
+  border: 1px;
+}
+
+#subCrit{
+  float: right;
 }
