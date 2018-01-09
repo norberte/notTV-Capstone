@@ -141,63 +141,69 @@ const App = React.createClass({
       <form id="uploadVideo" action="">
       <fieldset>
         <Tabs selected={0}>
+
           <Pane label="Select Video File">
-          <div className="tab">Select Video File
+          <div className="tab">
+          <h1>Select Video File</h1>
             <p><input type="file" name="videoFile" accept="video/*"/></p>
           </div>
           </Pane>
+
+
           <Pane label="Select Video Poster">
-          <div className="tab">Video Poster
+          <div className="tab">
+          <h1>Video Poster</h1>
             <p><input type = "file" name="videoPoster" accept="image/*"/></p>
           </div>
           </Pane>
+
+
           <Pane label="Add Video Details">
-          <div className="tab">Video Details
-            <p>Video Title<input type = "text" name="videoTitle"/></p>
-            <p>Genre/Category
+          <div className="tab">
+          <h1>Video Details</h1>
+            <h2>Video Title</h2>
+            <input type = "text" name="videoTitle"/>
+
+            <h2>Genre/Category</h2>
             <select name = "videoCategory">
               <option value="Action">Action</option>
               <option value="Adventure">Adventure</option>
               <option value="Comedy">Comedy</option>
               <option value="Some Junk For Testing">Some Junk</option>
             </select>
-            </p>
-            <p>Description<br />
+
+            <h2>Description</h2>
             <textarea rows="4" cols="50" name="videoDescription">
             Enter the description of the video here.
             </textarea>
-            </p>
-            <p>Tags<br />
+
+            <h2>Tags</h2>
             <textarea rows="4" cols="50" name="videoTags">
             Enter keywords seperated by a comma. For example: Edmonton,Winter,Driving,Fast
             </textarea>
-            </p>
-            <p>Language
+
+            <h2>Language</h2>
             <select name = "videoLanguage">
               <option value="English">English</option>
               <option value="French">French</option>
               <option value="Spanish">Spanish</option>
               <option value="Other">Other</option>
             </select>
-            </p>
-            <p>Content Rating
+
+            <h2>Content Rating</h2>
             <select name = "videoRating">
               <option value="G">G</option>
               <option value="PG">PG</option>
               <option value="R">R</option>
               <option value="NC-17">NC-17</option>
             </select>
-            </p>
           </div>
           </Pane>
+
+
         </Tabs>
         </fieldset>
       </form>
-
-        <div id="subCrit">
-          <p>Video Submission Criteria</p><br />
-        </div>
-
       </div>
 
 
@@ -205,13 +211,35 @@ const App = React.createClass({
   }
 });
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const Criteria = React.createClass({
+  render(){
+    return(
+      <div id="subCrit">
+        <h1>Video Submission Criteria</h1>
+        <ol>
+          <li>
+            abcdefg I just relaly like to pee.
+          </li>
+        </ol>
+      </div>
+    );
+  }
+});
+
+
+
+ReactDOM.render(<App />, document.getElementById('rootLeft'));
+ReactDOM.render(<Criteria />, document.getElementById('rootRight'));
+
+
 
 
 
   </script>
 
-  <div id="root">
+  <div id="rootLeft">
+  </div>
+  <div id="rootRight">
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

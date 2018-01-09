@@ -50,8 +50,8 @@
 }
 
 ul{
-  border: 1px solid #494949
   list-style-type: none;
+  border: 1px solid #494949
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -91,12 +91,31 @@ li a{
   background-color: #727a71;
 }
 
-#formDiv{
+#rootLeft{
+  float: left;
   border-radius: 5px;
   border-color: black;
   border: 1px;
 }
 
-#subCrit{
+#rootRight{
   float: right;
+  margin-right: 2em;
+  margin-left: 2em;
+  border: 1px;
+  border-radius: 5px;
+  border-color: black;
+}
+
+h1{
+  font-size: 16pt;
+}
+
+h2{
+  font-size: 12pt;
+}
+
+.tab{
+  position: absolute;
+  left: 1em;
 }
