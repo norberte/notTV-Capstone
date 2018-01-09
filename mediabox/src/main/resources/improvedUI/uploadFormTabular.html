@@ -195,13 +195,24 @@ const App = React.createClass({
               <option value="Other">Other</option>
             </select>
 
-            <h2>Content Rating</h2>
-            <select name = "videoLanguage">
-              <option value="All Audiences"></option>
-              <option value="Mature">Mature</option>
-            </select>
+            <h2>City</h2>
+            <input type = "text" name="city"/>
 
-            
+            <h2>Country</h2>
+            <input type = "text" name="country"/>
+
+            <h2>License</h2>
+            Allow adaptations of this work to be shared?
+            <input type="radio" name="videoLicense" value="Y"/>Yes<br/>
+            <input type="radio" name="videoLicense" value="N"/>No<br/>
+            <input type="radio" name="videoLicense" value="SA"/>Yes, as long as others share alike
+
+            <h2>Content Rating</h2>
+            <input type="radio" name="videoRating" value="All Audiences"/>All Audiences<br/>
+            <input type="radio" name="videoRating" value="Mature"/>Mature
+
+            <h2>Version</h2>
+            <input type = "text" name="videoVersion"/>
 
 
           </div>
