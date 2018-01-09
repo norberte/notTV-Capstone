@@ -62,6 +62,11 @@ public class ViewController {
         model.addAttribute("fileList", fileList);
         return "Example";
     }
+
+    @RequestMapping("browse")
+    public String browse() {
+	return "browse";
+    }
     
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
