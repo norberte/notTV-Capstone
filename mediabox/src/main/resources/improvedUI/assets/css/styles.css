@@ -92,19 +92,15 @@ li a{
 }
 
 #rootLeft{
-  float: left;
-  border-radius: 5px;
-  border-color: black;
-  border: 1px;
+
 }
 
 #rootRight{
   float: right;
   margin-right: 2em;
-  margin-left: 2em;
-  border: 1px;
-  border-radius: 5px;
-  border-color: black;
+  margin-left: 34em;
+  padding-left: 1em;
+  border-left: 2px solid black;
 }
 
 h1{
