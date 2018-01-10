@@ -1,11 +1,16 @@
+import CategoryFilter from './CategoryFilter.js';
+const React = require("react");
+const ReactDOM = require("react-dom");
+
+
 class Browse extends React.Component {
     render() {
 	return (
-	    <div className="row display-flex" style="height:100%;margin:0px;">
-	      <div className="col-md-2" style="height:100vh;background-color:#4b4646;padding:0px;">
-		// <CategoryFilter categories={this.props.categories}/>
+	    <div className="row display-flex categories-row">
+	      <div className="col-md-2 categories-column">
+		<CategoryFilter categories={this.props.categories}/>
 	      </div>
-	      <div className="col-md-10" style="height:100vh;">
+	      <div className="col-md-10 results-container">
 	      </div>
 	    </div>
 	);
@@ -23,6 +28,14 @@ let CATEGORIES = [
     },
     {
 	name: "City",
-	entries: []
+	entries: [
+	    "Edmonton",
+	    "Kelowna"
+	]
     }
 ];
+
+ReactDOM.render(
+    <Browse categories={CATEGORIES}/>,
+    document.getElementById('root')
+);

@@ -71,8 +71,7 @@
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
 	<configuration>
-	  <!-- <mainClass>springbackend.Application</mainClass> -->
-	  <mainClass>filesharingsystem.Main</mainClass>
+	  <mainClass>springbackend.Application</mainClass>
 	</configuration>
 	<executions>
 	  <execution>

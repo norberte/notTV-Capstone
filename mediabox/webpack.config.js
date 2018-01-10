@@ -13,7 +13,7 @@ module.exports = {
 	browse: './src/main/js/browse/Browse.js'
     },
     output: {
-	path: path.join(__dirname, 'src/main/resources/static/bundle'),
+	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
 	filename: '[name]-bundle.js'
     },
     plugins: [ commonsPlugin ],
@@ -23,7 +23,6 @@ module.exports = {
     		exclude: /(node_modules)/,
     		loader: 'babel-loader',
     		query: {
-    		    cacheDirectory: true,
     		    presets: ['env', 'react']
     		}
     	    }

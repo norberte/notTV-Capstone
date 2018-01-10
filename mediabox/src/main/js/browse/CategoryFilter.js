@@ -1,3 +1,5 @@
+const React = require("react");
+
 class CategoryEntry extends React.Component {
     render() {
 	return (
@@ -11,15 +13,17 @@ class CategoryEntry extends React.Component {
 
 class CategoryType extends React.Component {
     render() {
+	let entryClass = "panel-collapse collapse item-" + this.props.num;
+	let href = "#accordion-1 .item-" + this.props.num;
 	return (
 	    <div className="panel panel-default">
 	      <div className="panel-heading" role="tab">
 		<h4 className="panel-title">
-		  <span className="caret"/>
-		  <a role="button" data-toggle="collapse" data-parent="#accordion-1" aria-expanded="true" href="#accordion-1 .item-1" style="margin:4px;">{this.props.name} </a>
+		  <span className="caret"></span>
+		  <a role="button" data-toggle="collapse" data-parent="#accordion-1" aria-expanded="false" href={href} className="category-type-header">{this.props.name} </a>
 		</h4>
 	      </div>
-	      <div className="panel-collapse collapse in item-1" role="tabpanel">
+	      <div className={entryClass} role="tabpanel">
 		{
 		    this.props.entries.map((name, idx)=> {
 			return <CategoryEntry key={idx} name={name}/>;
@@ -32,13 +36,13 @@ class CategoryType extends React.Component {
 }
 
 
-class CategoryFilter extends React.Component {
+export default class CategoryFilter extends React.Component {
     render() {
 	return (
-	    <div className="panel-group" role="tablist" aria-multiselectable="true" id="accordion-1" style="margin:0px;">
+	    <div className="panel-group category-filter" role="tablist" aria-multiselectable="true" id="accordion-1">
 	      {
 		  this.props.categories.map((cat, idx)=>{
-		      return <CategoryType name={cat.name} entries={cat.entries}/>;
+		      return <CategoryType key={idx} num={idx + 1} name={cat.name} entries={cat.entries}/>;
 		  })
 	      }
 	    </div>
