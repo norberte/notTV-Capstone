@@ -11,7 +11,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -39,28 +41,62 @@ public class VideoSubmissionController extends WebMvcConfigurerAdapter {
         if (bindingResult.hasErrors()) {
             return "form";
         } else {
-        	String trackerFPath = startUploadProcess();  // let the upload-process return the tracker-filePath
-        	// TO DO: figure out how to get author of the video submission
-        	// since the author's user id is not included on the HTML form
-        	int userID = 0;
+        	File videoFile = new File("");
+        	File thumbnailFile = new File("");
+        	
+        	String trackerURL = startUploadProcess(videoFile);  // upload-process returns the tracker-filePath
+        	String thumbnailURL = storeThumbnailOnServer(thumbnailFile);
+        	
+        	
+        	String fileType = getVideoExtension(videoFile.getPath());
+        	
+        	int userID = getUserID(videoSubmissionForm.getUserName());
+        	videoSubmissionForm.setFileType(fileType);
         	videoSubmissionForm.setAuthor(userID); // get the user id and add it manually to the form
-        	videoSubmissionForm.setTrackerFilePath(trackerFPath); // add tracker-filePath manually to the form
+        	videoSubmissionForm.setThumbnailURL(thumbnailURL);
+        	videoSubmissionForm.setTrackerURL(trackerURL); // add tracker-filePath manually to the form
+        	
         	storeVideoFormIntoDB(videoSubmissionForm);
         }
 
         return "redirect:/results";
     }
     
-    public String startUploadProcess() {
+    public String startUploadProcess(File video) {
     	// TO DO: call the upload process from here
     	return "";
+    }
+    
+    public String storeThumbnailOnServer(File img) {
+    	return "";
+    }
+    
+    public String getVideoExtension(String videoFilePath) {
+    	return videoFilePath.substring(videoFilePath.lastIndexOf('.')+1);
+    }
+    
+    public int getUserID(String userName) {
+    	// search for userID based on userName
+    	ResultSetExtractor<Integer> rse = null;
+    	final String SQL_QUERY = "SELECT id FROM nottv_user WHERE username = ?";
+    	
+    	PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
+                ps.setString(1, userName);
+                
+                return ps;
+            }
+        };
+    	
+    	return this.jdbc.query(psc, rse);
     }
     
     public void storeVideoFormIntoDB(VideoForm vf) {
         // insert statement
     	final String INSERT_SQL = "INSERT INTO video(title, description, version,"
-    			+ " fileType, language, city, country, license, tags, "
-    			+ "author, trackerFilePath) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    			+ " fileType, language, city, country, license, "
+    			+ "author, thumbnailURL, trackerURL, contentRating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     	
     	PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -73,9 +109,10 @@ public class VideoSubmissionController extends WebMvcConfigurerAdapter {
                 ps.setString(6, vf.getCity());
                 ps.setString(7, vf.getCountry());
                 ps.setString(8, vf.getLicense());
-                ps.setString(9, vf.getTags());
-                ps.setInt(10, vf.getAuthor());
-                ps.setString(11, vf.getTrackerFilePath());
+                ps.setInt(9, vf.getAuthor());
+                ps.setString(10, vf.getThumbnailURL());
+                ps.setString(11, vf.getTrackerURL());
+                ps.setString(12, vf.getContentRating());
                 return ps;
             }
         };
