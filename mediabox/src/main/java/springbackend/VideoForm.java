@@ -1,34 +1,20 @@
 package springbackend;
 
-import javax.validation.constraints.Size;
-
 public class VideoForm {
-	@Size(min=2, max=50)
 	private String title;
-	@Size(max=500)
 	private String description;
 	private int version;
-	@Size(max=4)
 	private String fileType;
+	private String userName;
 	private int author;
-	@Size(max=25)
 	private String language;
-	@Size(max=25)
 	private String city;
-	@Size(max=25)
 	private String country;
-	@Size(max=25)
 	private String license;
-	@Size(max=500)
-	private String tags;
-	@Size(max=100)
-	private String trackerFilePath;
+	private String trackerURL;
+	private String thumbnailURL;
+	private String contentRating;
 	
-	// 1-arg constructor
-	public VideoForm(String title) {
-		super();
-		this.title = title;
-	}
 	
 	// no-arg constructor
 	public VideoForm() {
@@ -36,8 +22,8 @@ public class VideoForm {
 	}
 
 	// all argument constructor
-	public VideoForm(String title, String description, int version, String fileType, int author,
-			String language, String city, String country, String license, String tags, String trackerFilePath) {
+	public VideoForm(String title, String description, int version, String fileType, int author, String language,
+			String city, String country, String license, String trackerURL, String thumbnailURL, String contentRating) {
 		super();
 		this.title = title;
 		this.description = description;
@@ -48,18 +34,11 @@ public class VideoForm {
 		this.city = city;
 		this.country = country;
 		this.license = license;
-		this.tags = tags;
-		this.trackerFilePath = trackerFilePath;
+		this.trackerURL = trackerURL;
+		this.thumbnailURL = thumbnailURL;
+		this.contentRating = contentRating;
 	}
 	
-	public String getTrackerFilePath() {
-		return trackerFilePath;
-	}
-
-	public void setTrackerFilePath(String trackerFilePath) {
-		this.trackerFilePath = trackerFilePath;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -132,21 +111,45 @@ public class VideoForm {
 		this.license = license;
 	}
 
-	public String getTags() {
-		return tags;
+	public String getTrackerURL() {
+		return trackerURL;
 	}
 
-	public void setTags(String tags) {
-		this.tags = tags;
+	public void setTrackerURL(String trackerURL) {
+		this.trackerURL = trackerURL;
 	}
 
-	@Override
-	public String toString() {
-		return "Video [title=" + title + ", description=" + description + ", version=" + version
-				+ ", fileType=" + fileType + ", author=" + author + ", language=" + language + ", city=" + city
-				+ ", country=" + country + ", license=" + license + ", tags=" + tags + "]";
+	public String getThumbnailURL() {
+		return thumbnailURL;
+	}
+
+	public void setThumbnailURL(String thumbnailURL) {
+		this.thumbnailURL = thumbnailURL;
+	}
+
+	public String getContentRating() {
+		return contentRating;
+	}
+
+	public void setContentRating(String contentRating) {
+		this.contentRating = contentRating;
 	}
 	
+	@Override
+	public String toString() {
+		return "VideoForm [title=" + title + ", description=" + description + ", version=" + version + ", fileType="
+				+ fileType + ", author=" + author + ", language=" + language + ", city=" + city + ", country=" + country
+				+ ", license=" + license + ", trackerURL=" + trackerURL + ", thumbnailURL=" + thumbnailURL
+				+ ", contentRating=" + contentRating + ", userName =" + userName +  "]";
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	
 	/* temporary code describing the connection of fields from HTML form to VideoForm object
 	 * 
