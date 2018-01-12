@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
 </head>
 
-<body style="background-color:#c8c8c8;">
+<body>
 
   <div>
       <nav class="navbar navbar-default navigation-clean" style="margin:0px;background-color:rgb(0,0,0);background-image:url(&quot;null&quot;);border-color:#424342;border-radius:0px;">
@@ -46,22 +46,18 @@
   </div>
 
   <script type="text/babel">
-
   const Tabs = React.createClass({
     displayName: 'Tabs',
-
     getDefaultProps(){
       return{
         selected: 0
       };
     },
-
     getInitialState(){
       return{
         selected: this.props.selected
       };
     },
-
     _renderContent(){
       return(
         <div className="tab__content">
@@ -69,7 +65,6 @@
         </div>
       );
     },
-
     _renderTitles(){
       function labels(child, index){
         let activeClass = (this.state.selected === index ? 'active' : '');
@@ -89,14 +84,12 @@
           </ul>
       );
     },
-
     handleClick(index, event){
       event.preventDefault();
       this.setState({
         selected: index
       });
     },
-
     propTypes:{
       selected: React.PropTypes.number,
       children: React.PropTypes.oneOfType([
@@ -104,7 +97,6 @@
         React.PropTypes.element
       ]).isRequired
     },
-
     render(){
       return(
         <div className="tabs">
@@ -114,15 +106,12 @@
       );
     }
   });
-
-
 const Pane = React.createClass({
   displayName: 'Pane',
   propTypes:{
     label: React.PropTypes.string.isRequired,
     children: React.PropTypes.element.isRequired
   },
-
   render(){
     return(
       <div>
@@ -131,49 +120,38 @@ const Pane = React.createClass({
     );
   }
 });
-
-
 const App = React.createClass({
   render(){
     return(
-
       <div id="formDiv">
       <form id="uploadVideo" action="#" method="post">
       <fieldset>
         <Tabs selected={0}>
-
           <Pane label="Select Video File">
           <div className="tab">
           <h1>Select Video File</h1>
             <p><input type="file" name="videoFile" accept="video/*"/></p>
           </div>
           </Pane>
-
-
           <Pane label="Select Video Poster">
           <div className="tab">
           <h1>Video Poster</h1>
             <p><input type = "file" name="videoPoster" accept="image/*"/></p>
           </div>
           </Pane>
-
-
           <Pane label="Add Video Details">
           <div className="tab">
           <h1>Video Details</h1>
             <h2>Video Title</h2>
             <input type = "text" name="videoTitle"/>
-
             <h2>Description</h2>
             <textarea rows="4" cols="50" name="videoDescription">
             Enter the description of the video here.
             </textarea>
-
             <h2>Tags</h2>
             <textarea rows="4" cols="50" name="videoTags">
             Enter keywords seperated by a comma. For example: Edmonton,Winter,Driving,Fast
             </textarea>
-
             <h2>Language</h2>
             <select name = "videoLanguage">
               <option value="English">English</option>
@@ -181,29 +159,22 @@ const App = React.createClass({
               <option value="Spanish">Spanish</option>
               <option value="Other">Other</option>
             </select>
-
             <h2>City</h2>
             <input type = "text" name="city"/>
-
             <h2>Country</h2>
             <input type = "text" name="country"/>
-
             <h2>License</h2>
             Allow adaptations of this work to be shared?<br/>
             <input type="radio" name="videoLicense" value="Y"/>Yes&emsp;
             <input type="radio" name="videoLicense" value="N"/>No&emsp;
             <input type="radio" name="videoLicense" value="SA"/>Yes, as long as others share alike
-
             <h2>Content Rating</h2>
             <input type="radio" name="videoRating" value="All Audiences"/>All Audiences&emsp;
             <input type="radio" name="videoRating" value="Mature"/>Mature
-
             <h2>Version</h2>
             <input type = "text" name="videoVersion"/>
-
           </div>
           </Pane>
-
           <Pane label="Submit Video">
           <div className="tab">
           <h1>Submit Video</h1>
@@ -211,18 +182,13 @@ const App = React.createClass({
             <input type="hidden" name="author" value="testUser"/>
           </div>
           </Pane>
-
-
         </Tabs>
         </fieldset>
       </form>
       </div>
-
-
     );
   }
 });
-
 const Criteria = React.createClass({
   render(){
     return(
@@ -264,26 +230,15 @@ const Criteria = React.createClass({
     );
   }
 });
-
-
-
 ReactDOM.render(<App />, document.getElementById('rootLeft'));
 ReactDOM.render(<Criteria />, document.getElementById('rootRight'));
-
-
-
-
-
   </script>
-
   <div id="rootLeft">
   </div>
   <div id="rootRight">
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="assets/js/select.js"></script>
-
 </body>
 </html>

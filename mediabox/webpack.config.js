@@ -4,13 +4,14 @@ var webpack = require('webpack');
 
 // pack common dependencies
 let commonsPlugin = new webpack.optimize.CommonsChunkPlugin({
-    name: 'commons', 
+    name: 'commons',
     filename: 'common.js' // Name of the output file
 });
 
 module.exports = {
     entry: {
-	browse: './src/main/js/browse/Browse.js'
+	browse:       './src/main/js/browse/Browse.js',
+    upload:   './src/main/js/upload/Upload.js'
     },
     output: {
 	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
