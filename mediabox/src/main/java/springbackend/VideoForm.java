@@ -1,159 +1,199 @@
 package springbackend;
 
+import java.io.File;
+
 public class VideoForm {
-	private String title;
-	private String description;
-	private int version;
-	private String fileType;
-	private String userName;
-	private int author;
-	private String language;
-	private String city;
-	private String country;
-	private String license;
-	private String trackerURL;
-	private String thumbnailURL;
-	private String contentRating;
-	
-	
-	// no-arg constructor
-	public VideoForm() {
-		super();
-	}
+    private File videoFile;
+    private File thumbnailFile;
+    private String title;
+    private String description;
+    private int version;
+    private String fileType;
+    private String userName;
+    private int author;
+    private String language;
+    private String city;
+    private String country;
+    private String license;
+    private String trackerURL;
+    private String thumbnailURL;
+    private String contentRating;
 
-	// all argument constructor
-	public VideoForm(String title, String description, int version, String fileType, int author, String language,
-			String city, String country, String license, String trackerURL, String thumbnailURL, String contentRating) {
-		super();
-		this.title = title;
-		this.description = description;
-		this.version = version;
-		this.fileType = fileType;
-		this.author = author;
-		this.language = language;
-		this.city = city;
-		this.country = country;
-		this.license = license;
-		this.trackerURL = trackerURL;
-		this.thumbnailURL = thumbnailURL;
-		this.contentRating = contentRating;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
+    // TO DO: add category variables
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
-	public String getDescription() {
-		return description;
-	}
+    // no-arg constructor
+    public VideoForm() {
+        super();
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    // 2-arg constructor
+    public VideoForm(File video, File thumbnail) {
+        super();
+        this.videoFile = video;
+        this.thumbnailFile = thumbnail;
+    }
 
-	public int getVersion() {
-		return version;
-	}
+    // 2-arg constructor
+    public VideoForm(File video, String title) {
+        super();
+        this.videoFile = video;
+        this.title = title;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    // all argument constructor
+    public VideoForm(File videoFile, File thumbnailFile, String title, String description, int version, String fileType,
+            String userName, int author, String language, String city, String country, String license,
+            String trackerURL, String thumbnailURL, String contentRating) {
+        super();
+        this.videoFile = videoFile;
+        this.thumbnailFile = thumbnailFile;
+        this.title = title;
+        this.description = description;
+        this.version = version;
+        this.fileType = fileType;
+        this.userName = userName;
+        this.author = author;
+        this.language = language;
+        this.city = city;
+        this.country = country;
+        this.license = license;
+        this.trackerURL = trackerURL;
+        this.thumbnailURL = thumbnailURL;
+        this.contentRating = contentRating;
+    }
 
-	public String getFileType() {
-		return fileType;
-	}
+    public File getVideoFile() {
+        return videoFile;
+    }
 
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
+    public void setVideoFile(File videoFile) {
+        this.videoFile = videoFile;
+    }
 
-	public int getAuthor() {
-		return author;
-	}
+    public File getThumbnailFile() {
+        return thumbnailFile;
+    }
 
-	public void setAuthor(int author) {
-		this.author = author;
-	}
+    public void setThumbnailFile(File thumbnailFile) {
+        this.thumbnailFile = thumbnailFile;
+    }
 
-	public String getLanguage() {
-		return language;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public int getVersion() {
+        return version;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-	public String getLicense() {
-		return license;
-	}
+    public String getFileType() {
+        return fileType;
+    }
 
-	public void setLicense(String license) {
-		this.license = license;
-	}
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
-	public String getTrackerURL() {
-		return trackerURL;
-	}
+    public int getAuthor() {
+        return author;
+    }
 
-	public void setTrackerURL(String trackerURL) {
-		this.trackerURL = trackerURL;
-	}
+    public void setAuthor(int author) {
+        this.author = author;
+    }
 
-	public String getThumbnailURL() {
-		return thumbnailURL;
-	}
+    public String getLanguage() {
+        return language;
+    }
 
-	public void setThumbnailURL(String thumbnailURL) {
-		this.thumbnailURL = thumbnailURL;
-	}
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
-	public String getContentRating() {
-		return contentRating;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setContentRating(String contentRating) {
-		this.contentRating = contentRating;
-	}
-	
-	@Override
-	public String toString() {
-		return "VideoForm [title=" + title + ", description=" + description + ", version=" + version + ", fileType="
-				+ fileType + ", author=" + author + ", language=" + language + ", city=" + city + ", country=" + country
-				+ ", license=" + license + ", trackerURL=" + trackerURL + ", thumbnailURL=" + thumbnailURL
-				+ ", contentRating=" + contentRating + ", userName =" + userName +  "]";
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	
-	/* temporary code describing the connection of fields from HTML form to VideoForm object
-	 * 
-	 * <form action="#" th:action="@{/videoSubmission}" th:object="${form}" method="post">
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getTrackerURL() {
+        return trackerURL;
+    }
+
+    public void setTrackerURL(String trackerURL) {
+        this.trackerURL = trackerURL;
+    }
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    public String getContentRating() {
+        return contentRating;
+    }
+
+    public void setContentRating(String contentRating) {
+        this.contentRating = contentRating;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoForm [title=" + title + ", description=" + description + ", version=" + version + ", fileType="
+                + fileType + ", author=" + author + ", language=" + language + ", city=" + city + ", country=" + country
+                + ", license=" + license + ", trackerURL=" + trackerURL + ", thumbnailURL=" + thumbnailURL
+                + ", contentRating=" + contentRating + ", userName =" + userName +  "]";
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /* temporary code describing the connection of fields from HTML form to VideoForm object
+     * 
+     * <form action="#" th:action="@{/videoSubmission}" th:object="${form}" method="post">
     	 for title add this --> th:field="*{title}"
          for description add this --> th:field="*{description}"
          for version add this --> th:field="*{version}"
@@ -164,6 +204,6 @@ public class VideoForm {
          for license add this --> th:field="*{license}"
          for tags add this --> th:field="*{tags}"
     </form>
-	 * 
-	 */
+     * 
+     */
 }
