@@ -63,6 +63,11 @@ public class ViewController {
         return "Example";
     }
     
+    @RequestMapping("/browse")
+    public String browse(){
+        return "Browse";
+    }
+    
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
     public void video(@PathVariable(value="videoFile") String source,
