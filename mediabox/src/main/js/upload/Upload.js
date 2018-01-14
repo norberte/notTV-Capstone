@@ -95,7 +95,7 @@ render(){
   return(
 
     <div id="formDiv">
-    <form id="uploadVideo" action="#" method="post">
+    <form id="uploadVideo" action="/videoSubmission" method="post" commandName="videoForm">
     <fieldset>
       <Tabs selected={0}>
 
