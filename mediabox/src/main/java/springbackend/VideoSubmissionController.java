@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -38,16 +39,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
-public class VideoSubmissionController extends WebMvcConfigurerAdapter {
+public class VideoSubmissionController {
     @Autowired
     private JdbcTemplate jdbc;
     private static final Logger log = LoggerFactory.getLogger(VideoSubmissionController.class);
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/results").setViewName("results");
+    
+    @RequestMapping("/results")
+    public String results(){
+        return "results";
     }
-
+    
     @GetMapping("/videoSubmission")
     public String showForm(Model model) {
         model.addAttribute("form", new VideoForm());

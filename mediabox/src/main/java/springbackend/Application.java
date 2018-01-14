@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
-@ImportResource("classpath:dbConfig.xml")
 public class Application {
     
     //Window and Linux commands to open default browser to localhost:8080
