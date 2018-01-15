@@ -6,8 +6,9 @@
    "description": "Client interface to notTV's media box.",
    "dependencies": {
       "react": "^16.2.0",
+      "jquery": "^3.2.1",
+      "bootstrap": "3.3.7",
       "react-dom": "^16.2.0",
-      "react-bootstrap": "",
       "webpack": "^3.10.0"
    },
    "scripts": {

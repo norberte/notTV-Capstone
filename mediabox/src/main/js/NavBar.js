@@ -1,5 +1,5 @@
-/*
 const React = require("react");
+const ReactDOM = require("react-dom");
 
 const NavBar = React.createClass({
 render(){
@@ -37,4 +37,3 @@ render(){
 });
 
 ReactDOM.render(<NavBar />, document.getElementById('rootNav'));
-*/

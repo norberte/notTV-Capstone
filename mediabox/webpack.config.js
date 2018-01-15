@@ -10,8 +10,9 @@ let commonsPlugin = new webpack.optimize.CommonsChunkPlugin({
 
 module.exports = {
     entry: {
-	browse:       './src/main/js/browse/Browse.js',
-    upload:   './src/main/js/upload/Upload.js'
+	global: ['jquery', 'bootstrap', './src/main/js/NavBar.js'],
+	browse: './src/main/js/browse/Browse.js',
+	upload: './src/main/js/upload/Upload.js'
     },
     output: {
 	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
