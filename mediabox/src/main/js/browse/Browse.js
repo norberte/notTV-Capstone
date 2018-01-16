@@ -6,11 +6,30 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 
 class Browse extends React.Component {
+    constructor(props) {
+	super(props);
+	this.state = {
+	    categories: [],
+	    videos: []
+	};
+	// get the categories.
+	$.ajax({
+	    url: "/info/categories",
+	    dataType: "json",
+	    success: (data) => {
+		console.log(data);
+		this.setState({
+		    categories: data
+		});
+	    }
+	});
+    }
+    
     render() {
 	return (
 	    <div className="row display-flex categories-row">
 	      <div className="col-md-2 categories-column">
-		<CategoryFilter categories={this.props.categories}/>
+		<CategoryFilter categories={this.state.categories}/>
 	      </div>
 	      <div className="col-md-10 results-container">
 		<TopBar/>
@@ -28,24 +47,6 @@ class Browse extends React.Component {
     }
 }
 
-let CATEGORIES = [
-    {
-	name: "Misc",
-	entries: [
-	    "In Library",
-	    "Short Videos",
-	    "Long Videos"
-	]
-    },
-    {
-	name: "City",
-	entries: [
-	    "Edmonton",
-	    "Kelowna"
-	]
-    }
-];
-
 let VIDEOS = [];
 for(let i=0;i<8;i++)
     VIDEOS.push({
@@ -54,6 +55,6 @@ for(let i=0;i<8;i++)
     });
 
 ReactDOM.render(
-    <Browse categories={CATEGORIES} videos={VIDEOS}/>,
+    <Browse videos={VIDEOS}/>,
     document.getElementById('root')
 );

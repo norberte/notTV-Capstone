@@ -2,7 +2,7 @@ import './NavBar.js';
 
 // workaround for adding common styles.
 const links = [
-    "/css/styles.css",
+    // "/css/styles.css",
     "/css/nav.css",
     "/css/bootstrap/bootstrap-theme.min.css",
     // TODO: remove CDN reference

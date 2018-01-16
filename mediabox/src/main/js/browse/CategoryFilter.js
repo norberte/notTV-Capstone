@@ -4,7 +4,8 @@ class CategoryEntry extends React.Component {
     render() {
 	return (
 	    <div className="panel-body">
-	      <span>{this.props.name}</span>
+	      <span className="category-id hidden">{this.props.entry.id}</span>
+	      <span>{this.props.entry.name}</span>
 	      <i className="glyphicon glyphicon-ok pull-right hidden"/>
 	    </div>
 	);
@@ -25,8 +26,8 @@ class CategoryType extends React.Component {
 	      </div>
 	      <div className={entryClass} role="tabpanel">
 		{
-		    this.props.entries.map((name, idx)=> {
-			return <CategoryEntry key={idx} name={name}/>;
+		    this.props.entries.map((entry, idx)=> {
+			return <CategoryEntry key={idx} entry={entry}/>;
 		    })
 		}
 	      </div>
@@ -42,7 +43,7 @@ export default class CategoryFilter extends React.Component {
 	    <div className="panel-group category-filter" role="tablist" aria-multiselectable="true" id="accordion-1">
 	      {
 		  this.props.categories.map((cat, idx)=>{
-		      return <CategoryType key={idx} num={idx + 1} name={cat.name} entries={cat.entries}/>;
+		      return <CategoryType key={idx} num={idx + 1} name={cat.name} entries={cat.values}/>;
 		  })
 	      }
 	    </div>
