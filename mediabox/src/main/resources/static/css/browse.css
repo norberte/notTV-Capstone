@@ -5,7 +5,6 @@ nav{
 .navbar navbar-default navigation-clean {
     margin:0px;
     background-color:rgb(0,0,0);
-    background-image:url(&quot;null&quot;);
     border-color:#424342;
     border-radius:0px;
 }
@@ -25,7 +24,6 @@ nav{
 }
 
 .active{
-    background-image:url(&quot;null&quot;);
     background-color:rgb(0,0,0);
 }
 
