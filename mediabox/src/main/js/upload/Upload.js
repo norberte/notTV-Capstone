@@ -1,23 +1,43 @@
-//import TopBar from '../NavBar.js';
-
+import NavBar from '../NavBar.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
 
-const Tabs = React.createClass({
-  displayName: 'Tabs',
+class Tabs extends React.Component {
 
+constructor(props){
+    super(props);
+    this.state = {
+        selected: 0
+    };
+}
+
+  displayName: 'Tabs';
+
+
+//The commented out code below was code that was needed for an older version of this file. It ahs been left here for reference.
+/*
+    propTypes: {
+      selected: React.PropTypes.number,
+      children: React.PropTypes.oneOfType([React.PropTypes.array,React.PropTypes.element]).isRequired
+  }
+*/
+
+/*
   getDefaultProps(){
     return{
       selected: 0
     };
-  },
+  }
+*/
 
+/*
   getInitialState(){
     return{
       selected: this.props.selected
     };
-  },
+  }
+*/
 
   _renderContent(){
     return(
@@ -25,11 +45,11 @@ const Tabs = React.createClass({
       {this.props.children[this.state.selected]}
       </div>
     );
-  },
+  }
 
   _renderTitles(){
     function labels(child, index){
-      let activeClass = (this.state.selected === index ? 'active' : '');
+     let activeClass = (this.state.selected === index ? 'active' : '');
       return(
         <li key={index}>
           <a href="#"
@@ -45,22 +65,14 @@ const Tabs = React.createClass({
           {this.props.children.map(labels.bind(this))}
         </ul>
     );
-  },
+  }
 
   handleClick(index, event){
     event.preventDefault();
     this.setState({
       selected: index
     });
-  },
-
-  propTypes:{
-    selected: React.PropTypes.number,
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.element
-    ]).isRequired
-  },
+}
 
   render(){
     return(
@@ -70,27 +82,30 @@ const Tabs = React.createClass({
       </div>
     );
   }
-});
 
-
-const Pane = React.createClass({
-displayName: 'Pane',
-propTypes:{
-  label: React.PropTypes.string.isRequired,
-  children: React.PropTypes.element.isRequired
-},
-
-render(){
-  return(
-    <div>
-      {this.props.children}
-    </div>
-  );
 }
-});
 
+class Pane extends React.Component {
 
-const App = React.createClass({
+    displayName: 'Pane';
+
+/*
+    propTypes:{
+        label: React.PropTypes.string.isRequired,
+        children: React.PropTypes.element.isRequired
+    }
+*/
+
+    render(){
+        return(
+        <div>
+            {this.props.children}
+        </div>
+    );
+    }
+}
+
+class App extends React.Component {
 render(){
   return(
 
@@ -178,9 +193,9 @@ render(){
 
   );
 }
-});
+}
 
-const Criteria = React.createClass({
+class Criteria extends React.Component {
 render(){
   return(
     <div id="subCrit">
@@ -220,43 +235,10 @@ render(){
     </div>
   );
 }
-});
-
-const NavBar = React.createClass({
-render(){
-  return(
-      <div>
-          <nav className="navbar navbar-default navigation-clean">
-              <div className="container">
-                <div className="navbar-header">
-                  <a className="navbar-brand navbar-link" href="http://localhost:8080/browse"><img className="notTVLogo" src="/img/notTV_logo_white.png" alt="notTV Logo"/></a>
-                </div>
-                  <div className="collapse navbar-collapse" id="navcol-1">
-                      <form className="navbar-form navbar-left" target="_self">
-                          <div className="form-group">
-                              <input className="form-control search-field" type="search" name="search" placeholder="Search" id="search-field"/>
-                          </div>
-                      </form>
-                      <ul className="nav navbar-nav navbar-right">
-                          <li className="active" role="presentation"><a href="#">Watch </a></li>
-                          <li role="presentation"><a href="#">Search </a></li>
-                          <li role="presentation"><a href="http://localhost:8080/upload">Submit Video</a></li>
-                          <li className="dropdown"><a className="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">Account </a>
-                              <ul className="dropdown-menu" role="menu">
-                                  <li role="presentation"><a href="#">First Item</a></li>
-                                  <li role="presentation"><a href="#">Second Item</a></li>
-                                  <li role="presentation"><a href="#">Third Item</a></li>
-                              </ul>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-          </nav>
-      </div>
-  );
 }
-});
 
-ReactDOM.render(<NavBar />, document.getElementById('rootNav'));
+
+
+//ReactDOM.render(<NavBar />, document.getElementById('rootNav'));
 ReactDOM.render(<App />, document.getElementById("rootLeft"));
 ReactDOM.render(<Criteria />, document.getElementById('rootRight'));

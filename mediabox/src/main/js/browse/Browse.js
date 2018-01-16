@@ -1,3 +1,4 @@
+import NavBar from '../NavBar.js';
 import CategoryFilter from './CategoryFilter.js';
 import TopBar from './TopBar.js';
 import CarouselLayout from './CarouselLayout.js';
