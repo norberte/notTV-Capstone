@@ -37,70 +37,17 @@
   border-right:10px solid #3f73b1;
 }
 
-.notTVLogo{
-  height: 125%;
-  width:  125%;
-}
-
-.formTabs{
-  margin: 1em;
-  width: 25%;
-  height: 10%;
-  background-color: white;
-}
-
-ul{
+#rootLeft ul{
   list-style-type: none;
   border: 1px solid #494949
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #232323;
+  background-color: #373a38;
 }
 
-li{
+#rootLeft li{
   float: left
-}
-
-li a{
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none !important;
-}
-
-li a:visited{
-  color: white;
-}
-
-li a:focus{
-  color: white;
-}
-
-li a:hover{
-  color: white;
-  background-color: #3e473d;
-}
-
-li a{
-  color: white;
-}
-
-.active {
-  background-color: #727a71;
-}
-
-#rootLeft{
-
-}
-
-#rootRight{
-  float: right;
-  margin-right: 2em;
-  margin-left: 34em;
-  padding-left: 1em;
-  border-left: 2px solid black;
 }
 
 h1{
@@ -114,4 +61,11 @@ h2{
 .tab{
   position: absolute;
   left: 1em;
+}
+
+.formTabs{
+  margin: 0;
+  width: 25%;
+  height: 10%;
+  background-color: black;
 }
