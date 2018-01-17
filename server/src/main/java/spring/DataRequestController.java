@@ -1,5 +1,8 @@
 package spring;
 
+import java.sql.ResultSet;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,18 +22,21 @@ public class DataRequestController {
     JdbcTemplate jdbcTemplate;
     
     @RequestMapping("/video-data")
-    public void videoData(@RequestParam("filter") String filter){
+    public List<VideoData> videoData(@RequestParam(value="filter", required=false) String filter){
         
-        String query = "Select id From Video";
-        for(String categoryValue :filter.split("+")){
-            query += "Intersect +"
-                    + "Select categoryValueId"
-                    + "From video_category_value_join Natural Join category_value As cv"
-                    + "Where cv.name = " + categoryValue;
+        String query = "Select * From Video";
+        if(filter != null){
+            for(String categoryValue :filter.split("+")){
+                query += "Intersect +"
+                        + "Select categoryValueId"
+                        + "From video_category_value_join Natural Join category_value As cv"
+                        + "Where cv.name = " + categoryValue;
+            }
         }
         query += ";";
         
-        jdbcTemplate.query(query, rse)
+        List<VideoData> videos = jdbcTemplate.query(query, (rs, row) -> new VideoData(rs.getLong("id"), rs.getString("title")) );
         
+        return videos;
     }
 }
