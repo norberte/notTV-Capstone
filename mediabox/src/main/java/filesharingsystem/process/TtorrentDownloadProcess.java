@@ -1,4 +1,4 @@
-package filesharingsystem;
+package filesharingsystem.process;
 
 import java.io.File;
 import java.io.IOException;

@@ -15,31 +15,48 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import filesharingsystem.DownloadProcess;
-import filesharingsystem.TtorrentDownloadProcess;
+import filesharingsystem.PortMapException;
+import filesharingsystem.PortMapper;
+import filesharingsystem.process.DownloadProcess;
+import filesharingsystem.process.TtorrentDownloadProcess;
 
 @Controller
 public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
     private final File torrentDir, videoDir;
 
-    public ViewController() {
+    @Autowired
+    public ViewController(PortMapper portMapper) {
+	// Set up directories to store files
+	// TODO: Replace with FileStorageService
 	torrentDir = new File(System.getProperty("user.home"), "torrents");
 	videoDir = new File(System.getProperty("user.home"), "videos");
 	if(!torrentDir.isDirectory())
 	    torrentDir.mkdir();
 	if(!videoDir.isDirectory())
 	    videoDir.mkdir();
+
+	// configure port forwarding.
+	try {
+	    portMapper.setup();
+	} catch (PortMapException e) {
+	    log.warn("Unable to setup the port forwarding.", e);
+	    // TODO: send notification to UI to inform user
+	    // that they need to enable upnp.
+	    // Bonus: check portforwarding somehow to allow manual port forwarding.
+	}
     }
 
     @RequestMapping({"/","/home"})
@@ -57,6 +74,7 @@ public class ViewController {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             // e.printStackTrace();
+	    log.error("Error getting torrents.", e);
         }
 
         model.addAttribute("fileList", fileList);
@@ -113,13 +131,14 @@ public class ViewController {
 	    // download file.
 	    DownloadProcess dp = new TtorrentDownloadProcess(
 		torrentFile, new File(System.getProperty("user.home"), "videos"));
-	    filesharingsystem.DownloadProcess.Client client = dp.download();
+	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
 	    client.waitForDownload();
 	    String filename = client.files().get(0).getName();
 	    //removes ".torrent" from delete this if not using TrivialDownloadProcess
 	    // filename = filename.substring(0, filename.length()-8);
 
 	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
+	    //torrents with multiple files are a bonus feature :P -Levi
 	    log.info(filename);
 	    model.addAttribute("source", "video/"+filename);
 	    return "player";

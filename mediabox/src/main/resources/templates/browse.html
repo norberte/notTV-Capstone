@@ -3,20 +3,13 @@
   <head lang="en">
     <meta charset="UTF-8"/>
     <title>Browse</title>
-    <!-- No CDN because we want mediaboxes to work offline for saved videos. -->
-    <!-- TODO: Figure out why the downloaded bootstrap.min.css doesn't
-	 have Glyphicons
-      -->
-    <!-- <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css"/> -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/bootstrap/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="/css/browse.css" />
   </head>
   <body>
+    <div id="rootNav"></div>
     <div id="root"></div>
-    <script src="/js/external/jquery.min.js"></script>
-    <script src="/js/external/bootstrap.min.js"></script>
     <script src="/js/bundle/common.js"/>
+    <script src="/js/bundle/global-bundle.js"/>
     <script src="/js/bundle/browse-bundle.js"/>
   </body>
 </html>

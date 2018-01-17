@@ -1,12 +1,5 @@
 package filesharingsystem;
 
-import java.io.File;
-import java.util.Arrays;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-
 public class TestDefaultTorrentAssembler {
     // private final File file1 = new File(System.getProperty("user.home"), "cat.txt");
     

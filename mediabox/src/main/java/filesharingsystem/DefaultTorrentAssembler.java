@@ -37,12 +37,12 @@ import bt.service.CryptoUtil;
  * @author Levi Miller
  * @version
  */
-class DefaultTorrentAssembler implements TorrentAssembler {
+public class DefaultTorrentAssembler implements TorrentAssembler {
     private static Logger log = LoggerFactory.getLogger(TorrentAssembler.class);
     private static final File torrentDir = new File(System.getProperty("user.home"), "torrents");
     private final int pieceLength;
     
-    DefaultTorrentAssembler() {
+    public DefaultTorrentAssembler() {
 	pieceLength = 262144;
 	if(!torrentDir.isDirectory())
 	    torrentDir.mkdirs();
