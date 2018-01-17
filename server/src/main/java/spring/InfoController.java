@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,11 +49,13 @@ public class InfoController {
 
     @GetMapping("/videos")
     @ResponseBody
-    public Video[] getVideos() {
+    public Video[] getVideos(@RequestParam(value="categories[]") int[] categories) {
 	// Video(title, thumbnail_url, download_url)
 	// I don't think we store thumbnails yet, so it's okay to just use the placeholder for now.
 	// For the download url, I think we just store the torrent file(?) so just append
 	// the name of the torrent to /download?torrentName=
+	log.info("videos");
+	log.info(Arrays.toString(categories));
 	List<Video> videos = Arrays.asList(
 	    new Video(
 		"Title",

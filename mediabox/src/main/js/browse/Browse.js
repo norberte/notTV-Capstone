@@ -26,12 +26,24 @@ class Browse extends React.Component {
 
 	// TODO: Get videos for each category.
 	// get videos
-	$.ajax({
+	this.update_videos([1, 2, 3]);
+	
+	this.update_videos = this.update_videos.bind(this);
+    }
+
+    /**
+     * Gets a list of videos filtered by 'filters'
+     * filters = [ cat1_id, cat2_id, ...]
+     */
+    update_videos(filters) {
+	console.log('update_videos');
+	$.get({
 	    url: "http://nottv.levimiller.ca/info/videos",
-	    data: {},
+	    data: {
+		categories: filters
+	    },
 	    dataType: "json",
 	    success: (data) => {
-		console.log(data);
 		this.setState({
 		    videos: data
 		});
@@ -43,7 +55,7 @@ class Browse extends React.Component {
 	return (
 	    <div className="row display-flex categories-row">
 	      <div className="col-md-2 categories-column">
-		<CategoryFilter categories={this.state.categories}/>
+		<CategoryFilter categories={this.state.categories} update_handler={this.update_videos}/>
 	      </div>
 	      <div className="col-md-10 results-container">
 		<TopBar/>
