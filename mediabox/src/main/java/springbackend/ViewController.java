@@ -138,6 +138,7 @@ public class ViewController {
 	    // filename = filename.substring(0, filename.length()-8);
 
 	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
+	    //torrents with multiple files are a bonus feature :P -Levi
 	    log.info(filename);
 	    model.addAttribute("source", "video/"+filename);
 	    return "player";

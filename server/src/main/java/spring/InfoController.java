@@ -26,6 +26,10 @@ public class InfoController {
     public CategoryType[] getCategories() {
 	log.info("categories");
 	// test data.
+	// CategoryValue(id, name)
+	// CategoryType(name, CategoryValue[] values)
+	// If arrays are a pain and Lists are more convenient, feel free to change the view object.
+	// I'm pretty sure it will Serialize to the same json.
 	List<CategoryValue> misc = Arrays.asList(
 	    new CategoryValue(1, "In Library"),
 	    new CategoryValue(2, "Short Videos"),
@@ -45,11 +49,15 @@ public class InfoController {
     @GetMapping("/videos")
     @ResponseBody
     public Video[] getVideos() {
+	// Video(title, thumbnail_url, download_url)
+	// I don't think we store thumbnails yet, so it's okay to just use the placeholder for now.
+	// For the download url, I think we just store the torrent file(?) so just append
+	// the name of the torrent to /download?torrentName=
 	List<Video> videos = Arrays.asList(
 	    new Video(
 		"Title",
 		"/img/default-placeholder-300x300.png",
-		"/test/url"
+		"/download?torrentName=test.torrent"
 	    )
 	);
 	return videos.toArray(new Video[videos.size()]);

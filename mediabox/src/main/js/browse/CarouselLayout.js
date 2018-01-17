@@ -4,12 +4,14 @@ class VideoThumbnail extends React.Component {
     render() {
 	return (
 	    <div className="col-md-2 no-padding">
-	      <div className="thumbnail no-margin">
-		<img className="video-thumbnail" src={this.props.img_src}/>
-		<div className="caption">
-		  <h3 className="no-margin">{this.props.title} </h3>
+	      <a href={this.props.video.url}>
+		<div className="thumbnail no-margin">
+		  <img className="video-thumbnail" src={this.props.video.thumbnail}/>
+		  <div className="caption">
+		    <h3 className="no-margin">{this.props.video.title} </h3>
+		  </div>
 		</div>
-	      </div>
+	      </a>
 	    </div>
 	);
     }
@@ -39,7 +41,6 @@ export default class CarouselLayout extends React.Component {
     }
 
     next() {
-	console.log(this.state.start, this.props.videos.length);
 	// check if there is a video to the right not shown.
 	if(this.state.start + 6 < this.props.videos.length)
 	    this.setState({
@@ -72,11 +73,7 @@ export default class CarouselLayout extends React.Component {
 		  <ArrowButton dir="left" handler={this.prev}/>
 		  <div className="col-md-10">
 		    <div className="row row-eq-height">
-		      {
-			  rows.map((video, idx) =>
-				   <VideoThumbnail key={idx} title={video.title} img_src={video.src}/>
-			  )
-		      }
+		      { rows.map((video, idx) => <VideoThumbnail key={idx} video={video}/>) }
 		    </div>
 		  </div>
 		  <ArrowButton dir="right" handler={this.next}/>

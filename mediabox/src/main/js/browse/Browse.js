@@ -18,22 +18,25 @@ class Browse extends React.Component {
 	    url: "http://nottv.levimiller.ca/info/categories",
 	    dataType: "json",
 	    success: (data) => {
-		console.log(data);
 		this.setState({
 		    categories: data
 		});
 	    }
 	});
 
+	// TODO: Get videos for each category.
 	// get videos
-	// $.ajax({
-	//     url: "http://nottv.levimiller.ca/info/videos",
-	//     data: {},
-	//     dataType: "json",
-	//     success: (data) => {
-	// 	console.log(data);
-	//     }
-	// });
+	$.ajax({
+	    url: "http://nottv.levimiller.ca/info/videos",
+	    data: {},
+	    dataType: "json",
+	    success: (data) => {
+		console.log(data);
+		this.setState({
+		    videos: data
+		});
+	    }
+	});
     }
     
     render() {
