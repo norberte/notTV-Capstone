@@ -12,8 +12,9 @@ class Browse extends React.Component {
 	    categories: [],
 	    videos: []
 	};
+	console.log(location.origin);
 	// get the categories.
-	$.ajax({
+	$.get({
 	    url: "http://nottv.levimiller.ca/info/categories",
 	    dataType: "json",
 	    success: (data) => {
@@ -25,14 +26,14 @@ class Browse extends React.Component {
 	});
 
 	// get videos
-	$.ajax({
-	    url: "http://nottv.levimiller.ca/info/videos",
-	    data: {},
-	    dataType: "json",
-	    success: (data) => {
-		console.log(data);
-	    }
-	});
+	// $.ajax({
+	//     url: "http://nottv.levimiller.ca/info/videos",
+	//     data: {},
+	//     dataType: "json",
+	//     success: (data) => {
+	// 	console.log(data);
+	//     }
+	// });
     }
     
     render() {
