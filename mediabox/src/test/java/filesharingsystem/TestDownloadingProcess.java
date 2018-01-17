@@ -12,8 +12,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import filesharingsystem.DownloadProcess.Client;
-import filesharingsystem.UploadProcess.UploadException;
+import filesharingsystem.process.DownloadProcess;
+import filesharingsystem.process.DownloadProcess.Client;
+import filesharingsystem.process.TtorrentDownloadProcess;
+import filesharingsystem.process.TtorrentUploadProcess;
+import filesharingsystem.process.UploadProcess;
+import filesharingsystem.process.UploadProcess.UploadException;
 
 public class TestDownloadingProcess {
     private File contentFile, torrFile;

@@ -1,4 +1,4 @@
-package filesharingsystem;
+package filesharingsystem.process;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -18,6 +18,8 @@ import bt.metainfo.Torrent;
 import bt.runtime.BtClient;
 import bt.runtime.Config;
 
+import filesharingsystem.DefaultTorrentAssembler;
+import filesharingsystem.TorrentAssembler;
 import filesharingsystem.TorrentAssembler.Node;
 
 

@@ -14,13 +14,23 @@ class Browse extends React.Component {
 	};
 	// get the categories.
 	$.ajax({
-	    url: "/info/categories",
+	    url: "http://nottv.levimiller.ca/info/categories",
 	    dataType: "json",
 	    success: (data) => {
 		console.log(data);
 		this.setState({
 		    categories: data
 		});
+	    }
+	});
+
+	// get videos
+	$.ajax({
+	    url: "http://nottv.levimiller.ca/info/videos",
+	    data: {},
+	    dataType: "json",
+	    success: (data) => {
+		console.log(data);
 	    }
 	});
     }
@@ -35,10 +45,7 @@ class Browse extends React.Component {
 		<TopBar/>
 		<div className="row browse-body">
 		  <div className="col-md-12">
-		    <CarouselLayout title="Subscribed" videos={this.props.videos}/>
-		    <CarouselLayout title="In Library" videos={this.props.videos}/>
-		    <CarouselLayout title="Popular" videos={this.props.videos}/>
-		    <CarouselLayout title="Newest" videos={this.props.videos}/>
+		    <CarouselLayout title="Subscribed" videos={this.state.videos}/>
 		  </div>
 		</div>
 	      </div>
@@ -47,14 +54,7 @@ class Browse extends React.Component {
     }
 }
 
-let VIDEOS = [];
-for(let i=0;i<8;i++)
-    VIDEOS.push({
-	title: "Title" + i,
-	src: "/img/default-placeholder-300x300.png "
-    });
-
 ReactDOM.render(
-    <Browse videos={VIDEOS}/>,
+    <Browse />,
     document.getElementById('root')
 );
