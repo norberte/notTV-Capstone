@@ -17,7 +17,6 @@ import filesharingsystem.process.DownloadProcess.Client;
 import filesharingsystem.process.TtorrentDownloadProcess;
 import filesharingsystem.process.TtorrentUploadProcess;
 import filesharingsystem.process.UploadProcess;
-import filesharingsystem.process.UploadException;
 
 public class TestDownloadingProcess {
     private File contentFile, torrFile;
@@ -48,7 +47,6 @@ public class TestDownloadingProcess {
 
     @After
     public void tearDown() {
-	up.stop();
 	torrFile.delete();
     }
 

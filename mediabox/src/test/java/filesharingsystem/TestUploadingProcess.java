@@ -47,7 +47,6 @@ public class TestUploadingProcess {
 
     @After
     public void tearDown() {
-	up.stop();
 	torrFile.delete();
     }
 

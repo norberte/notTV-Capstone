@@ -2,11 +2,14 @@ package springbackend;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,29 +17,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.TtorrentDownloadProcess;
+import filesharingsystem.process.TtorrentUploadProcess;
+
+import util.SeedManager;
+import util.storage.StorageService;
 
 @Controller
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
+    
     @Autowired
     private Config config;
-    private File torrentDir;
-
-    public ProcessController() {
-	torrentDir = new File(System.getProperty("user.home"), "torrents");
-	if(!torrentDir.isDirectory())
-	    torrentDir.mkdir();
-    }
+    @Qualifier("TorrentStorage")
+    private StorageService torrentStorage;
     
     @RequestMapping("upload")
-    public void upload() {
-	
+    public void upload(String name, File video) {
+	// TODO: hook up this method to the ajax that submits the form.
+	try {
+	    // Start seeding process.
+	    SeedManager.addProcess(new TtorrentUploadProcess(
+		new URI(config.trackerUrl + "/announce"),
+		new URI(config.serverUrl + "/upload-torrent"),
+		name, video
+	    ));
+	} catch (URISyntaxException e) {
+	    log.error("Unable to start upload process.", e);
+	}
     }
     
     @RequestMapping(path = "download")
     public String download(@RequestParam(value="torrentName") String torrentName, Model model){
 	// get torrent file.
-	File torrentFile = new File(torrentDir, torrentName);
+	File torrentFile = torrentStorage.newFile(torrentName);
 	try {
 	    Request.Get(
 		String.format("%s/get-torrent/%s", this.config.getServerUrl(), torrentName)

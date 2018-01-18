@@ -33,18 +33,11 @@ import util.storage.StorageService;
 @Controller
 public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
-    private final File videoDir;
     @Qualifier("VideoStorage")
     private StorageService videoStorage;
 
     @Autowired
     public ViewController(PortMapper portMapper) {
-	// Set up directories to store files
-	// TODO: Replace with FileStorageService
-	videoDir = new File(System.getProperty("user.home"), "videos");
-	if(!videoDir.isDirectory())
-	    videoDir.mkdir();
-
 	// configure port forwarding.
 	try {
 	    portMapper.setup();
@@ -99,7 +92,7 @@ public class ViewController {
         // model.addAttribute("source", source);
         // model.addAttribute("type", type);
 	log.info("********** video *********");
-	File video = new File(videoDir, source);
+	File video = videoStorage.newFile(source);
 	log.info("Exists: " + video.isFile());
 	log.info("Path: " + video);
 
