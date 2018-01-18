@@ -28,7 +28,7 @@ class Tabs extends React.Component {
 
 	this.handlClick = this.handleClick.bind(this);
     }
-    
+
     displayName: 'Tabs';
 
     handleClick(index, event){
@@ -181,7 +181,7 @@ class App extends React.Component {
 		  <Tabs>
 		    <FilePane label="Select Video File" onChange={this.fileChange}/>
 		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
-		    
+
 		    <Pane label="Add Video Details">
 		      <div className="tab">
 			<h1>Video Details</h1>
@@ -212,7 +212,7 @@ class App extends React.Component {
 			<input type = "number" name="version" value={this.state.formData.version}  onChange={this.handleChange}/>
 		      </div>
 		    </Pane>
-		    
+
 		    <Pane label="Submit Video">
 		      <div className="tab">
 			<h1>Submit Video</h1>
