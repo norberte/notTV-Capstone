@@ -47,23 +47,23 @@ public class InfoController {
 
     @GetMapping("/videos")
     @ResponseBody
-    public Video[] getVideos() {
+    public Video[] getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {
 	// Video(title, thumbnail_url, download_url)
 	// I don't think we store thumbnails yet, so it's okay to just use the placeholder for now.
 	// For the download url, I think we just store the torrent file(?) so just append
 	// the name of the torrent to /download?torrentName=
         
     String query = "Select * From Video";
-    /*
-    if(filter != null){
-        for(String categoryValue :filter.split("+")){
+    
+    if(categories != null){
+        for(int categoryValue :categories){
             query += "Intersect +"
                       + "Select categoryValueId"
                       + "From video_category_value_join Natural Join category_value As cv"
-                      + "Where cv.name = " + categoryValue;
+                      + "Where cv.id = " + categoryValue;
         }
     }
-    */
+    
     query += ";";
             
     List<Video> videos = jdbcTemplate.query(query, 
