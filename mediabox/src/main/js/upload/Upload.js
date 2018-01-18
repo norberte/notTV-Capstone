@@ -244,8 +244,6 @@ render(){
 
   );
 }
->>>>>>> Upgraded form to store data across tabs in the REACT state. This data is then used in an ajax request to submit the form asynchronously.
->>>>>>> Upgraded form to store data across tabs in the REACT state. This data is then used in an ajax request to submit the form asynchronously.
 }
 
 class App extends React.Component {
