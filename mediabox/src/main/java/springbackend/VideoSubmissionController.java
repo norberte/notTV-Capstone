@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import filesharingsystem.TtorrentUploadProcess;
-import filesharingsystem.UploadProcess;
-import filesharingsystem.UploadProcess.UploadException;
+import filesharingsystem.process.TtorrentUploadProcess;
+import filesharingsystem.process.UploadProcess;
+import filesharingsystem.process.UploadProcess.UploadException;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
