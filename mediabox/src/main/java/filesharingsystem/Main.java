@@ -18,7 +18,7 @@ import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.TtorrentDownloadProcess;
 import filesharingsystem.process.TtorrentUploadProcess;
 import filesharingsystem.process.UploadProcess;
-import filesharingsystem.process.UploadProcess.UploadException;
+import filesharingsystem.process.UploadException;
 
 
 
@@ -35,9 +35,11 @@ public class Main {
 	} else if(args[0].equals("upload")) {
 	    UploadProcess up = new TtorrentUploadProcess(
 		new URI(args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"),
-		new URI(args.length > 3 ? args[3] : "http://notTV.levimiller.ca/upload-torrent")
+		new URI(args.length > 3 ? args[3] : "http://notTV.levimiller.ca/upload-torrent"),
+		FilenameUtils.getBaseName(args[1]),
+		new File(args[1])
 	    );
-	    up.upload(FilenameUtils.getBaseName(args[1]), new File(args[1]));
+	    up.run();
 	} else if (args[0].equals("seed")) {
 	    Client client = new Client(
 		InetAddress.getLocalHost(),

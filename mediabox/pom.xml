@@ -12,9 +12,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>tv.not</groupId>
   <artifactId>mediabox</artifactId>
-  <version>1.0</version>
   <packaging>jar</packaging>
 
   <!-- Descriptions -->
@@ -57,11 +55,6 @@
 
     <!-- Upnp -->
     <dependency>
-      <groupId>org.bitlet</groupId>
-      <artifactId>weupnp</artifactId>
-      <version>0.1.4</version>
-    </dependency>
-    <dependency>
       <groupId>org.fourthline.cling</groupId>
       <artifactId>cling-core</artifactId>
       <version>2.1.1</version>
@@ -77,17 +70,6 @@
       <groupId>com.turn</groupId>
       <artifactId>ttorrent-core</artifactId>
       <version>1.5</version>
-    </dependency>
-    <!-- BT Dependencies -->
-    <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-core</artifactId>
-      <version>${bt-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-dht</artifactId>
-      <version>${bt-version}</version>
     </dependency>
   </dependencies>
 
