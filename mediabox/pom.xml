@@ -12,7 +12,9 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
+  <groupId>tv.not</groupId>
   <artifactId>mediabox</artifactId>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <!-- Descriptions -->
@@ -54,6 +56,11 @@
     </dependency>
 
     <!-- Upnp -->
+    <dependency>
+      <groupId>org.bitlet</groupId>
+      <artifactId>weupnp</artifactId>
+      <version>0.1.4</version>
+    </dependency>
     <dependency>
       <groupId>org.fourthline.cling</groupId>
       <artifactId>cling-core</artifactId>
