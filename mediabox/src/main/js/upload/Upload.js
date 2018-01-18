@@ -280,8 +280,6 @@ render(){
 
   );
 }
->>>>>>> Upgraded form to store data across tabs in the REACT state. This data is then used in an ajax request to submit the form asynchronously.
->>>>>>> Upgraded form to store data across tabs in the REACT state. This data is then used in an ajax request to submit the form asynchronously.
 }
 
 class App extends React.Component {
@@ -372,9 +370,8 @@ class App extends React.Component {
 	      <form id="uploadVideo" method="post" onSubmit={this.handleSubmit} commandname="videoForm">
 		<fieldset>
 		  <Tabs>
-
-		      <FilePane label="Select Video File" onChange={this.fileChange}/>
-		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+		    <FilePane label="Select Video File" onChange={this.fileChange}/>
+		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">
