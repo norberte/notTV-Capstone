@@ -7,9 +7,11 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface StorageService {
-
-    void init();
-
+    /**
+     * Stores the given file.
+     * 
+     * @param file
+     */
     void store(MultipartFile file);
 
     Stream<Path> loadAll();
