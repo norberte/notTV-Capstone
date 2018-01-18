@@ -11,6 +11,22 @@
 
   <context:annotation-config />
 
+  <bean id="TorrentStorage" class="spring.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="spring.storage.StorageProperties">
+  	<constructor-arg value="torrents"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="ImageStorage" class="spring.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="spring.storage.StorageProperties">
+  	<constructor-arg value="img"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+  
   <mvc:cors>
     <mvc:mapping
 	path="/**"/>

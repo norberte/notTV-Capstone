@@ -26,11 +26,26 @@ public class TtorrentUploadProcess implements UploadProcess {
     private final URI announce, uploadURI;
     private Client client;
     private File uploadDir;
-    public TtorrentUploadProcess(URI announce, URI uploadURI) {
+    private String name;
+    private File file, torrentFile;
+    
+    public TtorrentUploadProcess(URI announce, URI uploadURI, String name, File file) {
 	this.announce = announce;
 	this.uploadURI = uploadURI;
+	this.name = name;
+	this.file = file;
 	this.uploadDir = new File(System.getProperty("user.home"), "uploads");
 	client = null;
+    }
+
+    @Override
+    public String getName() {
+	return this.name;
+    }
+
+    @Override
+    public File getTorrent() {
+	return torrentFile;
     }
     
     /**
@@ -39,11 +54,12 @@ public class TtorrentUploadProcess implements UploadProcess {
      * @param files
      */
     @Override
-    public void upload(String name, File parent, File... files) throws UploadException {
+    public void run() {
 	try {
-	    File torrentFile = new File(String.format("%s.torrent", name));
+	    torrentFile = new File(String.format("%s.torrent", this.name));
+	    File parent = new File("");
 	    // Create torrent from announce/files.
-	    Torrent t = Torrent.create(parent, Arrays.asList(files), announce, "notTV");
+	    Torrent t = Torrent.create(parent, Arrays.asList(this.file), announce, "notTV");
 	    t.save(new FileOutputStream(torrentFile));
 	    // send file to the server.
 	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
@@ -70,26 +86,20 @@ public class TtorrentUploadProcess implements UploadProcess {
 		    InetAddress.getLocalHost(),
 		    new SharedTorrent(t, new File(this.uploadDir.getAbsolutePath(), parent.getPath()), true)
 		);
+		// Should block
 		client.share();
 	    } else {
 		throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
 	    }
-	} catch (NoSuchAlgorithmException | InterruptedException | IOException e) {
+	} catch (NoSuchAlgorithmException | IOException e) {
 	    log.error("Error creating Torrent file.", e);
-	}
-    }
-    
-    @Override
-    public void upload(String name, File f) throws UploadException {
-	this.upload(name, new File(""), f);
-    }
-
-    @Override
-    public void stop() {
-	log.info("Stopping all uploads...");
-	if(client != null) {
-	    client.stop();
-	    client = null;
+	} catch (InterruptedException e) {
+	    // shutdown
+	    log.info("Stopping seeding of {}...", this.name);
+	    if(client != null) {
+		client.stop();
+		client = null;
+	    }
 	}
     }
 }

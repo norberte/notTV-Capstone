@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,11 +27,10 @@ import spring.storage.StorageService;
 @CrossOrigin
 @RestController
 public class TorrentUploadController {
-    private final StorageService storageService;
+    private final StorageService torrentStorage;
 
-    @Autowired
-    public TorrentUploadController(StorageService storageService) {
-	this.storageService = storageService;
+    public TorrentUploadController(@Qualifier("TorrentStorage") StorageService torrentStorage) {
+    	this.torrentStorage = torrentStorage;
     }
 
     /**
@@ -46,7 +45,7 @@ public class TorrentUploadController {
     @ResponseBody
     public List<String> listUploadedFiles(Model model) throws IOException {
 	// Return json/xml/whatever list.
-	return storageService.loadAll().map(
+	return torrentStorage.loadAll().map(
 	    path -> MvcUriComponentsBuilder.fromMethodName(TorrentUploadController.class,
 	    "serveFile", path.getFileName().toString()).build().toString())
 	    .collect(Collectors.toList());
@@ -62,7 +61,7 @@ public class TorrentUploadController {
     @GetMapping("/get-torrent/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-	Resource file = storageService.loadAsResource(filename);
+	Resource file = torrentStorage.loadAsResource(filename);
 	HttpHeaders responseHeaders = new HttpHeaders();
 	responseHeaders.add(
 	    HttpHeaders.CONTENT_DISPOSITION,
@@ -81,6 +80,6 @@ public class TorrentUploadController {
     @PostMapping("/upload-torrent")
     @ResponseStatus(value = HttpStatus.OK)
     public void handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-	storageService.store(file);
+	torrentStorage.store(file);
     }
 }

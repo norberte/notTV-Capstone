@@ -21,6 +21,24 @@
     <property name="trackerUrl" value="http://nottv.levimiller.ca:6969"/>
   </bean>
 
+  <!-- Storage setup  -->
+  <bean id="TorrentStorage" class="util.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg  value="torrents"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <!-- TODO: Develop a smarter Storage system for videos. -->
+  <bean id="VideoStorage" class="util.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg  value="videos"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+  
   <mvc:interceptors>
     <bean class="springbackend.ConfigHandlerInterceptor"/>
   </mvc:interceptors>
