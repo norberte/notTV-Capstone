@@ -23,6 +23,7 @@ import util.SeedManager;
 import util.storage.StorageService;
 
 @Controller
+@RequestMapping("process")
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
     

@@ -22,19 +22,19 @@
   </bean>
 
   <!-- Storage setup  -->
-  <bean id="TorrentStorage" class="spring.storage.FileSystemStorageService">
+  <bean id="TorrentStorage" class="util.storage.FileSystemStorageService">
     <constructor-arg>
-      <bean class="spring.storage.StorageProperties">
-  	<constructor-arg value="torrents"/>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg  value="torrents"/>
       </bean>
     </constructor-arg>
   </bean>
 
   <!-- TODO: Develop a smarter Storage system for videos. -->
-  <bean id="VideoStorage" class="spring.storage.FileSystemStorageService">
+  <bean id="VideoStorage" class="util.storage.FileSystemStorageService">
     <constructor-arg>
-      <bean class="spring.storage.StorageProperties">
-  	<constructor-arg value="videos"/>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg  value="videos"/>
       </bean>
     </constructor-arg>
   </bean>
