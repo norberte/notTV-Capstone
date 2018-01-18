@@ -38,6 +38,41 @@ class Tabs extends React.Component {
 	    this.setState({
 	           selected: index
 	    });
+	event.preventDefault();
+	this.setState({
+	    selected: index
+	});
+
+constructor(props){
+    super(props);
+    this.state = {
+        selected: 0
+    };
+}
+
+  displayName: 'Tabs';
+
+  _renderContent(){
+    return(
+      <div className="tab__content">
+      {this.props.children[this.state.selected]}
+      </div>
+    );
+  }
+
+  _renderTitles(){
+    function labels(child, index){
+     let activeClass = (this.state.selected === index ? 'active' : '');
+      return(
+        <li key={index}>
+          <a href="#"
+            className={activeClass}
+            onClick={this.handleClick.bind(this, index)}>
+            {child.props.label}
+          </a>
+        </li>
+      );
+
     }
 
     iterate(i, event){
