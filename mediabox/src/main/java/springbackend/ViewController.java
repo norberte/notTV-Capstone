@@ -72,7 +72,7 @@ public class ViewController {
     }
 
     @RequestMapping("browse")
-    public String browse(Model model) {
+    public String browse() {
 	return "browse";
     }
 
