@@ -63,23 +63,25 @@ public class InfoController {
     log.info("videos");
     log.info(Arrays.toString(categories));
  
-    String query = "Select * From Video";
+    String query = "Select title, trackerurl, thumbnailurl From Video";
     
+    /*
     if(categories != null){
-        for(int categoryValue :categories){
+        for(int categoryId :categories){
             query += "Intersect +"
                       + "Select categoryValueId"
                       + "From video_category_value_join Natural Join category_value As cv"
-                      + "Where cv.id = " + categoryValue;
+                      + "Where cv.id = " + categoryId;
         }
     }
+    */
     
     query += ";";
             
     List<Video> videos = jdbcTemplate.query(query, 
             (rs, row) -> new Video(rs.getString("title"), 
                         "/img/default-placeholder-300x300.png",
-                        "/download?torrentName="+rs.getString("url")) ); 
+                        "/download?torrentName="+rs.getString("trackerurl")) ); 
     /* 
 	List<Video> videos = Arrays.asList(
 	    new Video(
