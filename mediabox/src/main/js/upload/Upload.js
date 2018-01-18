@@ -31,7 +31,6 @@ class Tabs extends React.Component {
     this.iterate = this.iterate.bind(this);
     }
 
-
     displayName: 'Tabs';
 
     handleClick(index, event){
