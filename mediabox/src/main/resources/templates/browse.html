@@ -8,6 +8,11 @@
   <body>
     <div id="rootNav"></div>
     <div id="root"></div>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    const config = /*[[${config}]]*/ {};
+    /*]]>*/
+    </script>
     <script src="/js/bundle/common.js"/>
     <script src="/js/bundle/global-bundle.js"/>
     <script src="/js/bundle/browse-bundle.js"/>

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@ImportResource("classpath:spring/app-config.xml")
+@ImportResource("classpath:app-config.xml")
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
     
