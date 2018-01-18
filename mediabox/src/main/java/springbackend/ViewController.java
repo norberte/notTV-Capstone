@@ -21,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,10 +34,12 @@ import filesharingsystem.process.TtorrentDownloadProcess;
 @Controller
 public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
+    private Config config;
     private final File torrentDir, videoDir;
 
     @Autowired
-    public ViewController(PortMapper portMapper) {
+    public ViewController(PortMapper portMapper, Config config) {
+	this.config = config;
 	// Set up directories to store files
 	// TODO: Replace with FileStorageService
 	torrentDir = new File(System.getProperty("user.home"), "torrents");
@@ -82,7 +83,7 @@ public class ViewController {
     }
 
     @RequestMapping("browse")
-    public String browse() {
+    public String browse(Model model) {
 	return "browse";
     }
 
@@ -125,7 +126,7 @@ public class ViewController {
 	File torrentFile = new File(torrentDir, torrentName);
 	try {
 	    Request.Get(
-		String.format("http://nottv.levimiller.ca/get-torrent/%s", torrentName)
+		String.format("%s/get-torrent/%s", this.config.getServerUrl(), torrentName)
 	    ).execute().saveContent(torrentFile);
 
 	    // download file.

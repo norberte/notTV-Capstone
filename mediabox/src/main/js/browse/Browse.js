@@ -12,10 +12,9 @@ class Browse extends React.Component {
 	    categories: [],
 	    videos: []
 	};
-	console.log(location.origin);
 	// get the categories.
 	$.get({
-	    url: "http://nottv.levimiller.ca/info/categories",
+	    url: config.serverUrl + "/info/categories",
 	    dataType: "json",
 	    success: (data) => {
 		this.setState({
@@ -26,7 +25,7 @@ class Browse extends React.Component {
 
 	// TODO: Get videos for each category.
 	// get videos
-	this.update_videos([1, 2, 3]);
+	this.update_videos([]);
 	
 	this.update_videos = this.update_videos.bind(this);
     }
@@ -36,9 +35,8 @@ class Browse extends React.Component {
      * filters = [ cat1_id, cat2_id, ...]
      */
     update_videos(filters) {
-	console.log('update_videos');
 	$.get({
-	    url: "http://nottv.levimiller.ca/info/videos",
+	    url: config.serverUrl + "/info/videos",
 	    data: {
 		categories: filters
 	    },
