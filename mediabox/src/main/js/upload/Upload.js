@@ -115,7 +115,9 @@ class App extends React.Component {
 	//Send Form data
 	$.post({
             url:    config.serverUrl,
-            data:   formData,
+            data:   {
+		formData: formData
+	    },
             success:(response) => {
 		console.log('successful submit');
             },
