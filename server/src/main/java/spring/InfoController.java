@@ -72,7 +72,7 @@ public class InfoController {
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
 	    rs.getString("title"), 
 	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-	    "/download?torrentName="+rs.getString("downloadurl"))
+	    "/process/download?torrentName="+rs.getString("downloadurl"))
 	); 
     }
 }

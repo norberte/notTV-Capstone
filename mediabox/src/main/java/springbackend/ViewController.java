@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import filesharingsystem.PortMapException;
@@ -33,6 +34,7 @@ import util.storage.StorageService;
 @Controller
 public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
+    @Autowired
     @Qualifier("VideoStorage")
     private StorageService videoStorage;
 
@@ -51,7 +53,6 @@ public class ViewController {
 
     @RequestMapping({"/","/home"})
     public String home(Model model){
-
         String fileList="";
         File torrents;
         try {
@@ -71,6 +72,13 @@ public class ViewController {
         return "Example";
     }
 
+    @RequestMapping("player")
+    public String player(@RequestParam(value="video") String video, Model model) {
+	log.info("video {}", video);
+	model.addAttribute("source", "/video/" + video);
+	return "player";
+    }
+    
     @RequestMapping("browse")
     public String browse() {
 	return "browse";
@@ -92,14 +100,14 @@ public class ViewController {
         // model.addAttribute("source", source);
         // model.addAttribute("type", type);
 	log.info("********** video *********");
-	File video = videoStorage.newFile(source);
-	log.info("Exists: " + video.isFile());
-	log.info("Path: " + video);
+	File videoFile = videoStorage.load(source).toFile();
+	log.info("Exists: " + videoFile.isFile());
+	log.info("Path: " + videoFile);
 
 	try {
 	    response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
 	    response.setHeader("Content-Disposition", "attachment; filename="+source);
-	    InputStream iStream = new FileInputStream(video);
+	    InputStream iStream = new FileInputStream(videoFile);
 	    IOUtils.copy(iStream, response.getOutputStream());
 	    response.flushBuffer();
 	} catch (java.nio.file.NoSuchFileException e) {

@@ -160,6 +160,7 @@ class App extends React.Component {
 		    data: JSON.stringify(formData),
 		    success: (response) => {
 			console.log(response);
+			alert("Successfully uploaded!");
 		    },
 		    error: (response) => {
 			console.log(response);

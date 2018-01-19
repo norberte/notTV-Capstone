@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +88,7 @@ public class ProcessController {
 	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
 	    //torrents with multiple files are a bonus feature :P -Levi
 	    log.info(filename);
-	    model.addAttribute("source", "video/"+filename);
+	    model.addAttribute("source", "/video/"+filename);
 	    return "player";
 	} catch (IOException e) {
 	    log.error("Error getting torrent file from server.", e);

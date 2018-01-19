@@ -29,11 +29,20 @@ public class TtorrentUploadProcess implements UploadProcess {
     private String name;
     private File file, torrentFile;
     
+    /**
+     * Creates a new UploadProcess
+     *
+     * @param announce - http://tracker.url:port/announce
+     * @param uploadURI - http://server.url:port/uploat-torrent
+     * @param name - name of the torrent
+     * @param file - video file.
+     */
     public TtorrentUploadProcess(URI announce, URI uploadURI, String name, File file) {
 	this.announce = announce;
 	this.uploadURI = uploadURI;
 	this.name = FilenameUtils.getBaseName(name);
 	this.file = file;
+	//TODO: inject a StorageService for uploads/torrents.
 	this.uploadDir = new File(System.getProperty("user.home"), "uploads");
 	if(!this.uploadDir.isDirectory())
 	    this.uploadDir.mkdir();
@@ -58,6 +67,7 @@ public class TtorrentUploadProcess implements UploadProcess {
     @Override
     public void run() {
 	try {
+	    //TODO: use torrent StorageService to create this file.
 	    torrentFile = new File(String.format("%s.torrent", this.name));
 	    // Create torrent from announce/files.
 	    Torrent t = Torrent.create(this.file, announce, "notTV");
