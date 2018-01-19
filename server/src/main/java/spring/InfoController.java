@@ -29,68 +29,50 @@ public class InfoController {
 
     @GetMapping("/categories")
     @ResponseBody
-    public CategoryType[] getCategories() {
+    public List<CategoryType> getCategories() {
 	log.info("categories");
-	// test data.
 	// CategoryValue(id, name)
 	// CategoryType(name, CategoryValue[] values)
-	// If arrays are a pain and Lists are more convenient, feel free to change the view object.
-	// I'm pretty sure it will Serialize to the same json.
-	List<CategoryValue> misc = Arrays.asList(
-	    new CategoryValue(1, "In Library"),
-	    new CategoryValue(2, "Short Videos"),
-	    new CategoryValue(3, "Long Videos")
-	);
-	List<CategoryValue> city = Arrays.asList(
-	    new CategoryValue(1, "Edmonton"),
-	    new CategoryValue(2, "Kelowna")
-	); 
-	List<CategoryType> categories = Arrays.asList(
-	    new CategoryType("Misc", misc.toArray(new CategoryValue[misc.size()])),
-	    new CategoryType("City", city.toArray(new CategoryValue[city.size()]))
-	);
-	return categories.toArray(new CategoryType[categories.size()]);
+	return jdbcTemplate.query("Select * From category_type;", (rs, rowNum) -> new CategoryType(
+	    rs.getString("name"),
+	    jdbcTemplate.query(
+		"Select id, name From category_value Where categorytypeid=?;",
+		(cvRs, cvRowNum) -> new CategoryValue(cvRs.getInt("id"), cvRs.getString("name")),
+		rs.getInt("id")
+	    )
+	));
     }
 
     @GetMapping("/videos")
     @ResponseBody
-    public Video[] getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {
+    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {
 	// Video(title, thumbnail_url, download_url)
-	// I don't think we store thumbnails yet, so it's okay to just use the placeholder for now.
-	// For the download url, I think we just store the torrent file(?) so just append
-	// the name of the torrent to /download?torrentName=
-       
-    log.info("videos");
-    log.info(Arrays.toString(categories));
- 
-    String query = "Select title, trackerurl, thumbnailurl From Video";
-    
-    /*
-    if(categories != null){
-        for(int categoryId :categories){
-            query += "Intersect +"
-                      + "Select categoryValueId"
-                      + "From video_category_value_join Natural Join category_value As cv"
-                      + "Where cv.id = " + categoryId;
-        }
-    }
-    */
-    
-    query += ";";
-            
-    List<Video> videos = jdbcTemplate.query(query, 
-            (rs, row) -> new Video(rs.getString("title"), 
-                        "/img/default-placeholder-300x300.png",
-                        "/download?torrentName="+rs.getString("trackerurl")) ); 
-    /* 
-	List<Video> videos = Arrays.asList(
-	    new Video(
-		"Title",
-		"/img/default-placeholder-300x300.png",
-		"/download?torrentName=test.torrent"
-	    )
-	);
-	*/
-	return videos.toArray(new Video[videos.size()]);
+	log.info("videos");
+
+	// Make the query. It looks terrible, but it should be pretty efficient since
+	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
+	// Also, the intersects can be used to filter subsequent results
+	StringBuilder queryBuilder = new StringBuilder("Select title, downloadurl, thumbnailurl From Video ");
+	
+	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
+	    queryBuilder.append("Where id in (");
+	    for(int i=0; i<categories.length;i++) {
+		if(i != 0) // No intersect on first one.
+		    queryBuilder.append("Intersect ");
+		queryBuilder.append("Select categoryValueId ");
+		queryBuilder.append("From video_category_value_join Natural Join category_value As cv ");
+		queryBuilder.append("Where cv.id = ");
+		queryBuilder.append(categories[i]);
+	    }
+	}
+	queryBuilder.append(';');
+	String query = queryBuilder.toString();
+	log.info(query);
+	
+	return jdbcTemplate.query(query, (rs, row) -> new Video(
+	    rs.getString("title"), 
+	    "/img/default-placeholder-300x300.png", //TODO: link up thumbnails
+	    "/download?torrentName="+rs.getString("downloadurl"))
+	); 
     }
 }

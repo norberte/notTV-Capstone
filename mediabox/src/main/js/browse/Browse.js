@@ -45,6 +45,9 @@ class Browse extends React.Component {
 		this.setState({
 		    videos: data
 		});
+	    },
+	    complete: (response) => {
+		console.log(response);
 	    }
 	});
     }

@@ -26,6 +26,15 @@
       </bean>
     </constructor-arg>
   </bean>
+
+  <!-- Initialization for data source -->
+  <bean id="dataSource"
+	class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="org.postgresql.Driver"/>
+    <property name="url" value="jdbc:postgresql://localhost:5432/nottv"/>
+    <property name="username" value="postgres"/>
+    <property name="password" value="root"/>
+  </bean>
   
   <mvc:cors>
     <mvc:mapping
