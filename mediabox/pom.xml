@@ -57,11 +57,6 @@
 
     <!-- Upnp -->
     <dependency>
-      <groupId>org.bitlet</groupId>
-      <artifactId>weupnp</artifactId>
-      <version>0.1.4</version>
-    </dependency>
-    <dependency>
       <groupId>org.fourthline.cling</groupId>
       <artifactId>cling-core</artifactId>
       <version>2.1.1</version>
@@ -70,6 +65,17 @@
       <groupId>org.fourthline.cling</groupId>
       <artifactId>cling-support</artifactId>
       <version>2.1.1</version>
+    </dependency>
+    <!-- Extra library for Cling -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>8.1.8.v20121106</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>8.1.8.v20121106</version>
     </dependency>
     
     <!-- ttorrent  -->
