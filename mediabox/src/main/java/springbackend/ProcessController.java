@@ -66,7 +66,6 @@ public class ProcessController {
 	    log.error("Unable to start upload process. Malformed URI's in config.", e);
 	    return null; // hardcoded urls, so should never happen.
 	}
-	return FilenameUtils.getBaseName(name) + ".torrent";
     }
     
     @RequestMapping(path = "download")
