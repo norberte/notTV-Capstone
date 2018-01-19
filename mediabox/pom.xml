@@ -12,28 +12,33 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>tv.not</groupId>
   <artifactId>mediabox</artifactId>
-  <version>1.0</version>
   <packaging>jar</packaging>
 
   <!-- Descriptions -->
   <name>notTV MediaBox</name>
   <description>notTV's Filesharing System and MediaBox app.</description>
   <url>https://github.com/norberte/notTV-Capstone</url>
-  
+
+  <repositories>
+    <repository>
+      <id>4thline-repo</id>
+      <url>http://4thline.org/m2</url>
+      <snapshots>
+	<enabled>false</enabled> <!-- Or true, if you like to use unreleased code -->
+      </snapshots>
+    </repository>
+  </repositories>
   <!-- Dependencies -->
   <dependencies>
     <!-- Apache for requests -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -43,25 +48,34 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
-      <version>4.5.3</version>
     </dependency>
 
+    <!-- Upnp -->
+    <dependency>
+      <groupId>org.fourthline.cling</groupId>
+      <artifactId>cling-core</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fourthline.cling</groupId>
+      <artifactId>cling-support</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <!-- Extra library for Cling -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+    </dependency>
+    
     <!-- ttorrent  -->
     <dependency>
       <groupId>com.turn</groupId>
       <artifactId>ttorrent-core</artifactId>
       <version>1.5</version>
-    </dependency>
-    <!-- BT Dependencies -->
-    <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-core</artifactId>
-      <version>${bt-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.atomashpolskiy</groupId>
-      <artifactId>bt-dht</artifactId>
-      <version>${bt-version}</version>
     </dependency>
   </dependencies>
 
@@ -71,8 +85,7 @@
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
 	<configuration>
-	  <!-- <mainClass>springbackend.Application</mainClass> -->
-	  <mainClass>filesharingsystem.Main</mainClass>
+	  <mainClass>springbackend.Application</mainClass>
 	</configuration>
 	<executions>
 	  <execution>
@@ -81,6 +94,43 @@
 	    </goals>
 	  </execution>
 	</executions>
+      </plugin>
+
+      <!-- npm plugin -->
+      <plugin>
+      	<groupId>com.github.eirslett</groupId>
+      	<artifactId>frontend-maven-plugin</artifactId>
+      	<version>1.6</version>
+      	<configuration>
+      	  <installDirectory>target</installDirectory>
+      	</configuration>
+      	<executions>
+      	  <execution>
+      	    <id>install node and npm</id>
+      	    <goals>
+      	      <goal>install-node-and-npm</goal>
+      	    </goals>
+      	    <configuration>
+      	      <nodeVersion>v8.9.4</nodeVersion>
+      	      <npmVersion>5.6.0</npmVersion>
+      	    </configuration>
+      	  </execution>
+      	  <execution>
+      	    <id>npm install</id>
+      	    <goals>
+      	      <goal>npm</goal>
+      	    </goals>
+      	    <configuration>
+      	      <arguments>install</arguments>
+      	    </configuration>
+      	  </execution>
+      	  <execution>
+      	    <id>webpack build</id>
+      	    <goals>
+      	      <goal>webpack</goal>
+      	    </goals>
+      	  </execution>
+      	</executions>
       </plugin>
     </plugins>
   </build>

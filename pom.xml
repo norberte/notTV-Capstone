@@ -45,7 +45,9 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bt-version>1.5</bt-version>
+    <!-- <jetty.version>8.1.8.v20121106</jetty.version> -->
+    <jetty.version>8.1.15.v20140411</jetty.version>
+    <jetty-jsp.version>2.2.0.v201112011158</jetty-jsp.version>
   </properties>
   
   <parent>
@@ -72,31 +74,30 @@
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+	<exclusion>
+	  <groupId>org.springframework.boot</groupId>
+	  <artifactId>spring-boot-starter-tomcat</artifactId>
+	</exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jetty</artifactId>
+      <exclusions>
+	<exclusion>
+	  <groupId>org.eclipse.jetty.websocket</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Ensure that the Java Cryptography Extension is installed (required for keys > 128 bits) -->
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-enforcer-plugin</artifactId>
-	<version>1.1.1</version>
-	<executions>
-	  <execution>
-	    <id>enforce</id>
-	    <configuration>
-	      <rules>
-		<evaluateBeanshell>
-		  <condition>javax.crypto.Cipher.getMaxAllowedKeyLength("AES")>128</condition>
-		</evaluateBeanshell>
-	      </rules>
-	    </configuration>
-	    <goals>
-	      <goal>enforce</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

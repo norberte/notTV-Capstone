@@ -8,13 +8,14 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,26 +26,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import filesharingsystem.DownloadProcess;
-import filesharingsystem.TtorrentDownloadProcess;
+import filesharingsystem.PortMapException;
+import filesharingsystem.PortMapper;
+
+import util.storage.StorageService;
 
 @Controller
 public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
-    private final File torrentDir, videoDir;
-    
-    public ViewController() {
-	torrentDir = new File(System.getProperty("user.home"), "torrents");
-	videoDir = new File(System.getProperty("user.home"), "videos");
-	if(!torrentDir.isDirectory())
-	    torrentDir.mkdir();
-	if(!videoDir.isDirectory())
-	    videoDir.mkdir();
+    @Autowired
+    @Qualifier("VideoStorage")
+    private StorageService videoStorage;
+
+    @Autowired
+    public ViewController(PortMapper portMapper) {
+	// configure port forwarding.
+	try {
+	    portMapper.setup();
+	} catch (PortMapException e) {
+	    log.warn("Unable to setup the port forwarding.", e);
+	    // TODO: send notification to UI to inform user
+	    // that they need to enable upnp.
+	    // Bonus: check portforwarding somehow to allow manual port forwarding.
+	}
     }
-    
+
     @RequestMapping({"/","/home"})
     public String home(Model model){
-	
         String fileList="";
         File torrents;
         try {
@@ -57,16 +65,34 @@ public class ViewController {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             // e.printStackTrace();
+	    log.error("Error getting torrents.", e);
         }
-       
+
         model.addAttribute("fileList", fileList);
         return "Example";
     }
+
+    @RequestMapping("player")
+    public String player(@RequestParam(value="video") String video, Model model) {
+	log.info("video {}", video);
+	model.addAttribute("source", "/video/" + video);
+	return "player";
+    }
     
+    @RequestMapping("browse")
+    public String browse() {
+	return "browse";
+    }
+
+    @RequestMapping("upload")
+    public String upload() {
+	return "upload";
+    }
+
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
     public void video(@PathVariable(value="videoFile") String source,
-    // @RequestParam(value="type", required=false, defaultValue="video/mp4") String type, 
+    // @RequestParam(value="type", required=false, defaultValue="video/mp4") String type,
     Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 	// Maybe later?
 	// http://shazsterblog.blogspot.ca/2016/02/asynchronous-streaming-request.html
@@ -74,14 +100,14 @@ public class ViewController {
         // model.addAttribute("source", source);
         // model.addAttribute("type", type);
 	log.info("********** video *********");
-	File video = new File(videoDir, source);
-	log.info("Exists: " + video.isFile());
-	log.info("Path: " + video);
+	File videoFile = videoStorage.load(source).toFile();
+	log.info("Exists: " + videoFile.isFile());
+	log.info("Path: " + videoFile);
 
 	try {
 	    response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
 	    response.setHeader("Content-Disposition", "attachment; filename="+source);
-	    InputStream iStream = new FileInputStream(video);
+	    InputStream iStream = new FileInputStream(videoFile);
 	    IOUtils.copy(iStream, response.getOutputStream());
 	    response.flushBuffer();
 	} catch (java.nio.file.NoSuchFileException e) {
@@ -89,34 +115,5 @@ public class ViewController {
 	} catch (Exception e) {
 	    response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 	}
-    }
-    
-    @RequestMapping(path = "download")
-    public String download(@RequestParam(value="torrentName") String torrentName, Model model){
-	// get torrent file.
-	File torrentFile = new File(torrentDir, torrentName);
-	try {
-	    Request.Get(
-		String.format("http://nottv.levimiller.ca/get-torrent/%s", torrentName)
-	    ).execute().saveContent(torrentFile);
-
-	    // download file.
-	    DownloadProcess dp = new TtorrentDownloadProcess(
-		torrentFile, new File(System.getProperty("user.home"), "videos"));
-	    filesharingsystem.DownloadProcess.Client client = dp.download();
-	    client.waitForDownload();
-	    String filename = client.files().get(0).getName();
-	    //removes ".torrent" from delete this if not using TrivialDownloadProcess
-	    // filename = filename.substring(0, filename.length()-8);
-	    
-	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
-	    log.info(filename);
-	    model.addAttribute("source", "video/"+filename);
-	    return "player";
-	} catch (IOException e) {
-	    log.error("Error getting torrent file from server.", e);
-	}
-	
-	return "redirect:/";
     }
 }

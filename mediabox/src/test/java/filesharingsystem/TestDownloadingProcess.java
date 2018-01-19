@@ -12,8 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import filesharingsystem.DownloadProcess.Client;
-import filesharingsystem.UploadProcess.UploadException;
+import filesharingsystem.process.DownloadProcess;
+import filesharingsystem.process.DownloadProcess.Client;
+import filesharingsystem.process.TtorrentDownloadProcess;
+import filesharingsystem.process.TtorrentUploadProcess;
+import filesharingsystem.process.UploadProcess;
 
 public class TestDownloadingProcess {
     private File contentFile, torrFile;
@@ -32,17 +35,18 @@ public class TestDownloadingProcess {
 	    //Test if a .torrent file can be created during the upload process
 	    up = new TtorrentUploadProcess(
 		new URI("http://levimiller.ca:6969/announce"),
-		new URI("http://notTV.levimiller.ca/upload-torrent")
+		new URI("http://notTV.levimiller.ca/upload-torrent"),
+		"cat",
+		contentFile
 	    );
-	    up.upload("cat", contentFile);
-	} catch (FileNotFoundException | URISyntaxException | UploadException e) {
+	    up.run();
+		} catch (URISyntaxException | FileNotFoundException e) {
 	    e.printStackTrace();
 	}
     }
 
     @After
     public void tearDown() {
-	up.stop();
 	torrFile.delete();
     }
 
