@@ -70,12 +70,12 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-client</artifactId>
-      <version>8.1.8.v20121106</version>
+      <version>${jetty.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>8.1.8.v20121106</version>
+      <version>${jetty.version}</version>
     </dependency>
     
     <!-- ttorrent  -->
