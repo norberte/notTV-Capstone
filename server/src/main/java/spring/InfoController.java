@@ -59,11 +59,12 @@ public class InfoController {
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
-		queryBuilder.append("Select categoryValueId ");
-		queryBuilder.append("From video_category_value_join Natural Join category_value As cv ");
+		queryBuilder.append("Select videoid ");
+		queryBuilder.append("From video_category_value_join As vcvj Join category_value As cv On cv.id=vcvj.categoryvalueid ");
 		queryBuilder.append("Where cv.id = ");
 		queryBuilder.append(categories[i]);
 	    }
+	    queryBuilder.append(')');
 	}
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();

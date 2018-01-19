@@ -372,6 +372,14 @@ nav{
 }
 
 /* CategoryFilter */
+.category-active {
+    background-color: lightgrey;
+}
+
+.category-entry:hover {
+    cursor: pointer;
+}
+
 .category-type-header {
     margin: 4px;
 }
@@ -425,6 +433,7 @@ nav{
     display:flex;
     align-items:center;
     justify-content:center;
+    min-height: 200px;
 }
 .arrow-button-icon {
     width:100%;

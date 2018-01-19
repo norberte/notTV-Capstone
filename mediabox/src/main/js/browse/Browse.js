@@ -12,6 +12,7 @@ class Browse extends React.Component {
 	    categories: [],
 	    videos: []
 	};
+	
 	// get the categories.
 	$.get({
 	    url: config.serverUrl + "/info/categories",
@@ -46,7 +47,7 @@ class Browse extends React.Component {
 		    videos: data
 		});
 	    },
-	    complete: (response) => {
+	    error: (response) => {
 		console.log(response);
 	    }
 	});
@@ -56,7 +57,9 @@ class Browse extends React.Component {
 	return (
 	    <div className="row display-flex categories-row">
 	      <div className="col-md-2 categories-column">
-		<CategoryFilter categories={this.state.categories} update_handler={this.update_videos}/>
+		<CategoryFilter
+		   categories={this.state.categories}
+		   update_handler={this.update_videos}/>
 	      </div>
 	      <div className="col-md-10 results-container">
 		<TopBar/>
