@@ -57,7 +57,7 @@ public class ProcessController {
 	    // Start seeding process.
 	    File torrent = SeedManager.addProcess(new TtorrentUploadProcess(
 		new URI(config.trackerUrl + "/announce"),
-		new URI(config.serverUrl + "/upload-torrent"),
+		new URI("http://nottv.levimiller.ca/upload-torrent"),//config.serverUrl + "/upload-torrent"),
 		name, localVideo
 	    ));
 	    return torrent.getName();
@@ -73,7 +73,7 @@ public class ProcessController {
 	File torrentFile = torrentStorage.newFile(torrentName);
 	try {
 	    Request.Get(
-		String.format("%s/get-torrent/%s", this.config.getServerUrl(), torrentName)
+		String.format("%s/get-torrent/%s", "http://nottv.levimiller.ca"/*this.config.getServerUrl()*/, torrentName)
 	    ).execute().saveContent(torrentFile);
 
 	    // download file.
