@@ -59,6 +59,12 @@
     	<artifactId>h2</artifactId>
     	<scope>test</scope>
     </dependency>
+
+    <!-- DB -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
     <dependency>
     	<groupId>org.postgresql</groupId>
     	<artifactId>postgresql</artifactId>
