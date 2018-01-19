@@ -6,6 +6,11 @@ import org.fourthline.cling.transport.spi.NetworkAddressFactory;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.StreamServer;
 
+/**
+ *  http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#section.ConfiguringTransports
+ *
+ * @author
+ */
 public class ClingUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
     @Override

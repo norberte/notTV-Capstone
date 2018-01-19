@@ -12,9 +12,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>tv.not</groupId>
   <artifactId>mediabox</artifactId>
-  <version>1.0</version>
   <packaging>jar</packaging>
 
   <!-- Descriptions -->
@@ -37,12 +35,10 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -52,7 +48,6 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
-      <version>4.5.3</version>
     </dependency>
 
     <!-- Upnp -->
@@ -69,13 +64,15 @@
     <!-- Extra library for Cling -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-client</artifactId>
-      <version>${jetty.version}</version>
+      <artifactId>jetty-server</artifactId>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>${jetty.version}</version>
+      <artifactId>jetty-servlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
     </dependency>
     
     <!-- ttorrent  -->
