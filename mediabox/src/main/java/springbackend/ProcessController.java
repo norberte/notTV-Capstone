@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.TtorrentDownloadProcess;
@@ -29,21 +33,38 @@ public class ProcessController {
     
     @Autowired
     private Config config;
+    @Autowired
     @Qualifier("TorrentStorage")
     private StorageService torrentStorage;
+    @Autowired
+    @Qualifier("VideoStorage")
+    private StorageService videoStorage; 
     
-    @RequestMapping("upload")
-    public void upload(String name, File video) {
-	// TODO: hook up this method to the ajax that submits the form.
+    @PostMapping("upload")
+    @ResponseBody
+    public String upload(MultipartFile video) {
+	log.info(video.getOriginalFilename());
+	String name = video.getOriginalFilename();
+	//TODO: use a hash or something to make a unique name
+	File localVideo = videoStorage.newFile(name);
+	log.info(localVideo.toString());
+	try {
+	    video.transferTo(localVideo);
+	} catch (IllegalStateException | IOException e) {
+	    log.error("Error saving uploaded file.", e);
+	}
+
 	try {
 	    // Start seeding process.
-	    SeedManager.addProcess(new TtorrentUploadProcess(
+	    File torrent = SeedManager.addProcess(new TtorrentUploadProcess(
 		new URI(config.trackerUrl + "/announce"),
 		new URI(config.serverUrl + "/upload-torrent"),
-		name, video
+		name, localVideo
 	    ));
+	    return torrent.getName();
 	} catch (URISyntaxException e) {
-	    log.error("Unable to start upload process.", e);
+	    log.error("Unable to start upload process. Malformed URI's in config.", e);
+	    return null; // hardcoded urls, so should never happen.
 	}
     }
     

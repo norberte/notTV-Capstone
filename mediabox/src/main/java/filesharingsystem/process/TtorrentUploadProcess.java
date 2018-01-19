@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -32,9 +32,11 @@ public class TtorrentUploadProcess implements UploadProcess {
     public TtorrentUploadProcess(URI announce, URI uploadURI, String name, File file) {
 	this.announce = announce;
 	this.uploadURI = uploadURI;
-	this.name = name;
+	this.name = FilenameUtils.getBaseName(name);
 	this.file = file;
 	this.uploadDir = new File(System.getProperty("user.home"), "uploads");
+	if(!this.uploadDir.isDirectory())
+	    this.uploadDir.mkdir();
 	client = null;
     }
 
@@ -57,9 +59,9 @@ public class TtorrentUploadProcess implements UploadProcess {
     public void run() {
 	try {
 	    torrentFile = new File(String.format("%s.torrent", this.name));
-	    File parent = new File("");
 	    // Create torrent from announce/files.
-	    Torrent t = Torrent.create(parent, Arrays.asList(this.file), announce, "notTV");
+	    Torrent t = Torrent.create(this.file, announce, "notTV");
+
 	    t.save(new FileOutputStream(torrentFile));
 	    // send file to the server.
 	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
@@ -84,7 +86,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 		// start seeding.
 		client = new Client(
 		    InetAddress.getLocalHost(),
-		    new SharedTorrent(t, new File(this.uploadDir.getAbsolutePath(), parent.getPath()), true)
+		    new SharedTorrent(t, this.uploadDir, true)
 		);
 		// Should block
 		client.share();

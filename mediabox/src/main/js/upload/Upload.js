@@ -44,7 +44,6 @@ class Tabs extends React.Component {
 	      <ul className="tabs__labels">
 		{
 		    this.props.children.map((child, idx) => {
-			console.log(child);
 			return (
 			    <Label
 			       key={idx}
@@ -76,25 +75,43 @@ class Pane extends React.Component {
     }
 }
 
+class FilePane extends React.Component {
+    render() {
+	return (
+	    <div>
+	      <div className="tab">
+		<h1>{this.props.label}</h1>
+		<p>
+		  <input type="file" name="videoFile" accept="video/*"
+			 ref={(input) => { this.videoFile = input; }} onChange={()=>this.props.onChange(this.videoFile.files)}/>
+		</p>
+	      </div>
+	    </div>
+	);
+    }
+}
+
 class App extends React.Component {
     constructor(props){
 	super(props);
 	this.state = {
-	    videoFile: '',
-	    videoPoster: '',
-	    videoTitle: '',
-	    videoDescription: '',
-	    videoTags: '',
-	    videoLanguage: '',
-	    city: '',
-	    country: '',
-	    videoLicense: '',
-	    videoRating: '',
-	    videoVersion: '',
-	    author: 'testUser'
+	    videoFile: null,
+	    videoThumbnail: null,
+	    formData: {
+		title: '',
+		description: '',
+		version: '',
+		filetype: '',
+		license: '',
+		downloadurl: '', // get from mediabox server
+		thumbnailurl: '/img/default-placeholder-300x300.png', // ignore for now.
+		tags: '',
+		userid: '-1' // TODO: mediabod user id.
+	    }
 	};
 
 	this.handleChange = this.handleChange.bind(this);
+	this.fileChange = this.fileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -105,25 +122,45 @@ class App extends React.Component {
 	this.setState(state);
     }
 
+    fileChange(files) {
+	if(files.length > 0) // Only one file for now.
+	    this.state.videoFile = files[0];
+    }
+
     //handles getting state data and giving it to the ajax submit.
     handleSubmit(e){
 	e.preventDefault();
 
-	// get state data
-	const formData = this.state;
-	//DO AJAX jQUERY SUBMIT
-	//Send Form data
+	const localForm = new FormData();
+	localForm.append('video', this.state.videoFile);
+	// Start upload process on local mediabox server.
 	$.post({
-            url:    config.serverUrl,
-            data:   {
-		formData: formData
+	    url: '/process/upload',
+	    data: localForm,
+	    processData: false,  // tell jQuery not to process the data (because of the file)
+	    contentType: false,  // tell jQuery not to set contentType
+	    success: (response) => {
+		console.log(response);
 	    },
-            success:(response) => {
-		console.log('successful submit');
-            },
-	    complete:(response) => console.log(response)
+	    error: (response) => {
+		console.log(response);
+	    }
 	});
-
+	
+	// // get state data
+	// const formData = this.state;
+	// //DO AJAX jQUERY SUBMIT
+	// //Send Form data
+	// $.post({
+        //     url:    config.serverUrl,
+        //     data:   {
+	// 	formData: formData
+	//     },
+        //     success:(response) => {
+	// 	console.log('successful submit');
+        //     },
+	//     complete:(response) => console.log(response)
+	// });
     }
 
     render(){
@@ -132,76 +169,44 @@ class App extends React.Component {
 	      <form id="uploadVideo" method="post" onSubmit={this.handleSubmit} commandname="videoForm">
 		<fieldset>
 		  <Tabs>
-
-		    <Pane label="Select Video File">
-		      <div className="tab">
-			<h1>Select Video File</h1>
-			<p><input type="file" name="videoFile" accept="video/*" value={this.state.videoFile} onChange={this.handleChange}/></p>
-		      </div>
-		    </Pane>
-
-
-		    <Pane label="Select Video Poster">
-		      <div className="tab">
-			<h1>Video Poster</h1>
-			<p><input type = "file" name="videoPoster" accept="image/*" value={this.state.videoPoster}  onChange={this.handleChange}/></p>
-		      </div>
-		    </Pane>
-
-
+		    <FilePane label="Select Video File" onChange={this.fileChange}/>
+		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+		    
 		    <Pane label="Add Video Details">
 		      <div className="tab">
 			<h1>Video Details</h1>
 			<h2>Video Title</h2>
-			<input type = "text" name="videoTitle" value={this.state.videoTitle}  onChange={this.handleChange}/>
+			<input type = "text" name="videoTitle" value={this.state.formData.title}  onChange={this.handleChange}/>
 
 			<h2>Description</h2>
-			<textarea rows="4" cols="50" name="videoDescription" value={this.state.videoDescription}  onChange={this.handleChange}>
+			<textarea rows="4" cols="50" name="videoDescription" value={this.state.formData.description}  onChange={this.handleChange}>
 			  Enter the description of the video here.
 			</textarea>
 
 			<h2>Tags</h2>
-			<textarea rows="4" cols="50" name="videoTags" value={this.state.videoTags}  onChange={this.handleChange}>
+			<textarea rows="4" cols="50" name="videoTags" value={this.state.formData.tags}  onChange={this.handleChange}>
 			  Enter keywords seperated by a comma. For example: Edmonton,Winter,Driving,Fast
 			</textarea>
-
-			<h2>Language</h2>
-			<select name = "videoLanguage" value={this.state.videoLanguage}  onChange={this.handleChange}>
-			  <option value="English">English</option>
-			  <option value="French">French</option>
-			  <option value="Spanish">Spanish</option>
-			  <option value="Other">Other</option>
-			</select>
 		      </div>
 		    </Pane>
 
 		    <Pane label="More Video Details">
 		      <div className="tab">
-			<h2>City</h2>
-			<input type = "text" name="city" value={this.state.city}  onChange={this.handleChange}/>
-
-			<h2>Country</h2>
-			<input type = "text" name="country" value={this.state.country}  onChange={this.handleChange}/>
-
 			<h2>License</h2>
 			Allow adaptations of this work to be shared?<br/>
-			<input type="radio" name="videoLicense" value="Y" checked={this.state.videoLicense === 'Y'}  onChange={this.handleChange}/>Yes&emsp;
-			<input type="radio" name="videoLicense" value="N" checked={this.state.videoLicense === 'N'}  onChange={this.handleChange}/>No&emsp;
-			<input type="radio" name="videoLicense" value="SA" checked={this.state.videoLicense === 'SA'}  onChange={this.handleChange}/>Yes, as long as others share alike
-
-			<h2>Content Rating</h2>
-			<input type="radio" name="videoRating" value="All Audiences" checked={this.state.videoRating === 'All Audiences'}  onChange={this.handleChange}/>All Audiences&emsp;
-			<input type="radio" name="videoRating" value="Mature" checked={this.state.videoRating === 'Mature'}  onChange={this.handleChange}/>Mature
+			<input type="radio" name="videoLicense" value="Y" checked={this.state.formData.license === 'Y'}  onChange={this.handleChange}/>Yes&emsp;
+			<input type="radio" name="videoLicense" value="N" checked={this.state.formData.license === 'N'}  onChange={this.handleChange}/>No&emsp;
+			<input type="radio" name="videoLicense" value="SA" checked={this.state.formData.license === 'SA'}  onChange={this.handleChange}/>Yes, as long as others share alike
 
 			<h2>Version</h2>
-			<input type = "number" name="videoVersion" value={this.state.videoVersion}  onChange={this.handleChange}/>
+			<input type = "number" name="videoVersion" value={this.state.formData.version}  onChange={this.handleChange}/>
 		      </div>
 		    </Pane>
 		    
 		    <Pane label="Submit Video">
 		      <div className="tab">
 			<h1>Submit Video</h1>
-			<input type="hidden" name="author" value={this.state.author}  onChange={this.handleChange}/>
+			<input type="hidden" name="author" value="-1"  onChange={this.handleChange}/>
 			<input type="submit" value="Submit"/>
 		      </div>
 		    </Pane>

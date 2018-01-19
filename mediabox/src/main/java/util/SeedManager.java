@@ -66,12 +66,23 @@ public class SeedManager {
 
     /**
      * Starts the upload/seeding process in a new thread
-     *
+     * Blocks the thread until the torrent file is generated.
      * @param name
      * @param up
      */
-    public static void addProcess(UploadProcess up) {
-	INSTANCE.currentSeeds.put(up.getName(), new Pair(new Thread(up), up));
+    public static File addProcess(UploadProcess up) {
+	Thread t = new Thread(up);
+	t.start();
+	INSTANCE.currentSeeds.put(up.getName(), new Pair(t, up));
+
+	// Wait for torrent to be generated before returning.
+	while (up.getTorrent() == null)
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException e) {
+		log.error("Inturrupted while sleeping.", e);
+	    }
+	return up.getTorrent();
     }
 
     /**

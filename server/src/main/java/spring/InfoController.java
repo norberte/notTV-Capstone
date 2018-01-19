@@ -71,7 +71,7 @@ public class InfoController {
 	
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
 	    rs.getString("title"), 
-	    "/img/default-placeholder-300x300.png", //TODO: link up thumbnails
+	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
 	    "/download?torrentName="+rs.getString("downloadurl"))
 	); 
     }
