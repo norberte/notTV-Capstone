@@ -68,8 +68,8 @@ class Pane extends React.Component {
 
     render(){
         return(
-            <div>
-              {this.props.children}
+	    <div>
+	      {this.props.children}
             </div>
 	);
     }
@@ -101,12 +101,10 @@ class App extends React.Component {
 		title: '',
 		description: '',
 		version: '',
-		filetype: '',
 		license: '',
-		downloadurl: '', // get from mediabox server
 		thumbnailurl: '/img/default-placeholder-300x300.png', // ignore for now.
 		tags: '',
-		userid: '-1' // TODO: mediabod user id.
+		userid: '-1' // TODO: mediabox user id.
 	    }
 	};
 
@@ -118,7 +116,7 @@ class App extends React.Component {
     //handles a change in an input from the form and gives that new change to the state.
     handleChange(e){
 	const state = this.state;
-	state[e.target.name] = e.target.value;
+	state.formData[e.target.name] = e.target.value;
 	this.setState(state);
     }
 
@@ -139,28 +137,39 @@ class App extends React.Component {
 	    data: localForm,
 	    processData: false,  // tell jQuery not to process the data (because of the file)
 	    contentType: false,  // tell jQuery not to set contentType
-	    success: (response) => {
-		console.log(response);
+	    success: (torrentFile) => {
+		// TODO: loop through formData
+		const formData = {
+			title: this.state.formData.title,
+			description: this.state.formData.description,
+			version: this.state.formData.version,
+			filetype: this.state.videoFile.type,
+			license: this.state.formData.license,
+			downloadurl: torrentFile,
+			thumbnailurl: this.state.formData.thumbnailurl,
+			tags: this.state.formData.tags,
+			userid: this.state.formData.userid
+		};
+
+		// insert video
+		$.ajax({
+		    type: "POST",
+		    url: config.serverUrl + "/upload/videoSubmission",
+		    contentType: 'application/json',
+		    processData: false,
+		    data: JSON.stringify(formData),
+		    success: (response) => {
+			console.log(response);
+		    },
+		    error: (response) => {
+			console.log(response);
+		    }
+		});
 	    },
 	    error: (response) => {
 		console.log(response);
 	    }
 	});
-	
-	// // get state data
-	// const formData = this.state;
-	// //DO AJAX jQUERY SUBMIT
-	// //Send Form data
-	// $.post({
-        //     url:    config.serverUrl,
-        //     data:   {
-	// 	formData: formData
-	//     },
-        //     success:(response) => {
-	// 	console.log('successful submit');
-        //     },
-	//     complete:(response) => console.log(response)
-	// });
     }
 
     render(){
@@ -176,15 +185,15 @@ class App extends React.Component {
 		      <div className="tab">
 			<h1>Video Details</h1>
 			<h2>Video Title</h2>
-			<input type = "text" name="videoTitle" value={this.state.formData.title}  onChange={this.handleChange}/>
+			<input type = "text" name="title" value={this.state.formData.title}  onChange={this.handleChange}/>
 
 			<h2>Description</h2>
-			<textarea rows="4" cols="50" name="videoDescription" value={this.state.formData.description}  onChange={this.handleChange}>
+			<textarea rows="4" cols="50" name="description" value={this.state.formData.description}  onChange={this.handleChange}>
 			  Enter the description of the video here.
 			</textarea>
 
 			<h2>Tags</h2>
-			<textarea rows="4" cols="50" name="videoTags" value={this.state.formData.tags}  onChange={this.handleChange}>
+			<textarea rows="4" cols="50" name="tags" value={this.state.formData.tags}  onChange={this.handleChange}>
 			  Enter keywords seperated by a comma. For example: Edmonton,Winter,Driving,Fast
 			</textarea>
 		      </div>
@@ -194,12 +203,12 @@ class App extends React.Component {
 		      <div className="tab">
 			<h2>License</h2>
 			Allow adaptations of this work to be shared?<br/>
-			<input type="radio" name="videoLicense" value="Y" checked={this.state.formData.license === 'Y'}  onChange={this.handleChange}/>Yes&emsp;
-			<input type="radio" name="videoLicense" value="N" checked={this.state.formData.license === 'N'}  onChange={this.handleChange}/>No&emsp;
-			<input type="radio" name="videoLicense" value="SA" checked={this.state.formData.license === 'SA'}  onChange={this.handleChange}/>Yes, as long as others share alike
+			<input type="radio" name="license" value="Y" checked={this.state.formData.license === 'Y'}  onChange={this.handleChange}/>Yes&emsp;
+			<input type="radio" name="license" value="N" checked={this.state.formData.license === 'N'}  onChange={this.handleChange}/>No&emsp;
+			<input type="radio" name="license" value="SA" checked={this.state.formData.license === 'SA'}  onChange={this.handleChange}/>Yes, as long as others share alike
 
 			<h2>Version</h2>
-			<input type = "number" name="videoVersion" value={this.state.formData.version}  onChange={this.handleChange}/>
+			<input type = "number" name="version" value={this.state.formData.version}  onChange={this.handleChange}/>
 		      </div>
 		    </Pane>
 		    
