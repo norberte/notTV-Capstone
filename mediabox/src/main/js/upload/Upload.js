@@ -87,7 +87,21 @@ constructor(props){
     //Currently, does not work.
     const disableNext = this.state.selected == this.props.children.length;
     const disablePrev = this.state.selected == 0;
-	return(
+
+	    event.preventDefault();
+	    this.setState({
+	           selected: index
+	    });
+    }
+
+    iterate(i, event){
+        event.preventDefault();
+        this.setState({
+            selected: this.state.selected + i
+        });
+    }
+
+    render(){
 	    <div className="tabs">
 	      <ul className="tabs__labels">
 
@@ -370,8 +384,9 @@ class App extends React.Component {
 	      <form id="uploadVideo" method="post" onSubmit={this.handleSubmit} commandname="videoForm">
 		<fieldset>
 		  <Tabs>
-		    <FilePane label="Select Video File" onChange={this.fileChange}/>
-		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+
+		      <FilePane label="Select Video File" onChange={this.fileChange}/>
+		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">
