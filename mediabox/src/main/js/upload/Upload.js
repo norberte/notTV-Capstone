@@ -69,10 +69,47 @@ class Tabs extends React.Component {
 		{this.props.children[this.state.selected]}
 	    </div>
 
-        <button className="iterateButton" type="button" onClick = {(e)=>this.iterate(1, e)}>Next</button>
-        <button className="iterateButton" type="button" onClick = {(e)=>this.iterate(-1, e)}>Previous</button>
+        {/*
+        Currently, the code for not showing the prev or next buttons based on this.state.selected
+        does not work. It throws an error when attempting to build the maven project and
+        points to the 4 in "if (this.state.selected < 4 && this.state.selected > 0) {"
+        */}
+
+        {/*
+        //Code for generating the correct itteration button config and assigning that to a variable iteration Buttons
+        //It is intended that this return what needs to be rendered, whether that be both buttons, or just Next or jsut Previous.
+            if (this.state.selected < 4 && this.state.selected > 0) {
+                return (
+                <div id = "iterateButtons">
+                    <button type="button" onClick = {(e)=>this.iterate(1, e)}>Next</button>
+                    <button type="button" onClick = {(e)=>this.iterate(-1, e)}>Previous</button>
+                </div>
+                );
+            } else if (this.state.selected == 4) {
+                return (
+                <div id = "iterateButtons">
+                    <button type="button" onClick = {(e)=>this.iterate(-1, e)}>Previous</button>
+                </div>
+                );
+            } else if (this.state.selected == 0){
+                return (
+                <div id = "iterateButtons">
+                    <button type="button" onClick = {(e)=>this.iterate(1, e)}>Next</button>
+                </div>
+                );
+            } else {
+                console.log("Iteration Buttons Render Error: Current Selection is either less than 0 or greater than 4. The Range for these values should be 0 to 4 because there are 5 tabs. This is hard coded at the moment.");
+            }
+            */}
+
+            {/*Uncontrolled Iteration Buttons. It is possible to iterate below 0 or above 4 with these.*/}
+            <div id = "iterateButtons">
+                <button type="button" onClick = {(e)=>this.iterate(1, e)}>Next</button>
+                <button type="button" onClick = {(e)=>this.iterate(-1, e)}>Previous</button>
+            </div>
 
 		</div>
+
 	);
     }
 }

@@ -1,3 +1,21 @@
+#iterateButtons {
+    position: relative;
+    left: 750px;
+    top: -47px;
+}
+
+/* This is intended to customize the buttons, but there is some strange bug where on each Pane change the buttons reset to default and hen have the css apllied again. It looks terrible, so I am leaving them as default for now.
+#iterateButtons button {
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+#iterateButtons button.hover {
+    background-color: #2d2d2d
+    color: #373a38;
+}
+*/
+
 .features-boxed {
   overflow-y:auto;
 }
