@@ -197,8 +197,9 @@ class App extends React.Component {
 	      <form id="uploadVideo" method="post" onSubmit={this.handleSubmit} commandname="videoForm">
 		<fieldset>
 		  <Tabs>
-		    <FilePane label="Select Video File" onChange={this.fileChange}/>
-		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+
+		      <FilePane label="Select Video File" onChange={this.fileChange}/>
+		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">
