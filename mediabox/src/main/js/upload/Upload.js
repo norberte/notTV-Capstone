@@ -20,6 +20,7 @@ class Label extends React.Component {
 }
 
 
+class Tabs extends React.Component {
     constructor(props){
 	super(props);
 	this.state = {
