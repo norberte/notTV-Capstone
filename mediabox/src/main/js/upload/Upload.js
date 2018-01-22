@@ -27,21 +27,31 @@ class Tabs extends React.Component {
 	};
 
 	this.handlClick = this.handleClick.bind(this);
+    this.iterate = this.iterate.bind(this);
     }
 
     displayName: 'Tabs';
 
     handleClick(index, event){
-	event.preventDefault();
-	this.setState({
-	    selected: index
-	});
+	    event.preventDefault();
+	    this.setState({
+	           selected: index
+	    });
+    }
+
+    iterate(i, event){
+        event.preventDefault();
+        this.setState({
+            selected: this.state.selected + i
+        });
     }
 
     render(){
+
 	return(
 	    <div className="tabs">
 	      <ul className="tabs__labels">
+
 		{
 		    this.props.children.map((child, idx) => {
 			return (
@@ -53,19 +63,22 @@ class Tabs extends React.Component {
 			);
 		    })
 		}
+
             </ul>
 		<div className="tab__content">
 		{this.props.children[this.state.selected]}
 	    </div>
+
+        <button className="iterateButton" type="button" onClick = {(e)=>this.iterate(1, e)}>Next</button>
+        <button className="iterateButton" type="button" onClick = {(e)=>this.iterate(-1, e)}>Previous</button>
+
 		</div>
 	);
     }
-
 }
 
 class Pane extends React.Component {
     displayName: 'Pane';
-
     render(){
         return(
 	    <div>
@@ -78,7 +91,6 @@ class Pane extends React.Component {
 class FilePane extends React.Component {
     render() {
 	return (
-	    <div>
 	      <div className="tab">
 		<h1>{this.props.label}</h1>
 		<p>
@@ -86,7 +98,6 @@ class FilePane extends React.Component {
 			 ref={(input) => { this.videoFile = input; }} onChange={()=>this.props.onChange(this.videoFile.files)}/>
 		</p>
 	      </div>
-	    </div>
 	);
     }
 }
@@ -179,8 +190,9 @@ class App extends React.Component {
 	      <form id="uploadVideo" method="post" onSubmit={this.handleSubmit} commandname="videoForm">
 		<fieldset>
 		  <Tabs>
-		    <FilePane label="Select Video File" onChange={this.fileChange}/>
-		    <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+
+		      <FilePane label="Select Video File" onChange={this.fileChange}/>
+		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">
