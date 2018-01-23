@@ -68,14 +68,30 @@ class CategoryType extends React.Component {
 
 	this.handleDelete = this.handleDelete.bind(this);
 	this.handleEdit = this.handleEdit.bind(this);
+	this.newCategory = this.newCategory.bind(this);
+	this.save = this.save.bind(this);
     }
 
     handleEdit(e) {
-	console.log(e);
+	console.log(e.target);
     }
 
     handleDelete(e) {
-	console.log(e);
+	console.log(e.target);
+    }
+
+    newCategory() {
+	console.log("test");
+	this.setState({
+	    categoryTypes: this.state.categoryTypes.concat([{
+		name: "New Category",
+		values: []
+	    }])
+	});
+    }
+
+    save() {
+	console.log("save");
     }
     
     render() {
@@ -106,7 +122,8 @@ class CategoryType extends React.Component {
 		</tr>
 		<tr>
 		  <td>
-		    <input type="button" className="btn btn-success" value="Add Category"/>
+		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategory}/>
+		    <input type="button" className="btn btn-info" value="Save" onClick={this.save}/>
 		  </td>
 		</tr>
 	      </tbody>
