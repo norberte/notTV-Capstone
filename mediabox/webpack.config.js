@@ -16,8 +16,8 @@ module.exports = {
         account: './src/main/js/account/Account.js'
     },
     output: {
-	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
-	filename: '[name]-bundle.js'
+        path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
+        filename: '[name]-bundle.js'
     },
     resolve: { // resolve utilities file.
         alias: {
@@ -36,15 +36,15 @@ module.exports = {
         })
     ],
     module: {
-    	rules : [
-    	    {
-		test: /\.js/,
-    		exclude: /(node_modules)/,
-    		loader: 'babel-loader',
-    		query: {
-    		    presets: ['env', 'react']
-    		}
-    	    }
-    	]
+        rules : [
+            {
+                test: /\.js/,
+                exclude: /(node_modules)/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['env', 'react']
+                }
+            }
+        ]
     }
 };

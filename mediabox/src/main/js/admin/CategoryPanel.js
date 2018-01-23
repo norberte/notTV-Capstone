@@ -1,41 +1,17 @@
 const React = require("react");
 
-
 class CategoryRow extends React.Component {
-    constructor(props) {
-	super(props);
-	this.state = {
-	    valueClass: this.props.category.name.replace(/\s/g,"-").toLowerCase() + "-collapse"
-	};
-    }
-    
     render() {
+	console.log(this.props.category);
+	const id = this.props.category.name + "-accordian";
 	return (
-	    <tbody className="panel panel-default">
-	      <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + this.state.valueClass}>
-		<td className="category-col">
-		  <div  className="panel-title">
-		    <i className="glyphicon glyphicon-menu-up"/>
-		    {" " + this.props.category.name}
-		  </div>
-		</td>
-		<td className="category-col">
-		  <input className="deleteButton btn btn-danger" type="button" value="Delete Category"/>
-		</td>
+	    <tbody>
+	      <tr data-toggle="collapse" data-target={"#" + id} className="clickable">
+		<td><div contentEditable="true"  onChange={this.props.handleEdit}>{this.props.category.name}</div></td>
+		<td><input type="button" value="X" onClick={this.props.handleDelete}/></td>
 	      </tr>
 	      {
-		  this.props.category.values.map((val, idx) => {
-		      return (
-			  <tr key={idx} className={"category-row panel-collapse collapse " + this.state.valueClass}>
-			    <td className="panel-body">
-			      <input type="text" onChange={this.props.handleEdit} value={val.name}/>
-			    </td>
-			    <td className="category-col">
-			      <input id={val.id} className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
-			    </td>
-			  </tr>
-		      );
-		  })
+		  this.props.category.values.map((val, idx) => <tr id={id} key={idx} className="collapse"><td>{val.name}</td></tr>)
 	      }
 	    </tbody>
 	    
@@ -66,35 +42,19 @@ class CategoryType extends React.Component {
 
 	this.handleDelete = this.handleDelete.bind(this);
 	this.handleEdit = this.handleEdit.bind(this);
-	this.newCategory = this.newCategory.bind(this);
-	this.save = this.save.bind(this);
     }
 
     handleEdit(e) {
-	console.log(e.target);
+	console.log(e);
     }
 
     handleDelete(e) {
-	console.log(e.target);
-    }
-
-    newCategory() {
-	console.log("test");
-	this.setState({
-	    categoryTypes: this.state.categoryTypes.concat([{
-		name: "New Category",
-		values: []
-	    }])
-	});
-    }
-
-    save() {
-	console.log("save");
+	console.log(e);
     }
     
     render() {
 	return (
-	    <table className="panel-group" id="category-accordian">
+	    <table>
 	      <thead>
 		<tr>
 		  <th>CategoryType</th>
@@ -112,19 +72,6 @@ class CategoryType extends React.Component {
 		      })
 		  : NULL_ROW
 	      }
-	      <tbody>
-		<tr>
-		  <td>
-		    <br/>
-		  </td>
-		</tr>
-		<tr>
-		  <td>
-		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategory}/>
-		    <input type="button" className="btn btn-info" value="Save" onClick={this.save}/>
-		  </td>
-		</tr>
-	      </tbody>
 	    </table>
 	);
     }
