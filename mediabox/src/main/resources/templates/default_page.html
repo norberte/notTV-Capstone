@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head lang="en">
     <meta charset="UTF-8"/>
-    <title>Browse</title>
-    <link rel="stylesheet" href="/css/browse.css" />
+    <title th:text="${title}"/>
+    <link rel="stylesheet" th:href="@{/css/{file}.css(file=${page_name})}" />
   </head>
   <body>
     <div id="rootNav"></div>
@@ -15,6 +15,6 @@
     </script>
     <script src="/js/bundle/common.js"/>
     <script src="/js/bundle/global-bundle.js"/>
-    <script src="/js/bundle/browse-bundle.js"/>
+    <script th:src="@{/js/bundle/{file}(file=${page_name} + '-bundle.js')}"/>
   </body>
 </html>
