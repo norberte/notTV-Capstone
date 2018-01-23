@@ -8,6 +8,7 @@ module.exports = {
             'bootstrap',
             './src/main/js/global.js'
         ],
+        admin: './src/main/js/admin/Admin.js',
         browse: './src/main/js/browse/Browse.js',
         upload: './src/main/js/upload/Upload.js',
         userProfile: './src/main/js/userProfile/userProfile.js',
