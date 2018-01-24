@@ -10,7 +10,7 @@ module.exports = {
 	],
 	browse: './src/main/js/browse/Browse.js',
 	upload: './src/main/js/upload/Upload.js',
-	videoCreator: './src/main/js/videoCreator/videoCreator.js'
+	userProfile: './src/main/js/userProfile/userProfile.js'
     },
     output: {
 	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
