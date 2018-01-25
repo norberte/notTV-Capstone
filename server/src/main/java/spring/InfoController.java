@@ -1,11 +1,15 @@
 package spring;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +46,33 @@ public class InfoController {
 	));
     }
 
+    
+    @GetMapping("/recentVideos")
+    @ResponseBody
+    public List<Video> getRecentVideos(@RequestParam(value="userid[]", required=true) int[] userid) {
+    // Video(title, thumbnail_url, download_url)
+    log.info("recent videos");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
+            return ps;
+        }
+    };
+    
+    return jdbcTemplate.query(psc, (rs, row) -> new Video(
+        rs.getString("title"), 
+        rs.getString("thumbnailurl"), //TODO: make sure this is correct.
+        "/process/download?torrentName="+rs.getString("downloadurl"))
+    ); 
+    }
+    
     @GetMapping("/videos")
     @ResponseBody
     public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {

@@ -92,6 +92,12 @@ public class ViewController {
 	return "upload";
     }
 
+    // work more on this
+    @RequestMapping("userProfile/{userID:.+}") 
+    public String userProfile() {
+    return "userProfile";
+    }
+    
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
     public void video(@PathVariable(value="videoFile") String source,
