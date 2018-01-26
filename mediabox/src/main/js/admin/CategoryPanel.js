@@ -16,22 +16,24 @@ class CategoryRow extends React.Component {
 	    <tbody className="panel panel-default">
 	      <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + this.state.valueClass}>
 		<td className="category-col">
-		  <div  className="panel-title"  onChange={this.props.handleEdit}>
+		  <div  className="panel-title">
 		    <i className="glyphicon glyphicon-menu-up"/>
 		    {" " + this.props.category.name}
 		  </div>
 		</td>
 		<td className="category-col">
-		  <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleDelete}/>
+		  <input className="deleteButton btn btn-danger" type="button" value="Delete Category"/>
 		</td>
 	      </tr>
 	      {
 		  this.props.category.values.map((val, idx) => {
 		      return (
 			  <tr key={idx} className={"category-row panel-collapse collapse " + this.state.valueClass}>
-			    <td className="panel-body"><div contentEditable="true">{val.name}</div></td>
+			    <td className="panel-body">
+			      <input type="text" onChange={this.props.handleEdit} value={val.name}/>
+			    </td>
 			    <td className="category-col">
-			      <input className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
+			      <input id={val.id} className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
 			    </td>
 			  </tr>
 		      );
