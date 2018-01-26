@@ -1,6 +1,5 @@
 const React = require("react");
 
-
 class CategoryRow extends React.Component {
     constructor(props) {
 	super(props);
@@ -68,35 +67,19 @@ class CategoryType extends React.Component {
 
 	this.handleDelete = this.handleDelete.bind(this);
 	this.handleEdit = this.handleEdit.bind(this);
-	this.newCategory = this.newCategory.bind(this);
-	this.save = this.save.bind(this);
     }
 
     handleEdit(e) {
-	console.log(e.target);
+	console.log(e);
     }
 
     handleDelete(e) {
-	console.log(e.target);
-    }
-
-    newCategory() {
-	console.log("test");
-	this.setState({
-	    categoryTypes: this.state.categoryTypes.concat([{
-		name: "New Category",
-		values: []
-	    }])
-	});
-    }
-
-    save() {
-	console.log("save");
+	console.log(e);
     }
     
     render() {
 	return (
-	    <table className="panel-group" id="category-accordian">
+	    <table>
 	      <thead>
 		<tr>
 		  <th>CategoryType</th>
@@ -114,19 +97,6 @@ class CategoryType extends React.Component {
 		      })
 		  : NULL_ROW
 	      }
-	      <tbody>
-		<tr>
-		  <td>
-		    <br/>
-		  </td>
-		</tr>
-		<tr>
-		  <td>
-		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategory}/>
-		    <input type="button" className="btn btn-info" value="Save" onClick={this.save}/>
-		  </td>
-		</tr>
-	      </tbody>
 	    </table>
 	);
     }
