@@ -1,0 +1,29 @@
+.deleteButton {
+    float: right;
+}
+
+.category-col {
+    padding: 4px;
+}
+.category-row {
+    border: solid;
+    border-width: 1px 0;
+}
+.category-row:first-child,
+.category-row:nth-child(2){
+    border-top: none;
+}
+.category-row:last-child {
+    border-bottom: none;
+}
+
+.panel-heading:hover {
+    cursor: pointer;
+}
+.panel-heading:hover h4 {
+    text-decoration: underline;
+}
+
+#category-accordian {
+    width: 100%;
+}
