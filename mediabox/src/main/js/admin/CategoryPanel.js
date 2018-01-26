@@ -15,13 +15,13 @@ class CategoryRow extends React.Component {
 	    <tbody className="panel panel-default">
 	      <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + this.state.valueClass}>
 		<td className="category-col">
-		  <div  className="panel-title">
+		  <div  className="panel-title"  onChange={this.props.handleEdit}>
 		    <i className="glyphicon glyphicon-menu-up"/>
 		    {" " + this.props.category.name}
 		  </div>
 		</td>
 		<td className="category-col">
-		  <input className="deleteButton btn btn-danger" type="button" value="Delete Category"/>
+		  <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleDelete}/>
 		</td>
 	      </tr>
 	      {
@@ -79,7 +79,7 @@ class CategoryType extends React.Component {
     
     render() {
 	return (
-	    <table className="panel-group" id="category-accordian">
+	    <table>
 	      <thead>
 		<tr>
 		  <th>CategoryType</th>
@@ -97,18 +97,6 @@ class CategoryType extends React.Component {
 		      })
 		  : NULL_ROW
 	      }
-	      <tbody>
-		<tr>
-		  <td>
-		    <br/>
-		  </td>
-		</tr>
-		<tr>
-		  <td>
-		    <input type="button" className="btn btn-success" value="Add Category"/>
-		  </td>
-		</tr>
-	      </tbody>
 	    </table>
 	);
     }
