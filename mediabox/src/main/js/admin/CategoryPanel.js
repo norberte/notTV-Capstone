@@ -1,5 +1,6 @@
 const React = require("react");
 
+
 class CategoryRow extends React.Component {
     constructor(props) {
 	super(props);
@@ -79,7 +80,7 @@ class CategoryType extends React.Component {
     
     render() {
 	return (
-	    <table>
+	    <table className="panel-group" id="category-accordian">
 	      <thead>
 		<tr>
 		  <th>CategoryType</th>
@@ -97,6 +98,18 @@ class CategoryType extends React.Component {
 		      })
 		  : NULL_ROW
 	      }
+	      <tbody>
+		<tr>
+		  <td>
+		    <br/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+		    <input type="button" className="btn btn-success" value="Add Category"/>
+		  </td>
+		</tr>
+	      </tbody>
 	    </table>
 	);
     }
