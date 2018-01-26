@@ -1,5 +1,6 @@
 const React = require("react");
 
+
 class CategoryRow extends React.Component {
     constructor(props) {
 	super(props);
@@ -28,11 +29,9 @@ class CategoryRow extends React.Component {
 		  this.props.category.values.map((val, idx) => {
 		      return (
 			  <tr key={idx} className={"category-row panel-collapse collapse " + this.state.valueClass}>
-			    <td className="panel-body">
-			      <input type="text" onChange={this.props.handleEdit} value={val.name}/>
-			    </td>
+			    <td className="panel-body"><div contentEditable="true">{val.name}</div></td>
 			    <td className="category-col">
-			      <input id={val.id} className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
+			      <input className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
 			    </td>
 			  </tr>
 		      );
