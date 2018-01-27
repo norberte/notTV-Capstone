@@ -102,6 +102,8 @@ constructor(props){
     }
 
   render(){
+    //The below two cont's are the condition for when it is tru to have a button disabled
+    //Currently, does not work.
     const disableNext = this.state.selected == this.props.children.length;
     const disablePrev = this.state.selected == 0;
 	return(
