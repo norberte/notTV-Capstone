@@ -1,3 +1,13 @@
+.iterationButtons{
+  color: grey;
+}
+
+#iterateButtonsDiv {
+    position: relative;
+    left: 750px;
+    top: -47px;
+}
+
 .features-boxed {
   overflow-y:auto;
 }
