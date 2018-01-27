@@ -127,7 +127,7 @@ constructor(props){
 		{this.props.children[this.state.selected]}
 	   </div>
 
-     <div id = "iterateButtons">
+     <div id = "iterateButtonsDiv">
          <button className="iterationButtons" type="button" onClick = {(e)=>this.iterate(1, e)} disabled={this.disableNext}>Next</button>
          <button className="iterateButtons" type="button" onClick = {(e)=>this.iterate(-1, e)} disabled={this.disablePrev}>Previous</button>
      </div>
