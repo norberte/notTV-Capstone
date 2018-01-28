@@ -93,7 +93,7 @@ class Account extends React.Component {
            // Use Ajax to send new account details
            $.ajax({
                type: "POST",
-               url: config.serverUrl + "/upload/accountSubmit",
+               url: config.serverUrl + "/account/accountSubmit",
                contentType: 'application/json',
                processData: false,
                data: JSON.stringify(formData),
