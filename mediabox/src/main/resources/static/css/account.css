@@ -1,0 +1,49 @@
+figure{
+    float: left;
+    width: 300px;
+    height: 300px;
+    padding: 0.25em;
+    margin: 0.125em;
+    /*background-color: #8b9099;*/
+}
+
+figcaption{
+    text-align: center;
+    font-size: 18pt;
+}
+
+
+#accountInfo{
+    background-color: #adb3bc;
+}
+
+
+h1 {
+    padding-top: 0.125em;
+    padding-bottom: 0.125em;
+    text-align:center;
+}
+
+#accountInfoForm{
+    text-align: center;
+    float: right;
+    padding: 0.125em;
+    margin-right: 1em;
+    width: 50%;
+}
+
+input[type=button], input[type=submit], input[type=reset]{
+    color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    text-decoration: none;
+    background-color: #5e9bff;
+    margin 10px;
+    cursor: pointer;
+    width: 25%;
+}
+
+#subscritpions {
+    float: left;
+}
