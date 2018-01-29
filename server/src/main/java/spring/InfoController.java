@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.Video;
+import spring.view.Playlist;
 
 @CrossOrigin
 @RestController
@@ -44,6 +45,35 @@ public class InfoController {
 		rs.getInt("id")
 	    )
 	));
+    }
+    
+    // gets playlists owned by a user. 
+    // takes in a userID parameter
+    @GetMapping("/playlists")
+    @ResponseBody
+    public List<Playlist> getPlaylists(@RequestParam(value="userid[]", required=true) int[] userid) {
+    // Video(title, thumbnail_url, download_url)
+    log.info("playlists owned by a user");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Select title,thumbnailurl, downloadurl From Playlist Where owner = ?");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
+            return ps;
+        }
+    };
+    
+    return jdbcTemplate.query(psc, (rs, row) -> new Playlist(
+        rs.getString("title"), 
+        rs.getString("thumbnailurl"), // TODO: make sure this is correct.
+        rs.getString("downloadurl") // TODO: implement the download for a whole playlist
+        )
+    ); 
     }
 
     

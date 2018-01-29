@@ -1,6 +1,7 @@
 import NavBar from '../NavBar.js';
 import CarouselLayout from '../browse/CarouselLayout.js';
 import AuthorHeader from './authorHeader.js';
+import PlaylistCarousel from './playlists.js';
 
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -11,23 +12,25 @@ class Profile extends React.Component {
     constructor(props) {
 	super(props);
 	this.state = {
-		userid:  -1,
+		userid:  [-1],
 		username: "testUser",
 	    videos: [],
 		playlists: []
 	};
 
-	// TODO: Get recent videos that belong to the user
-	// get recent videos
-	this.update_videos([]);
-	
-	this.update_videos = this.update_videos.bind(this);
+	// Get recent videos that belong to the user	
+	this.update_videos = this.update_videos(this.state.userid);
+	// Get playlists owned by the user
+	this.update_playlists = this.update_playlists(this.state.userid);
     }
 
-    update_videos() {
+    // ajax call for getting the videos
+    update_videos(userID) {
 	$.get({
-	    url: config.serverUrl + "/info/recentVideos",
-	    data: JSON.stringify(this.state.userid),
+	    url: config.serverUrl + "/info/recentVideos/",
+	    data: {
+			userid: userID
+		    },
 	    dataType: "json",
 	    success: (data) => {
 		this.setState({
@@ -40,25 +43,42 @@ class Profile extends React.Component {
 	});
     }
     
-    // TODO: Get playlists owned by the user
-    
-	// get playlists
+    // ajax call for getting the playlists
+    update_playlists(userID) {
+    	$.get({
+    	    url: config.serverUrl + "/info/playlists/",
+    	    data: {
+    			userid: userID
+    		    },
+    	    dataType: "json",
+    	    success: (data) => {
+    		this.setState({
+    		    playlists: data
+    		});
+    	    },
+    	    error: (response) => {
+    		console.log(response);
+    	    }
+    	});
+        }
     
     render() {
 	return (
 		<div className="container">
 	        <div className="row">
 	            <div className="col-md-10 col-md-offset-1">
-	            	<AuthorHeader/>
-	            	
+	            	<AuthorHeader description= "NotTV Test Account" username = {this.state.username} />
 	            	<br/>
 	            	<br/>
-	            	<CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
-	            	
+	            	<div className="row browse-body">
+	      		  		<CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
+	      		  	</div>
 	            	<br/>
 	            	<br/>
-	            	
-	            </div>
+	            	<div className="row browse-body">
+      		  			<PlaylistCarousel title="Playlists" playlists={this.state.playlists}/>
+      		  		</div>	  
+      		  	</div>
 	        </div>
 	    </div>
 	);

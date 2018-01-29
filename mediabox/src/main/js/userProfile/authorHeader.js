@@ -9,7 +9,7 @@ export default class AuthorHeader extends React.Component {
 					</div>
 					<div className="media-body">
 						<h4 className="media-heading">{this.props.username}</h4>
-						<p>NotTV Team Test Account </p>
+						<p>{this.props.description}</p>
 						<button className="btn btn-default" type="button">Subscribe</button>
 						<button className="btn btn-default" type="button">Unsubscribe</button>
 					</div>
