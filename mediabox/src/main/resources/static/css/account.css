@@ -3,7 +3,7 @@ figure{
     width: 300px;
     height: 300px;
     padding: 0.25em;
-    margin: 0.125em;
+    margin: 0.25em;
     /*background-color: #8b9099;*/
 }
 
@@ -14,22 +14,32 @@ figcaption{
 
 
 #accountInfo{
+    position: absolute;
+    width: 100%;
     background-color: #adb3bc;
 }
 
 
 h1 {
-    padding-top: 0.125em;
-    padding-bottom: 0.125em;
+    position: relative;
     text-align:center;
+    color: black;
 }
 
 #accountInfoForm{
-    text-align: center;
+    position: relative;
+    text-align: left;
     float: right;
-    padding: 0.125em;
-    margin-right: 1em;
+    padding: 0.25em;
+    margin-top: 0.5em;
+    margin-right: 5em;
     width: 50%;
+    height: 300px;
+    border: 1px solid black;
+}
+
+input {
+    width: 100%
 }
 
 input[type=button], input[type=submit], input[type=reset]{
@@ -39,11 +49,17 @@ input[type=button], input[type=submit], input[type=reset]{
     padding: 4px 8px;
     text-decoration: none;
     background-color: #5e9bff;
-    margin 10px;
     cursor: pointer;
-    width: 25%;
+    width: 100%;
 }
 
-#subscritpions {
-    float: left;
+input[type=submit]{
+    position: relative;
+    top: 5em;
+}
+
+.lowerDiv {
+    position: relative;
+    top: 10em;
+    width: 100%;
 }
