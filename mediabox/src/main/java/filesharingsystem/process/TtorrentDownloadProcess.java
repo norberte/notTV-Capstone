@@ -13,18 +13,16 @@ import org.slf4j.LoggerFactory;
 
 import com.turn.ttorrent.client.SharedTorrent;
 
+import util.storage.StorageService;
+
 
 public class TtorrentDownloadProcess implements DownloadProcess {
     private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
-    private final File torrent, downloadDir;
-    public TtorrentDownloadProcess(File torrent, File downloadDir) {
+    private final File torrent;
+    private final StorageService torrentStorage;
+    public TtorrentDownloadProcess(File torrent, StorageService torrentStorage) {
 	this.torrent = torrent;
-	this.downloadDir = downloadDir;
-    }
-
-    public TtorrentDownloadProcess(File torrent) {
-	this.torrent = torrent;
-	this.downloadDir = new File(System.getProperty("user.home"));
+	this.torrentStorage = torrentStorage;
     }
     
     @Override
@@ -34,7 +32,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 		// This is the interface the client will listen on (you might need something
 		// else than localhost here).
 		InetAddress.getLocalHost(),		
-		SharedTorrent.fromFile(torrent, downloadDir));
+		SharedTorrent.fromFile(torrent, torrentStorage.getBaseDir()));
 	    // client.setMaxDownloadRate(50.0);
 	    // client.setMaxUploadRate(50.0);
 	    client.download();
@@ -49,7 +47,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 		@Override
 		public List<File> files() {
 		    return client.getTorrent().getFilenames().stream().map(fn -> {
-			return new File(downloadDir, fn);
+			return torrentStorage.get(fn);
 		    }).collect(Collectors.toList());
 		}
 

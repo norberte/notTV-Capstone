@@ -47,7 +47,7 @@ public class ProcessController {
 	log.info(video.getOriginalFilename());
 	String name = video.getOriginalFilename();
 	//TODO: use a hash or something to make a unique name
-	File localVideo = videoStorage.newFile(name);
+	File localVideo = videoStorage.get(name);
 	log.info(localVideo.toString());
 	try {
 	    video.transferTo(localVideo);
@@ -74,7 +74,7 @@ public class ProcessController {
     @RequestMapping(path = "download")
     public String download(@RequestParam(value="torrentName") String torrentName, @RequestParam("videoId") int videoId, HttpServletRequest request){
 	// get torrent file.
-	File torrentFile = torrentStorage.newFile(torrentName);
+	File torrentFile = torrentStorage.get(torrentName);
 	try {
 	    Request.Get(
 		String.format("%s/get-torrent/%s", "http://nottv.levimiller.ca"/*this.config.getServerUrl()*/, torrentName)
@@ -82,7 +82,7 @@ public class ProcessController {
 
 	    // download file.
 	    DownloadProcess dp = new TtorrentDownloadProcess(
-		torrentFile, new File(System.getProperty("user.home"), "videos"));
+		torrentFile, torrentStorage);
 	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
 	    client.waitForDownload();
 	    String filename = client.files().get(0).getName();

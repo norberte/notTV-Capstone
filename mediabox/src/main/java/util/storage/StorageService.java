@@ -1,7 +1,6 @@
 package util.storage;
 
 import java.io.File;
-import java.nio.file.Path;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,19 +21,11 @@ public interface StorageService {
 
     /**
      * Gets the file with the given id.
-     *
+     * Creates a new file if it doesn't exist.
      * @param filename
      * @return
      */
-    Path load(String filename);
-
-    /**
-     * Creates and returns a new File with the given name.
-     *
-     * @param name
-     * @return
-     */
-    File newFile(String name);
+    File get(String filename);
 
     /**
      * Gets the base directory.

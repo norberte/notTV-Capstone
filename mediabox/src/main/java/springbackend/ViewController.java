@@ -76,7 +76,7 @@ public class ViewController {
         // model.addAttribute("source", source);
         // model.addAttribute("type", type);
 	log.info("********** video *********");
-	File videoFile = videoStorage.load(source).toFile();
+	File videoFile = videoStorage.get(source);
 	log.info("Exists: " + videoFile.isFile());
 	log.info("Path: " + videoFile);
 

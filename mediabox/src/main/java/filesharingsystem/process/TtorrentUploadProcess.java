@@ -69,7 +69,7 @@ public class TtorrentUploadProcess implements UploadProcess {
     public void run() {
 	// Get public ip.
 	try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-	    torrentFile = torrentStorage.newFile(String.format("%s.torrent", this.name));
+	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
 	    // Create torrent from announce/files.
 	    Torrent t = Torrent.create(this.file, announce, "notTV");
 

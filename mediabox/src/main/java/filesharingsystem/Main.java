@@ -28,7 +28,10 @@ public class Main {
     public static void main(String args[])
 	throws URISyntaxException, UnknownHostException, NoSuchAlgorithmException, IOException, UploadException {
 	if(args[0].equals("download")) {
-	    DownloadProcess dp = new TtorrentDownloadProcess(new File(args[1]));
+	    DownloadProcess dp = new TtorrentDownloadProcess(
+		new File(args[1]),
+		new FileSystemStorageService(new StorageProperties("torrents"))
+	    );
 	    DownloadProcess.Client c = dp.download();
 	    c.waitForDownload(); // wait for download to complete.
 	    for(File f : c.files()) { // do something with files.

@@ -15,10 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
     private final Path rootLocation;
-
+    private final File rootDir;
+    
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
 	this.rootLocation = Paths.get(properties.getLocation());
+	this.rootDir = rootLocation.toFile();
 	this.init();
     }
 
@@ -45,8 +47,8 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Path load(String filename) {
-	return rootLocation.resolve(filename);
+    public File get(String filename) {
+	return new File(rootDir, filename);
     }
 
     @Override
@@ -58,14 +60,9 @@ public class FileSystemStorageService implements StorageService {
 	    throw new StorageException("Could not initialize storage", e);
 	}
     }
-
-    @Override
-    public File newFile(String name) {
-	return new File(rootLocation.toFile(), name);
-    }
     
     @Override
     public File getBaseDir() {
-	return rootLocation.toFile();
+	return rootDir;
     }
 }
