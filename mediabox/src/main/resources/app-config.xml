@@ -39,6 +39,9 @@
       </bean>
     </constructor-arg>
   </bean>
+
+  <bean id="UploadProcessFactory" class="filesharingsystem.process.TtorrentUploadProcessFactory"/>
+  <bean id="SeedManager" class="util.SeedManager"/>
   
   <mvc:interceptors>
     <bean class="springbackend.ConfigHandlerInterceptor"/>

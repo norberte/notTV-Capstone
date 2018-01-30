@@ -19,10 +19,10 @@ import util.storage.StorageService;
 public class TtorrentDownloadProcess implements DownloadProcess {
     private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
     private final File torrent;
-    private final StorageService torrentStorage;
-    public TtorrentDownloadProcess(File torrent, StorageService torrentStorage) {
+    private final StorageService videoStorage;
+    public TtorrentDownloadProcess(File torrent, StorageService videoStorage) {
 	this.torrent = torrent;
-	this.torrentStorage = torrentStorage;
+	this.videoStorage = videoStorage;
     }
     
     @Override
@@ -32,7 +32,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 		// This is the interface the client will listen on (you might need something
 		// else than localhost here).
 		InetAddress.getLocalHost(),		
-		SharedTorrent.fromFile(torrent, torrentStorage.getBaseDir()));
+		SharedTorrent.fromFile(torrent, videoStorage.getBaseDir()));
 	    // client.setMaxDownloadRate(50.0);
 	    // client.setMaxUploadRate(50.0);
 	    client.download();
@@ -47,7 +47,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 		@Override
 		public List<File> files() {
 		    return client.getTorrent().getFilenames().stream().map(fn -> {
-			return torrentStorage.get(fn);
+			return videoStorage.get(fn);
 		    }).collect(Collectors.toList());
 		}
 

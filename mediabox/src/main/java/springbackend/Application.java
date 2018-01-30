@@ -11,13 +11,17 @@ import org.springframework.context.annotation.ImportResource;
 import filesharingsystem.PortMapException;
 import filesharingsystem.PortMapper;
 
-@SpringBootApplication
+import util.SeedManager;
+
+
+@SpringBootApplication()
 @ImportResource("classpath:app-config.xml")
 public class Application implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
     @Autowired
     PortMapper portMapper;
-    
+    @Autowired
+    SeedManager seedManager;
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

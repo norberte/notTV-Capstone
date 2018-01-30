@@ -68,7 +68,7 @@ public class TtorrentUploadProcess implements UploadProcess {
     @Override
     public void run() {
 	// Get public ip.
-	try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
+	try {
 	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
 	    // Create torrent from announce/files.
 	    Torrent t = Torrent.create(this.file, announce, "notTV");
@@ -77,9 +77,6 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    // send file to the server.
 	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
 
-	    String ip = s.next();
-	    log.info("My current IP address is " + ip);
-	    
 	    // Create request
 	    CloseableHttpClient httpClient = HttpClients.createDefault();
 	    HttpPost uploadFile = new HttpPost(this.uploadURI);

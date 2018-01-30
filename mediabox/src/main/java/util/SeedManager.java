@@ -1,19 +1,27 @@
 package util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+
+import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-import filesharingsystem.process.TtorrentResumeUploadProcess;
 import filesharingsystem.process.UploadProcess;
+import filesharingsystem.process.UploadProcessFactory;
+
+import util.storage.StorageService;
 
 
 /**
@@ -22,46 +30,38 @@ import filesharingsystem.process.UploadProcess;
  * @author
  */
 public class SeedManager {
-    private static class Pair {
-	private Thread t;
-	private UploadProcess up;
-	Pair(Thread t, UploadProcess up) {
+    private static class Pair<T, S> implements Serializable{
+	private static final long serialVersionUID = -3540758862913946498L;
+	private T t;
+	private S s;
+	Pair(T t, S s) {
 	    this.t = t;
-	    this.up = up;
+	    this.s = s;
 	}
     }
     
     private static final Logger log = LoggerFactory.getLogger(SeedManager.class);
-    private static final SeedManager INSTANCE;
-    private final Map<String, Pair> currentSeeds;
-    private final File memory;
+    private static final String MEMORY = "SeedManager-Memory";
+    private UploadProcessFactory uploadProcessFactory;
+    private final StorageService torrentStorage;
+    private final Map<String, Pair<Thread, UploadProcess>> currentSeeds;
 
-    static {
-	INSTANCE = new SeedManager();
-	// Runtime.getRuntime().addShutdownHook(new Thread() {
-	//     keepRunning = false;
-	    
-	// });
-    }
-    
-    private SeedManager() {
+    @SuppressWarnings("unchecked") // can't check generic type.
+    @Autowired
+    public SeedManager(@Qualifier("TorrentStorage") StorageService torrentStorage, UploadProcessFactory uploadProcessFactory) {
+	this.torrentStorage = torrentStorage;
+	this.uploadProcessFactory = uploadProcessFactory;
 	this.currentSeeds = new HashMap<>();
-	this.memory = Paths.get(System.getProperty("user.home"), "seeds.csv").toFile();
-
-	// Start seeding all saved upload seeds.
-	try(Scanner scan = new Scanner(this.memory)) {
-	    scan.useDelimiter(",");
-	    while(scan.hasNext()) {
-		// resume seeding
-		String[] vals = scan.next().trim().split(","); // [name, torrentPath]
-		UploadProcess up = new TtorrentResumeUploadProcess(vals[0], new File(vals[1]));
-		Thread t = new Thread(up);
-		t.start();
-		INSTANCE.currentSeeds.put(vals[0], new Pair(t, up));
+	// Start seeding saved seeds:
+	File memory = torrentStorage.get(MEMORY);
+	if(memory.exists())
+	    try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(memory))){
+		for(Pair<String, File> p : (Pair<String, File>[]) in.readObject())
+		    addProcess(p.t, p.s);
+	    } catch (IOException | ClassNotFoundException | URISyntaxException e) {
+		log.error("Unable to load saved seeds.", e);
 	    }
-	} catch (FileNotFoundException e) {
-	    log.error("Error reading seeds.", e);
-	}
+	    
     }
 
     /**
@@ -69,11 +69,13 @@ public class SeedManager {
      * Blocks the thread until the torrent file is generated.
      * @param name
      * @param up
+     * @throws URISyntaxException
      */
-    public static File addProcess(UploadProcess up) {
+    public File addProcess(String name, File file) throws URISyntaxException {
+	UploadProcess up = uploadProcessFactory.getProcess(name, file);
 	Thread t = new Thread(up);
 	t.start();
-	INSTANCE.currentSeeds.put(up.getName(), new Pair(t, up));
+	currentSeeds.put(up.getName(), new Pair<>(t, up));
 
 	// Wait for torrent to be generated before returning.
 	while (up.getTorrent() == null)
@@ -90,28 +92,25 @@ public class SeedManager {
      *
      * @param name
      */
-    public static void stopProcess(String name) {
+    public void stopProcess(String name) {
 	log.info("Stopping process {}...", name);
-	if(INSTANCE.currentSeeds.containsKey(name))
-	    INSTANCE.currentSeeds.remove(name).t.interrupt();
+	if(currentSeeds.containsKey(name))
+	    currentSeeds.remove(name).t.interrupt();
     }
 
     /**
      * Persists the current seeds so they can be started up again.
      *
      */
-    public static void saveSeeds() {
-	// Very simple persistence.
-	try(FileWriter writer = new FileWriter(INSTANCE.memory)){
-	    // Write name,torrentPath on each line.
-	    for(Pair p : INSTANCE.currentSeeds.values())
-		writer.append(p.up.getName())
-		    .append(',')
-		    .append(p.up.getTorrent().getAbsolutePath())
-		    .append('\n');
-	    writer.flush();
+    @PreDestroy
+    public void saveSeeds() {
+	log.info("Saving seeds...");
+	try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(torrentStorage.get(MEMORY)))) {
+	    // Only write the name and File of the UploadProcess, because it's all we need to resume seeding.
+	    // Otherwise we need to make UploadProcess and all it's attributes Serializable.
+	    out.writeObject(currentSeeds.values().stream().map(p -> new Pair<>(p.s.getName(), p.s.getTorrent())).toArray(Pair[]::new));
 	} catch (IOException e) {
-	    log.error("Error persisting seeds.", e);
-	} 
+	    log.error("Error persisting the files currently being seeded.", e);
+	}
     }
 }

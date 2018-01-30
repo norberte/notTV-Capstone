@@ -2,7 +2,6 @@ package springbackend;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.TtorrentDownloadProcess;
-import filesharingsystem.process.TtorrentUploadProcess;
 
 import util.SeedManager;
 import util.storage.StorageService;
@@ -39,7 +37,9 @@ public class ProcessController {
     private StorageService torrentStorage;
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService videoStorage; 
+    private StorageService videoStorage;
+    @Autowired
+    private SeedManager seedManager;
     
     @PostMapping("upload")
     @ResponseBody
@@ -57,13 +57,7 @@ public class ProcessController {
 
 	try {
 	    // Start seeding process.
-	    File torrent = SeedManager.addProcess(new TtorrentUploadProcess(
-		torrentStorage,
-		videoStorage,
-		new URI(config.trackerUrl + "/announce"),
-		new URI(config.serverUrl + "/upload-torrent"),
-		name, localVideo
-	    ));
+	    File torrent = seedManager.addProcess(name, localVideo);
 	    return torrent.getName();
 	} catch (URISyntaxException e) {
 	    log.error("Unable to start upload process. Malformed URI's in config.", e);
@@ -82,7 +76,7 @@ public class ProcessController {
 
 	    // download file.
 	    DownloadProcess dp = new TtorrentDownloadProcess(
-		torrentFile, torrentStorage);
+		torrentFile, videoStorage);
 	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
 	    client.waitForDownload();
 	    String filename = client.files().get(0).getName();
