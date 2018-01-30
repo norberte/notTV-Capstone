@@ -14,14 +14,23 @@ import org.apache.http.client.fluent.Request;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import filesharingsystem.process.TtorrentUploadProcess;
-import filesharingsystem.process.UploadProcess;
 import filesharingsystem.process.UploadException;
+import filesharingsystem.process.UploadProcess;
+
+import util.storage.StorageService;
 
 public class TestUploadingProcess {
     private File torrFile;
     private UploadProcess up;
+    @Qualifier("TorrentStorage")
+    private StorageService torrentStorage;
+    @Autowired
+    @Qualifier("VideoStorage")
+    private StorageService videoStorage; 
     
     @Before
     public void setup() {
@@ -34,6 +43,8 @@ public class TestUploadingProcess {
 
 	    //Test if a .torrent file can be created during the upload process
 	    up = new TtorrentUploadProcess(
+		torrentStorage,
+		videoStorage,
 		new URI("http://levimiller.ca:6969/announce"),
 		new URI("http://notTV.levimiller.ca/upload-torrent"),
 		"cat",

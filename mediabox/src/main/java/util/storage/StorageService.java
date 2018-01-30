@@ -35,4 +35,11 @@ public interface StorageService {
      * @return
      */
     File newFile(String name);
+
+    /**
+     * Gets the base directory.
+     *
+     * @return
+     */
+    File getBaseDir();
 }

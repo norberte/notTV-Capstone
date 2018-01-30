@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.DownloadProcess.Client;
@@ -18,9 +20,16 @@ import filesharingsystem.process.TtorrentDownloadProcess;
 import filesharingsystem.process.TtorrentUploadProcess;
 import filesharingsystem.process.UploadProcess;
 
+import util.storage.StorageService;
+
 public class TestDownloadingProcess {
     private File contentFile, torrFile;
     private UploadProcess up;
+    @Qualifier("TorrentStorage")
+    private StorageService torrentStorage;
+    @Autowired
+    @Qualifier("VideoStorage")
+    private StorageService videoStorage;
     
     @Before
     public void setup() {
@@ -34,6 +43,8 @@ public class TestDownloadingProcess {
 
 	    //Test if a .torrent file can be created during the upload process
 	    up = new TtorrentUploadProcess(
+		torrentStorage,
+		videoStorage,
 		new URI("http://levimiller.ca:6969/announce"),
 		new URI("http://notTV.levimiller.ca/upload-torrent"),
 		"cat",

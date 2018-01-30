@@ -17,9 +17,11 @@ import com.turn.ttorrent.common.Torrent;
 import filesharingsystem.process.DownloadProcess;
 import filesharingsystem.process.TtorrentDownloadProcess;
 import filesharingsystem.process.TtorrentUploadProcess;
-import filesharingsystem.process.UploadProcess;
 import filesharingsystem.process.UploadException;
+import filesharingsystem.process.UploadProcess;
 
+import util.storage.StorageProperties;
+import util.storage.FileSystemStorageService;
 
 
 public class Main {
@@ -34,6 +36,8 @@ public class Main {
 	    }
 	} else if(args[0].equals("upload")) {
 	    UploadProcess up = new TtorrentUploadProcess(
+		new FileSystemStorageService(new StorageProperties("torrents")),
+		new FileSystemStorageService(new StorageProperties("uploads")),
 		new URI(args.length > 2 ? args[2] : "http://levimiller.ca:6969/announce"),
 		new URI(args.length > 3 ? args[3] : "http://notTV.levimiller.ca/upload-torrent"),
 		FilenameUtils.getBaseName(args[1]),

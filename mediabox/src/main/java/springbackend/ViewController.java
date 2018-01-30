@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import filesharingsystem.PortMapException;
-import filesharingsystem.PortMapper;
-
 import util.storage.StorageService;
 
 @Controller
@@ -38,19 +35,6 @@ public class ViewController {
     @Autowired
     @Qualifier("VideoStorage")
     private StorageService videoStorage;
-
-    @Autowired
-    public ViewController(PortMapper portMapper) {
-	// configure port forwarding.
-	try {
-	    portMapper.setup();
-	} catch (PortMapException e) {
-	    log.warn("Unable to setup the port forwarding.", e);
-	    // TODO: send notification to UI to inform user
-	    // that they need to enable upnp.
-	    // Bonus: check portforwarding somehow to allow manual port forwarding.
-	}
-    }
 
     @RequestMapping({"/","/home"})
     public String home(Model model){

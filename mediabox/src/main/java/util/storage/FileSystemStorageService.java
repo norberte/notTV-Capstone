@@ -63,4 +63,9 @@ public class FileSystemStorageService implements StorageService {
     public File newFile(String name) {
 	return new File(rootLocation.toFile(), name);
     }
+    
+    @Override
+    public File getBaseDir() {
+	return rootLocation.toFile();
+    }
 }

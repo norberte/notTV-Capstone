@@ -58,6 +58,8 @@ public class ProcessController {
 	try {
 	    // Start seeding process.
 	    File torrent = SeedManager.addProcess(new TtorrentUploadProcess(
+		torrentStorage,
+		videoStorage,
 		new URI(config.trackerUrl + "/announce"),
 		new URI("http://nottv.levimiller.ca/upload-torrent"),//config.serverUrl + "/upload-torrent"),
 		name, localVideo

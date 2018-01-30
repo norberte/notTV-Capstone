@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,13 +21,16 @@ import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
+import util.storage.StorageService;
+
 public class TtorrentUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
     private final URI announce, uploadURI;
     private Client client;
-    private File uploadDir;
     private String name;
     private File file, torrentFile;
+    private StorageService torrentStorage, uploadStorage;
+
     
     /**
      * Creates a new UploadProcess
@@ -38,15 +40,13 @@ public class TtorrentUploadProcess implements UploadProcess {
      * @param name - name of the torrent
      * @param file - video file.
      */
-    public TtorrentUploadProcess(URI announce, URI uploadURI, String name, File file) {
+    public TtorrentUploadProcess(StorageService torrentStorage, StorageService uploadStorage, URI announce, URI uploadURI, String name, File file) {
 	this.announce = announce;
 	this.uploadURI = uploadURI;
 	this.name = FilenameUtils.getBaseName(name);
 	this.file = file;
-	//TODO: inject a StorageService for uploads/torrents.
-	this.uploadDir = new File(System.getProperty("user.home"), "uploads");
-	if(!this.uploadDir.isDirectory())
-	    this.uploadDir.mkdir();
+	this.torrentStorage = torrentStorage;
+	this.uploadStorage = uploadStorage;
 	client = null;
     }
 
@@ -69,11 +69,9 @@ public class TtorrentUploadProcess implements UploadProcess {
     public void run() {
 	// Get public ip.
 	try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-	    //TODO: use torrent StorageService to create this file.
-	    torrentFile = new File(String.format("%s.torrent", this.name));
-	    File parent = new File("");
+	    torrentFile = torrentStorage.newFile(String.format("%s.torrent", this.name));
 	    // Create torrent from announce/files.
-	    Torrent t = Torrent.create(parent, Arrays.asList(this.file), announce, "notTV");
+	    Torrent t = Torrent.create(this.file, announce, "notTV");
 
 	    t.save(new FileOutputStream(torrentFile));
 	    // send file to the server.
@@ -103,7 +101,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 		client = new Client(
 		    // InetAddress.getByName(ip),
 		    InetAddress.getLocalHost(),
-		    new SharedTorrent(t, new File(this.uploadDir.getAbsolutePath(), parent.getPath()), true)
+		    new SharedTorrent(t, uploadStorage.getBaseDir(), true)
 		);
 		// Should block
 		client.share();
