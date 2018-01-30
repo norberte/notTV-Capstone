@@ -25,7 +25,6 @@ public class ClingPortMapper implements PortMapper {
 	    new PortMapping(port, host, PortMapping.Protocol.UDP, "UDP PORT Forwarding"),
 	    new PortMapping(6969, host, PortMapping.Protocol.TCP, "TCP PORT Forwarding (announce)"),
 	    new PortMapping(6969, host, PortMapping.Protocol.UDP, "UDP PORT Forwarding (announce)"),
-	    
 	};
 
 	// customize for use with tomcat.
