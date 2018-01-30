@@ -19,7 +19,7 @@
     <!-- <property name="serverUrl" value="http://nottv.levimiller.ca"/> -->
     <!-- <property name="serverUrl" value="//localhost:1248"/> -->
     <property name="serverUrl" value="http://35.160.102.229:1248"/>
-    <property name="trackerUrl" value="http://levimiller.ca:6969"/>
+    <property name="trackerUrl" value="http://35.160.102.229:6969"/>
   </bean>
 
   <!-- Storage setup  -->
