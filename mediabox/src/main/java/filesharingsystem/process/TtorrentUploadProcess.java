@@ -105,7 +105,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    if(code == 200) {
 		log.info("Successfully uploaded torrent to the server, seeding...");
 		// start seeding.
-		client = new Client(
+		client = WANClient.newWANClient(
 		    InetAddress.getLocalHost(),
 		    InetAddress.getByName(ip),
 		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
@@ -115,7 +115,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    } else {
 		throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
 	    }
-	} catch (NoSuchAlgorithmException | IOException e) {
+	} catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
 	    log.error("Error creating Torrent file.", e);
 	} catch (InterruptedException e) {
 	    // shutdown
@@ -124,9 +124,6 @@ public class TtorrentUploadProcess implements UploadProcess {
 		client.stop();
 		client = null;
 	    }
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	} 
     }
 }
