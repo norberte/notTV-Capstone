@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.http.client.ClientProtocolException;
@@ -43,15 +42,11 @@ public class TestUploadingProcess {
 
 	    //Test if a .torrent file can be created during the upload process
 	    up = new TtorrentUploadProcess(
-		torrentStorage,
-		videoStorage,
-		new URI("http://levimiller.ca:6969/announce"),
-		new URI("http://notTV.levimiller.ca/upload-torrent"),
 		"cat",
 		torrFile
 	    );
 	    up.run();
-	} catch (FileNotFoundException | URISyntaxException | UploadException e) {
+	} catch (FileNotFoundException | UploadException e) {
 	    e.printStackTrace();
 	}
     }

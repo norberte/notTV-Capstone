@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -43,15 +41,11 @@ public class TestDownloadingProcess {
 
 	    //Test if a .torrent file can be created during the upload process
 	    up = new TtorrentUploadProcess(
-		torrentStorage,
-		videoStorage,
-		new URI("http://levimiller.ca:6969/announce"),
-		new URI("http://notTV.levimiller.ca/upload-torrent"),
 		"cat",
 		contentFile
 	    );
 	    up.run();
-		} catch (URISyntaxException | FileNotFoundException e) {
+	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
 	}
     }

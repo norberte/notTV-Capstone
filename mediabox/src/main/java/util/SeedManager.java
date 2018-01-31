@@ -15,11 +15,11 @@ import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import filesharingsystem.process.UploadProcess;
-import filesharingsystem.process.UploadProcessFactory;
 
 import util.storage.StorageService;
 
@@ -42,15 +42,15 @@ public class SeedManager {
     
     private static final Logger log = LoggerFactory.getLogger(SeedManager.class);
     private static final String MEMORY = "SeedManager-Memory";
-    private UploadProcessFactory uploadProcessFactory;
     private final StorageService torrentStorage;
+    private final BeanFactory beanFactory;
     private final Map<String, Pair<Thread, UploadProcess>> currentSeeds;
 
     @SuppressWarnings("unchecked") // can't check generic type.
     @Autowired
-    public SeedManager(@Qualifier("TorrentStorage") StorageService torrentStorage, UploadProcessFactory uploadProcessFactory) {
+    public SeedManager(@Qualifier("TorrentStorage") StorageService torrentStorage, BeanFactory beanFactory) {
 	this.torrentStorage = torrentStorage;
-	this.uploadProcessFactory = uploadProcessFactory;
+	this.beanFactory = beanFactory;
 	this.currentSeeds = new HashMap<>();
 	// Start seeding saved seeds:
 	File memory = torrentStorage.get(MEMORY);
@@ -72,7 +72,7 @@ public class SeedManager {
      * @throws URISyntaxException
      */
     public File addProcess(String name, File file) throws URISyntaxException {
-	UploadProcess up = uploadProcessFactory.getProcess(name, file);
+	UploadProcess up = beanFactory.getBean(UploadProcess.class, name, file);
 	Thread t = new Thread(up);
 	t.start();
 	currentSeeds.put(up.getName(), new Pair<>(t, up));

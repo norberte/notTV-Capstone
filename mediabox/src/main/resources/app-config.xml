@@ -40,7 +40,9 @@
     </constructor-arg>
   </bean>
 
-  <bean id="UploadProcessFactory" class="filesharingsystem.process.TtorrentUploadProcessFactory"/>
+  <!-- UploadProcess -->
+
+  <bean id="UploadProcess" class="filesharingsystem.process.TtorrentUploadProcess" scope="prototype" lazy-init="true"/>
   <bean id="SeedManager" class="util.SeedManager"/>
   
   <mvc:interceptors>

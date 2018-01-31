@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,68 +56,68 @@ public class InfoController {
     @GetMapping("/playlists")
     @ResponseBody
     public List<Playlist> getPlaylists(@RequestParam(value="userid[]", required=true) int[] userid) {
-    // Video(title, thumbnail_url, download_url)
-    log.info("playlists owned by a user");
+        // Video(title, thumbnail_url, download_url)
+        log.info("playlists owned by a user");
 
-    // Make the query.
-    String query = "Select title,thumbnailurl, downloadurl From Playlist Where owner = ?";
-    log.info(query);
+        // Make the query.
+        String query = "Select title,thumbnailurl, downloadurl From Playlist Where owner = ?";
+        log.info(query);
     
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
-            return ps;
-        }
-    };
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
+                return ps;
+            }
+        };
     
-    return jdbcTemplate.query(psc, (rs, row) -> new Playlist(
-        rs.getString("title"), 
-        rs.getString("thumbnailurl"), // TODO: make sure this is correct.
-        rs.getString("downloadurl") // TODO: implement the download for a whole playlist
+        return jdbcTemplate.query(psc, (rs, row) -> new Playlist(
+            rs.getString("title"), 
+            rs.getString("thumbnailurl"), // TODO: make sure this is correct.
+            rs.getString("downloadurl") // TODO: implement the download for a whole playlist
         )
-    ); 
+        ); 
     }
 
     @GetMapping("/getUserID")
     @ResponseBody
     public List<Integer> getUserID(@RequestParam(value="username[]", required=true) String[] username) {
-    // Video(title, thumbnail_url, download_url)
-    log.info("return userID given username");
+        // Video(title, thumbnail_url, download_url)
+        log.info("return userID given username");
 
-    // Make the query.
-    String query = "Select id From nottv_user Where username = ?;";
-    log.info(query);
+        // Make the query.
+        String query = "Select id From nottv_user Where username = ?;";
+        log.info(query);
     
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, username[0]); // json of length 1 is sent, with only one username inside the json object
-            return ps;
-        }
-    };
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, username[0]); // json of length 1 is sent, with only one username inside the json object
+                return ps;
+            }
+        };
     
-    return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id"))); 
+        return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id"))); 
     }
     
     @GetMapping("/checkSubscribed")
     @ResponseBody
     public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
-                        @RequestParam(value="userID2", required=true) int userID2 ) {
-    log.info("Given userID1 and userID2, check if userid1 is subscripted to userId2");
+    @RequestParam(value="userID2", required=true) int userID2 ) {
+        log.info("Given userID1 and userID2, check if userid1 is subscripted to userId2");
 
-    // Make the query.
-    String query = "Select authorId From subscribe Where subscriberId = ? AND authorId = ?;";
-    log.info(query);
+        // Make the query.
+        String query = "Select authorId From subscribe Where subscriberId = ? AND authorId = ?;";
+        log.info(query);
     
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
-            ps.setInt(2, userID2);  // user2, the user who's profile is being checked, is the author
-            return ps;
-        }
-    };
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
+                ps.setInt(2, userID2);  // user2, the user who's profile is being checked, is the author
+                return ps;
+            }
+        };
     
         List<Integer> result = jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("authorId")));
         log.info("Query result: " + Arrays.toString(result.toArray()));
@@ -133,30 +135,34 @@ public class InfoController {
     @GetMapping("/recentVideos")
     @ResponseBody
     public List<Video> getRecentVideos(@RequestParam(value="userid[]", required=true) int[] userid) {
-    // Video(title, thumbnail_url, download_url)
-    log.info("recent videos");
+        // Video(title, thumbnail_url, download_url)
+        log.info("recent videos");
 
-    // Make the query.
-    String query = "Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10";
-    log.info(query);
+        // Make the query.
+        String query = "Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10";
+        log.info(query);
     
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
-            return ps;
-        }
-    };
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
+                return ps;
+            }
+        };
     
-    return jdbcTemplate.query(psc, (rs, row) -> new Video(
-        rs.getString("title"), 
-        rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-        "/process/download?torrentName="+rs.getString("downloadurl"))
-    ); 
+        return jdbcTemplate.query(psc, (rs, row) -> new Video(
+            rs.getString("title"), 
+            rs.getString("thumbnailurl"), //TODO: make sure this is correct.
+            "/process/download?torrentName="+rs.getString("downloadurl"))
+        ); 
+    }    
+    
+    @GetMapping("/public-ip")
+    @ResponseBody
+    public String getPublicIp(HttpServletRequest request) {
+	return request.getRemoteAddr();
     }
-    
-    
-    
+
     @GetMapping("/videos")
     @ResponseBody
     public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {
