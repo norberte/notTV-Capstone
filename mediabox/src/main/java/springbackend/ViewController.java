@@ -92,10 +92,11 @@ public class ViewController {
 	return "upload";
     }
 
-    // work more on this
-    @RequestMapping("userProfile/{userID:.+}") 
-    public String userProfile() {
-    return "userProfile";
+    @RequestMapping("userProfile/{username}") 
+    public String userProfile(@PathVariable("username") String username, Model model) {
+    //public String userProfile() {
+        model.addAttribute("username", username);
+        return "userProfile";
     }
     
     @RequestMapping("video/{videoFile:.+}")

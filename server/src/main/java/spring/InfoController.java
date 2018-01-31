@@ -76,6 +76,59 @@ public class InfoController {
     ); 
     }
 
+    @GetMapping("/getUserID")
+    @ResponseBody
+    public List<Integer> getUserID(@RequestParam(value="username[]", required=true) String[] username) {
+    // Video(title, thumbnail_url, download_url)
+    log.info("return userID given username");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Select id From nottv_user Where username = ?;");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, username[0]); // json of length 1 is sent, with only one username inside the json object
+            return ps;
+        }
+    };
+    
+    return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id"))); 
+    }
+    
+    
+    
+    @GetMapping("/checkSubscribed")
+    @ResponseBody
+    public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
+                        @RequestParam(value="userID2", required=true) int userID2 ) {
+    log.info("Given userID1 and userID2, check if userid1 is subscripted to userId2");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Select authorId From subscribe Where subscriberId = ? AND authorId = ?;");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
+            ps.setInt(2, userID2);  // user2, the user who's profile is being checked, is the author
+            return ps;
+        }
+    };
+    
+    
+        List<Integer> result = jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("authorId")));
+        if(result.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     
     @GetMapping("/recentVideos")
     @ResponseBody
@@ -102,6 +155,8 @@ public class InfoController {
         "/process/download?torrentName="+rs.getString("downloadurl"))
     ); 
     }
+    
+    
     
     @GetMapping("/videos")
     @ResponseBody

@@ -5,7 +5,7 @@ export default class AuthorHeader extends React.Component {
 		return (
 				<div className="media">
 					<div className="media-left">
-						<img src="./img/user.png"></img>
+						<img src="../img/user.png"></img>
 					</div>
 					<div className="media-body">
 						<h4 className="media-heading">{this.props.username}</h4>
