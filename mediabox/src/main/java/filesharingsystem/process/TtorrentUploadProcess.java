@@ -76,7 +76,7 @@ public class TtorrentUploadProcess implements UploadProcess {
     @Override
     public void run() {
 	// Get public ip.
-	try(Scanner s = new Scanner(new URL("").openStream(), "UTF-8")) {
+	try(Scanner s = new Scanner(new URL(config.getServerUrl() + "/info/public-ip").openStream(), "UTF-8")) {
 	    String ip = s.next();
 	    log.info(ip);
 	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
@@ -106,8 +106,8 @@ public class TtorrentUploadProcess implements UploadProcess {
 		log.info("Successfully uploaded torrent to the server, seeding...");
 		// start seeding.
 		client = new Client(
-		    // InetAddress.getByName(ip),
 		    InetAddress.getLocalHost(),
+		    InetAddress.getByName(ip),
 		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
 		);
 		// Should block
