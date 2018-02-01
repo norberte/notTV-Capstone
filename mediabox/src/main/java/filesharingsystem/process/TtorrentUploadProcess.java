@@ -26,6 +26,8 @@ import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
+import filesharingsystem.process.WANClient.ClientInitializationException;
+
 import springbackend.Config;
 
 import util.storage.StorageService;
@@ -117,6 +119,8 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    }
 	} catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
 	    log.error("Error creating Torrent file.", e);
+	} catch (ClientInitializationException e) {
+	    log.error("Error creating the client, couldn't start upload process.", e);
 	} catch (InterruptedException e) {
 	    // shutdown
 	    log.info("Stopping seeding of {}...", this.name);

@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 import java.util.UUID;
@@ -32,15 +31,43 @@ import sun.misc.Unsafe;
  * @author
  */
 public class WANClient {
-    private static final Logger log = LoggerFactory.getLogger(WANClient.class);
+    public static class ClientInitializationException extends Exception {
+	private static final long serialVersionUID = 3182947996648682383L;
+
+	ClientInitializationException(String message) {
+	    super(message);
+	}
+	ClientInitializationException(String message, Throwable cause) {
+	    super(message, cause);
+	}
+    }
     
-    public static Client newWANClient(InetAddress bindAddress, InetAddress announceAddress, SharedTorrent torrent) throws UnknownHostException, IOException {
+    private static final Logger log = LoggerFactory.getLogger(WANClient.class);
+    private static final Unsafe unsafe;
+
+    static {
+	unsafe = getUnsafe();
+    }
+
+    private static Unsafe getUnsafe() {
+	// Can't actually instantiate Unsafe because of it's private constructor.
+	// Unsafe has an instance of itself contained in 'theUnsafe'.
 	try {
-	    // Can't actually instantiate Unsafe because of it's private constructor.
-	    // Unsafe has an instance of itself contained in 'theUnsafe'.
 	    Field unsafeField = Unsafe.class.getDeclaredField("theUnsafe");
 	    unsafeField.setAccessible(true);
-	    Unsafe unsafe = (Unsafe) unsafeField.get(null);
+	    return (Unsafe) unsafeField.get(null);
+	} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+	    log.error("Unable to get Unsafe Instance.", e);
+	}
+	return null;
+    }
+    
+    public static Client newWANClient(InetAddress bindAddress, InetAddress announceAddress, SharedTorrent torrent) throws IOException, ClientInitializationException {
+	if(unsafe == null) {
+	    log.warn("Unsafe isn't initialized, cannot create client.");
+	    throw new ClientInitializationException("Unsafe isn't initialized, so Client can't be created. Check the logs.");
+	}
+	try {
 	    Client c = (Client)unsafe.allocateInstance(Client.class);
 
 	    // Tediously initialize c exactly like in Client, except
@@ -93,10 +120,9 @@ public class WANClient {
 
 	    return c;
 	} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-	    // TODO Auto-generated catch block
-	    log.error("Not surprisingly, this didn't work. Can't instantiate WANClient.", e);
+	    log.error("Not surprisingly, this didn't work. Can't instantiate WANClient.");
+	    throw new ClientInitializationException("Unable to create client.", e);
 	} 
-	return null;
     }
 
     private static void set(Client c, String field, Object value)
