@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import spring.model.VideoData;
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.Video;
@@ -188,5 +189,26 @@ public class InfoController {
 	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
 	    "/process/download?torrentName="+rs.getString("downloadurl"))
 	); 
+    }
+    
+    
+    @GetMapping("/video-data")
+    @ResponseBody
+    public List<VideoData> getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
+    log.info("video data");
+    StringBuilder queryBuilder = new StringBuilder("Select title, description, userid, username ");
+    queryBuilder.append("From Video Inner Join nottv_user On nottv_user.id = Video.userid ");
+    queryBuilder.append("Where video.id = ");
+    queryBuilder.append(videoId);
+    queryBuilder.append(';');
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    return jdbcTemplate.query(query, (rs, row) -> new VideoData(
+        rs.getString("title"), 
+        rs.getString("description"),
+        rs.getInt("userid"),
+        rs.getString("username"))
+    ); 
     }
 }

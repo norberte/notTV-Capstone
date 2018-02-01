@@ -72,13 +72,6 @@ public class ViewController {
         model.addAttribute("fileList", fileList);
         return "Example";
     }
-
-    @RequestMapping("player")
-    public String player(@RequestParam(value="video") String video, Model model) {
-	log.info("video {}", video);
-	model.addAttribute("source", "/video/" + video);
-	return "player";
-    }
     
     @RequestMapping("{page}")
     public String defaultPage(@PathVariable String page, Model model) {
