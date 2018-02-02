@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +70,7 @@ public class ProcessController {
     }
     
     @RequestMapping(path = "download")
-    public String download(@RequestParam(value="torrentName") String torrentName, Model model){
+    public String download(@RequestParam(value="torrentName") String torrentName, @RequestParam("videoId") int videoId, HttpServletRequest request){
 	// get torrent file.
 	File torrentFile = torrentStorage.newFile(torrentName);
 	try {
@@ -82,14 +84,14 @@ public class ProcessController {
 	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
 	    client.waitForDownload();
 	    String filename = client.files().get(0).getName();
-	    //removes ".torrent" from delete this if not using TrivialDownloadProcess
-	    // filename = filename.substring(0, filename.length()-8);
 
 	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
 	    //torrents with multiple files are a bonus feature :P -Levi
 	    log.info(filename);
-	    model.addAttribute("source", "/video/"+filename);
-	    return "player";
+	    
+        request.setAttribute("videoId", videoId);
+        request.setAttribute("videoName", filename);
+	    return "forward:/watch";
 	} catch (IOException e) {
 	    log.error("Error getting torrent file from server.", e);
 	}

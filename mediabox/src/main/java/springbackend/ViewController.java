@@ -54,23 +54,10 @@ public class ViewController {
 
     @RequestMapping({"/","/home"})
     public String home(Model model){
-        String fileList="";
-        File torrents;
-        try {
-            torrents = new ClassPathResource("public/torrents").getFile();
-            System.out.println(torrents.exists());
-            DirectoryStream<Path> dirStream = Files.newDirectoryStream(torrents.toPath());
-            for(Path p: dirStream){
-                fileList += "'"+p.getFileName()+"',";
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            // e.printStackTrace();
-	    log.error("Error getting torrents.", e);
-        }
-
-        model.addAttribute("fileList", fileList);
-        return "Example";
+        String home = "browse";
+        model.addAttribute("title", StringUtils.capitalize(home));
+        model.addAttribute("page_name", home);
+        return "default_page";
     }
     
     @RequestMapping("{page}")

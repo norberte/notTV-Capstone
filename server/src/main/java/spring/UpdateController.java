@@ -28,7 +28,7 @@ public class UpdateController {
     
     @GetMapping("/subscribe")
     @ResponseBody
-    public boolean subscribe(@RequestParam(value="authorid") int authorId, @RequestParam(value="unsub") boolean unsub) {
+    public boolean subscribe(@RequestParam("authorId") int authorId, @RequestParam("unsub") boolean unsub) {
         log.info("update subscriptions table");
         String query;
         if(unsub)
@@ -49,7 +49,7 @@ public class UpdateController {
      */
     @GetMapping("/report")
     @ResponseBody
-    public boolean report(@RequestParam("videoid") int videoId, @RequestParam("report_text") String reportText) {
+    public boolean report(@RequestParam("videoId") int videoId, @RequestParam("report_text") String reportText) {
         log.info("update subscriptions table");
         //TODO: add reportText to query after we add that column to the database 
         String query = new String("Insert Into flag (userid, videoid) Values (?,?);"); 

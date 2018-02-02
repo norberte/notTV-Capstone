@@ -166,7 +166,7 @@ public class InfoController {
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-	StringBuilder queryBuilder = new StringBuilder("Select title, downloadurl, thumbnailurl From Video ");
+	StringBuilder queryBuilder = new StringBuilder("Select id, title, downloadurl, thumbnailurl From Video ");
 	
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
 	    queryBuilder.append("Where id in (");
@@ -187,7 +187,7 @@ public class InfoController {
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
 	    rs.getString("title"), 
 	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-	    "/process/download?torrentName="+rs.getString("downloadurl"))
+	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("id"))
 	); 
     }
     
