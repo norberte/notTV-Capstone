@@ -1,8 +1,7 @@
 import NavBar from '../NavBar.js';
 import CarouselLayout from '../browse/CarouselLayout.js';
-import AuthorHeader from './authorHeader.js';
 import PlaylistCarousel from './playlists.js';
-
+import AuthorHeader from './authorHeader.js'
 const React = require("react");
 const ReactDOM = require("react-dom");
 
@@ -14,7 +13,8 @@ let default_loggedIn_username = "dummy"; // real username from DB that we consid
 // userName and id of the user who's profile is being checked out
 let username_fromURLParameter = "";
 
-class Profile extends React.Component {
+
+export default class Profile extends React.Component {
     constructor(props) {
 	super(props);
 	var urlPath = window.location.pathname;
@@ -27,7 +27,7 @@ class Profile extends React.Component {
 		username: [username_fromURLParameter],
 	    videos: [],
 		playlists: [],
-		subscribedToLoggedInUser: false
+		loggedInUser_IsSubscribed: false
 	};
 	
 	// check validity of the username provided in the url
@@ -39,18 +39,18 @@ class Profile extends React.Component {
     	    url: config.serverUrl + "/info/checkSubscribed",
     	    data: {
     			userID1: loggedInUser,
-    			userID2: userFromProfile
+    			userID2: userFromProfile[0] // this is actually an array of 1 element
     		    },
     	    dataType: "json",
     	    success: (data) => {
-    	    	var bool = jQuery.parseJSON(data);
+    	    	console.log("Successfully checked if user is subscribed.");
     	    	this.setState({
-    			subscribedToLoggedInUser: bool
-    		});
+    	    		loggedInUser_IsSubscribed: data
+    	    	});
     	    },
     	    error: (response) => {
-    		console.log(response);
-    	    }
+    	    	console.log("Failed to check if logged in user is subscribed");
+    	    } 
     	});
     }
     
@@ -136,7 +136,7 @@ class Profile extends React.Component {
 		<div className="container">
 	        <div className="row">
 	            <div className="col-md-10 col-md-offset-1">
-	            	<AuthorHeader description= "NotTV Test Account" username = {this.state.username} />
+	            	<AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} subscribed = {this.state.loggedInUser_IsSubscribed} loggedIn_userID = {default_loggedIn_userID} />
 	            	<br/>
 	            	<br/>
 	            	<div className="row browse-body">
@@ -157,17 +157,3 @@ class Profile extends React.Component {
 ReactDOM.render(
 	    <Profile />, document.getElementById('root')
 	);
-
-// playlist React Component
-// <playlists videos={this.state.playlists}/>
-// <CarouselLayout title="Playlists" videos={this.state.playlists}/>
-
-/*
-console.log(this.props.location.query.username);
-if(this.props.location.query.username ==){
-	username_fromURLParameter = this.props.location.query.username
-} else {
-	username_fromURLParameter = default_loggedIn_username;
-}
-*/
-

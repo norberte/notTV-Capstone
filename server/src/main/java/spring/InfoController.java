@@ -3,6 +3,7 @@ package spring;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -100,6 +101,64 @@ public class InfoController {
     
     
     
+    @GetMapping("/unsubscribe")
+    @ResponseBody
+    public boolean unsubscribe(@RequestParam(value="userID1", required=true) int userID1,
+                        @RequestParam(value="userID2", required=true) int userID2 ) {
+    log.info("Given userID1 and userID2, unsubscribe userid1 from userId2's profile");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Delete From subscribe Where subscriberId = ? AND authorId = ?;");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
+            ps.setInt(2, userID2);  // user2, the user who's profile is being unsubscribed, is the author
+            return ps;
+        }
+    };
+    
+    
+        int numberOfRowAffected = jdbcTemplate.update(psc);
+        if(numberOfRowAffected > 0) {
+            return true; // successfully unsubscribe
+        } else {
+            return false; // did not unsubscribe, or could not even unsubscribe, since it was not subscribed before
+        }        
+    }
+    
+    
+    @GetMapping("/subscribe")
+    @ResponseBody
+    public boolean subscribe(@RequestParam(value="userID1", required=true) int userID1,
+                        @RequestParam(value="userID2", required=true) int userID2 ) {
+    log.info("Given userID1 and userID2, subscribe userid1 to userId2's profile");
+
+    // Make the query.
+    StringBuilder queryBuilder = new StringBuilder("Insert into subscribe(subscriberId,authorId) Values(?,?);");
+    String query = queryBuilder.toString();
+    log.info(query);
+    
+    PreparedStatementCreator psc = new PreparedStatementCreator() {
+        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
+            ps.setInt(2, userID2);  // user2, the user who's profile is being unsubscribed, is the author
+            return ps;
+        }
+    };
+    
+        int numberOfRowAffected = jdbcTemplate.update(psc);
+        if(numberOfRowAffected > 0) {
+            return true; // successfully subscribed
+        } else {
+            return false; // did not subscribe, since some error happened or it was already subscribed in the beginning
+        }
+    }
+    
     @GetMapping("/checkSubscribed")
     @ResponseBody
     public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
@@ -122,12 +181,16 @@ public class InfoController {
     
     
         List<Integer> result = jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("authorId")));
+        log.info("Query result: " + Arrays.toString(result.toArray()));
         if(result.size() > 0) {
+            log.info("user is subscibed");
             return true;
         } else {
+            log.info("user is unsubscibed");
             return false;
         }
     }
+    
     
     
     @GetMapping("/recentVideos")
