@@ -62,7 +62,6 @@ export default class AuthorHeader extends React.Component {
 	subscribedButton(){
 		return (<button className="btn btn-default" type="button" onClick={this.subscribe(this.props.loggedIn_userID, this.props.userID)}>Subscribe </button>);
 	}
-	
 	unsubscribedButton(){
 		return (<button className="btn btn-default" type="button" onClick={this.unsubscribe(this.props.loggedIn_userID, this.props.userID)}>Unsubscribe</button>);
 	}

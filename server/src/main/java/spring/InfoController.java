@@ -179,7 +179,6 @@ public class InfoController {
         }
     };
     
-    
         List<Integer> result = jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("authorId")));
         log.info("Query result: " + Arrays.toString(result.toArray()));
         if(result.size() > 0) {

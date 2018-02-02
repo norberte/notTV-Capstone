@@ -13,7 +13,6 @@ let default_loggedIn_username = "dummy"; // real username from DB that we consid
 // userName and id of the user who's profile is being checked out
 let username_fromURLParameter = "";
 
-
 export default class Profile extends React.Component {
     constructor(props) {
 	super(props);
