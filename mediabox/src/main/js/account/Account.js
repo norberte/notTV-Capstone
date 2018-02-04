@@ -138,8 +138,12 @@ class Account extends React.Component {
             </div>
 
             <div className = "lowerDiv">
+            <div className = "row browse-body">
                 <CarouselLayout title="Subscribed" videos={this.state.subscriptions}/>
+            </div>
+            <div className = "row browse-body">
                 <CarouselLayout title="Saved Videos" videos={this.state.videos}/>
+            </div>
             </div>
 
         </div>

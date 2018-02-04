@@ -16,7 +16,7 @@ figcaption{
 #accountInfo{
     position: absolute;
     width: 100%;
-    background-color: #adb3bc;
+    background-color: #f7f7f7;
 }
 
 
@@ -56,4 +56,38 @@ input[type=submit]{
 
 #hide {
     visibility: hidden;
+}
+
+
+
+.row  {
+    font-size: 12pt;
+}
+
+.browse-body{
+    overflow-y: auto;
+}
+
+
+
+/* Carousel Layout  */
+.arrow-button {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height: 200px;
+}
+.arrow-button-icon {
+    width:100%;
+    vertical-align:middle;
+    height:50%;
+}
+
+.video-thumbnail {
+    width:100%;
+    height:auto;
+}
+
+.carousel-layout {
+    margin: 0px 0px 15px -15px;
 }
