@@ -1,7 +1,16 @@
-#myContainer{
+.container{
 	position: absolute;
     width: 100%;
 	background-color: white;
+}
+
+.media {
+    padding-top: 10px;
+    padding-bottom: 50px;
+}
+
+.row{
+    font-size: 13pt;
 }
 
 .no-padding {
