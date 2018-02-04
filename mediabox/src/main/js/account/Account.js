@@ -125,7 +125,6 @@ class Account extends React.Component {
                     <input type = "text" name="newEmail" value={this.state.formData.email}  onChange={this.handleChange} placeholder="Enter a New Email" /><br />
                     <input type = "password" name="newPass" value={this.state.formData.newPass}  onChange={this.handleChange} placeholder="Enter a New Password" /><br />
                     <input type = "password" name="confirmNewPass" value={this.state.formData.confirmNewPass}  onChange={this.handleChange} placeholder="Confirm New Password" />
-                    <p>Auto Download Latest Videos <input type = "checkbox" name = "autoDownload" value="T" checked={this.state.formData.autoDownload === 'T'} onChange={this.handleChange} /></p>
                     <input id="saveButton" type="submit" value="Save"/>
                 </form>
             </div>
