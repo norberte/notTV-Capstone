@@ -1,7 +1,7 @@
 import NavBar from '../NavBar.js';
 //There is crossover into the browse folder with the use of CarouselLayout.
 //Perhaps, if we are to use it in this page, it should be moved up a folder.
-import CarouselLayout from '../browse/CarouselLayout.js';
+import CarouselLayout from '../CarouselLayout.js';
 
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -125,7 +125,15 @@ class Account extends React.Component {
                     <input type = "text" name="newEmail" value={this.state.formData.email}  onChange={this.handleChange} placeholder="Enter a New Email" /><br />
                     <input type = "password" name="newPass" value={this.state.formData.newPass}  onChange={this.handleChange} placeholder="Enter a New Password" /><br />
                     <input type = "password" name="confirmNewPass" value={this.state.formData.confirmNewPass}  onChange={this.handleChange} placeholder="Confirm New Password" />
-                    <input id="saveButton" type="submit" value="Save"/>
+
+                    <input type="submit" value="Submit"/>
+                </form>
+                {/*
+                For some reason, I need to have this below form here to get the above form to have
+                a clickable submit button. This is very strange.
+                */}
+                <form id = "hide">
+                    <input type="submit" value="Submit"/>
                 </form>
             </div>
 
