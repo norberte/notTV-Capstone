@@ -22,35 +22,16 @@ export default class Profile extends React.Component {
 	// ... TO DO: FIND A BETTER WAY to do this
 	
 	this.state = {
-		userid:  [],
+		userid:  [1],
 		username: [username_fromURLParameter],
 	    videos: [],
-		playlists: [],
-		loggedInUser_IsSubscribed: false
+		playlists: []
 	};
+	
+	this.checkUsernameValidity = this.checkUsernameValidity.bind(this);
 	
 	// check validity of the username provided in the url
 	this.checkUsernameValidity = this.checkUsernameValidity(this.state.username);
-    }
-    
-    checkForSubscribed(loggedInUser, userFromProfile){
-    	$.get({
-    	    url: config.serverUrl + "/info/checkSubscribed",
-    	    data: {
-    			userID1: loggedInUser,
-    			userID2: userFromProfile[0] // this is actually an array of 1 element
-    		    },
-    	    dataType: "json",
-    	    success: (data) => {
-    	    	console.log("Successfully checked if user is subscribed.");
-    	    	this.setState({
-    	    		loggedInUser_IsSubscribed: data
-    	    	});
-    	    },
-    	    error: (response) => {
-    	    	console.log("Failed to check if logged in user is subscribed");
-    	    } 
-    	});
     }
     
     //ajax call to check username validity
@@ -71,9 +52,6 @@ export default class Profile extends React.Component {
     	    		this.setState({
             			userid: data
             		});
-    	    		
-    	    		// Check if logged in user is subscribed to user'profile being checked out
-    	    		this.checkForSubscribed = this.checkForSubscribed(default_loggedIn_userID, this.state.userid);
     	    		
     	    		// Get recent videos that belong to the user
         	    	this.update_videos = this.update_videos(this.state.userid);
@@ -131,23 +109,23 @@ export default class Profile extends React.Component {
         }
     
     render() {
-	return (
+	return (	
+		<div id ="myContainer">
 		<div className="container">
 	        <div className="row">
 	            <div className="col-md-10 col-md-offset-1">
-	            	<AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} subscribed = {this.state.loggedInUser_IsSubscribed} loggedIn_userID = {default_loggedIn_userID} />
-	            	<br/>
-	            	<br/>
+	            	<div>
+	            		<AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} loggedIn_userID = {default_loggedIn_userID} />
+	            	</div>
 	            	<div className="row browse-body">
 	      		  		<CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
 	      		  	</div>
-	            	<br/>
-	            	<br/>
 	            	<div className="row browse-body">
       		  			<PlaylistCarousel title="Playlists" playlists={this.state.playlists}/>
       		  		</div>	  
       		  	</div>
 	        </div>
+	    </div>
 	    </div>
 	);
     }
