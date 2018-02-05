@@ -110,7 +110,7 @@ export default class AuthorHeader extends React.Component {
 						<h4 className="media-heading">{this.props.username}</h4>
 						<p>{this.props.description}</p>
 						<div>
-							<button className="btn btn-default" type="button" onClick={ (this.state.subscribed) ? (() => this.unsubscribe(this.props.loggedIn_userID, this.props.userID)) : (() => this.subscribe(this.props.loggedIn_userID, this.props.userID)) }> { (this.state.subscribed) ? this.state.unsub : this.state.sub } </button> 
+							<button className="btn btn-default" type="button" onClick={ (this.state.subscribed == true) ? (() => this.unsubscribe(this.props.loggedIn_userID, this.props.userID)) : (() => this.subscribe(this.props.loggedIn_userID, this.props.userID)) }> { (this.state.subscribed == true) ? this.state.unsub : this.state.sub } </button> 
 						</div>
 					</div>
 				</div>
