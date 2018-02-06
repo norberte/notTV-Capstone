@@ -11,6 +11,6 @@ const links = [
 const HEAD = $("head")[0];
 $(links).each((idx, l) => {
     $(HEAD).prepend(
-	"<link href=\"" + l +"\" rel=\"stylesheet\" />"
+        "<link href=\"" + l +"\" rel=\"stylesheet\" />"
     );
 });
