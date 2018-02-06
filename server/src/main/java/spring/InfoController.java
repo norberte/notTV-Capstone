@@ -57,8 +57,7 @@ public class InfoController {
     log.info("playlists owned by a user");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Select title,thumbnailurl, downloadurl From Playlist Where owner = ?");
-    String query = queryBuilder.toString();
+    String query = "Select title,thumbnailurl, downloadurl From Playlist Where owner = ?";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -84,8 +83,7 @@ public class InfoController {
     log.info("return userID given username");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Select id From nottv_user Where username = ?;");
-    String query = queryBuilder.toString();
+    String query = "Select id From nottv_user Where username = ?;";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -108,8 +106,7 @@ public class InfoController {
     log.info("Given userID1 and userID2, unsubscribe userid1 from userId2's profile");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Delete From subscribe Where subscriberId = ? AND authorId = ?;");
-    String query = queryBuilder.toString();
+    String query = "Delete From subscribe Where subscriberId = ? AND authorId = ?;";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -138,8 +135,7 @@ public class InfoController {
     log.info("Given userID1 and userID2, subscribe userid1 to userId2's profile");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Insert into subscribe(subscriberId,authorId) Values(?,?);");
-    String query = queryBuilder.toString();
+    String query = "Insert into subscribe(subscriberId,authorId) Values(?,?);";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -166,8 +162,7 @@ public class InfoController {
     log.info("Given userID1 and userID2, check if userid1 is subscripted to userId2");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Select authorId From subscribe Where subscriberId = ? AND authorId = ?;");
-    String query = queryBuilder.toString();
+    String query = "Select authorId From subscribe Where subscriberId = ? AND authorId = ?;";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -199,8 +194,7 @@ public class InfoController {
     log.info("recent videos");
 
     // Make the query.
-    StringBuilder queryBuilder = new StringBuilder("Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10");
-    String query = queryBuilder.toString();
+    String query = "Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10";
     log.info(query);
     
     PreparedStatementCreator psc = new PreparedStatementCreator() {

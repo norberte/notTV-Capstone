@@ -96,7 +96,9 @@ public class ViewController {
     public String userProfile(@PathVariable("username") String username, Model model) {
     //public String userProfile() {
         model.addAttribute("username", username);
-        return "userProfile";
+        model.addAttribute("title", "User Profile");
+        model.addAttribute("page_name", "userProfile");
+        return "default_page";
     }
     
     @RequestMapping("video/{videoFile:.+}")
