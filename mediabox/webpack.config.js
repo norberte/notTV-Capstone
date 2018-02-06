@@ -3,39 +3,40 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        global: [
-            'jquery',
-            'bootstrap',
-            './src/main/js/global.js'
-        ],
-        browse: './src/main/js/browse/Browse.js',
-        upload: './src/main/js/upload/Upload.js',
-        userProfile: './src/main/js/userProfile/userProfile.js'
+	global: [
+	    'jquery',
+	    'bootstrap',
+	    './src/main/js/global.js'
+	],
+	browse: './src/main/js/browse/Browse.js',
+	upload: './src/main/js/upload/Upload.js',
+	userProfile: './src/main/js/userProfile/userProfile.js',
+	watch:  './src/main/js/video/Video.js'
     },
     output: {
-        path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
-        filename: '[name]-bundle.js'
+	path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
+	filename: '[name]-bundle.js'
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'commons',
-            filename: 'common.js' // Name of the output file
-        })
+	new webpack.ProvidePlugin({
+	    $: "jquery",
+	    jQuery: "jquery"
+	}),
+	new webpack.optimize.CommonsChunkPlugin({
+	    name: 'commons',
+	    filename: 'common.js' // Name of the output file
+	})
     ],
     module: {
-        rules : [
-            {
-                test: /\.js/,
-                exclude: /(node_modules)/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['env', 'react']
-                }
-            }
-        ]
+    	rules : [
+    	    {
+		test: /\.js/,
+    		exclude: /(node_modules)/,
+    		loader: 'babel-loader',
+    		query: {
+    		    presets: ['env', 'react']
+    		}
+    	    }
+    	]
     }
 }

@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import spring.model.VideoData;
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.Video;
 import spring.view.Playlist;
+import spring.view.VideoData;
 
 @CrossOrigin
 @RestController
@@ -165,7 +167,7 @@ public class InfoController {
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-	StringBuilder queryBuilder = new StringBuilder("Select title, downloadurl, thumbnailurl From Video ");
+	StringBuilder queryBuilder = new StringBuilder("Select id, title, downloadurl, thumbnailurl From Video ");
 	
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
 	    queryBuilder.append("Where id in (");
@@ -186,7 +188,34 @@ public class InfoController {
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
 	    rs.getString("title"), 
 	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-	    "/process/download?torrentName="+rs.getString("downloadurl"))
+	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("id"))
 	); 
+    }
+    
+    
+    @GetMapping("/video-data")
+    @ResponseBody
+    public VideoData getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
+    log.info("video data");
+    StringBuilder queryBuilder = new StringBuilder("Select video.id, title, description, userid, username ");
+    queryBuilder.append("From video Inner Join nottv_user On nottv_user.id = Video.userid ");
+    queryBuilder.append("Where video.id = ?;");
+    String query = queryBuilder.toString();
+    log.info(query +" ,"+videoId);
+    
+    return jdbcTemplate.query(query, new Object[] {videoId}, (rs) -> 
+        {    
+        rs.next();
+        int id = rs.getInt("id");
+        String title = rs.getString("title");
+        String desc = rs.getString("description");
+        int userId = rs.getInt("userid");
+        String userName = rs.getString("username");
+        
+        boolean subbed = jdbcTemplate.query("Select 1 From subscribe Where authorid = ? And subscriberid = ?;",
+                                                new Object[] {userId, 1} , (rs2) -> {return rs2.next();});
+        
+        return new VideoData(id, title, desc, userId, userName, subbed);
+        });   
     }
 }
