@@ -97,64 +97,6 @@ public class InfoController {
     return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id"))); 
     }
     
-    
-    
-    @GetMapping("/unsubscribe")
-    @ResponseBody
-    public boolean unsubscribe(@RequestParam(value="userID1", required=true) int userID1,
-                        @RequestParam(value="userID2", required=true) int userID2 ) {
-    log.info("Given userID1 and userID2, unsubscribe userid1 from userId2's profile");
-
-    // Make the query.
-    String query = "Delete From subscribe Where subscriberId = ? AND authorId = ?;";
-    log.info(query);
-    
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
-            ps.setInt(2, userID2);  // user2, the user who's profile is being unsubscribed, is the author
-            return ps;
-        }
-    };
-    
-    
-        int numberOfRowAffected = jdbcTemplate.update(psc);
-        if(numberOfRowAffected > 0) {
-            return true; // successfully unsubscribe
-        } else {
-            return false; // did not unsubscribe, or could not even unsubscribe, since it was not subscribed before
-        }        
-    }
-    
-    
-    @GetMapping("/subscribe")
-    @ResponseBody
-    public boolean subscribe(@RequestParam(value="userID1", required=true) int userID1,
-                        @RequestParam(value="userID2", required=true) int userID2 ) {
-    log.info("Given userID1 and userID2, subscribe userid1 to userId2's profile");
-
-    // Make the query.
-    String query = "Insert into subscribe(subscriberId,authorId) Values(?,?);";
-    log.info(query);
-    
-    PreparedStatementCreator psc = new PreparedStatementCreator() {
-        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, userID1);  // user1, the loggedIn user, is the subscriber
-            ps.setInt(2, userID2);  // user2, the user who's profile is being unsubscribed, is the author
-            return ps;
-        }
-    };
-    
-        int numberOfRowAffected = jdbcTemplate.update(psc);
-        if(numberOfRowAffected > 0) {
-            return true; // successfully subscribed
-        } else {
-            return false; // did not subscribe, since some error happened or it was already subscribed in the beginning
-        }
-    }
-    
     @GetMapping("/checkSubscribed")
     @ResponseBody
     public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
