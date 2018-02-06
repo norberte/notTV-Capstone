@@ -1,4 +1,4 @@
-const React = require("react");
+!const React = require("react");
 
 export default class AuthorHeader extends React.Component {
     constructor(props) {
