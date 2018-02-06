@@ -1,9 +1,26 @@
 import NavBar from '../NavBar.js';
 import CategoryFilter from './CategoryFilter.js';
 import TopBar from './TopBar.js';
-import CarouselLayout from './CarouselLayout.js';
+import CarouselLayout from '../CarouselLayout.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
+
+class VideoThumbnail extends React.Component {
+    render() {
+        return (
+            <div className="col-md-2 no-padding">
+              <a href={this.props.video.url}>
+                <div className="thumbnail no-margin">
+                  <img className="video-thumbnail" src={this.props.video.thumbnail}/>
+                  <div className="caption">
+                    <h3 className="no-margin">{this.props.video.title} </h3>
+                  </div>
+                </div>
+              </a>
+            </div>
+        );
+    }
+}
 
 class Browse extends React.Component {
     constructor(props) {
@@ -65,7 +82,7 @@ class Browse extends React.Component {
                 <TopBar/>
                 <div className="row browse-body">
                   <div className="col-md-12">
-                    <CarouselLayout title="Subscribed" videos={this.state.videos}/>
+                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" videos={this.state.videos}/>
                   </div>
                 </div>
               </div>

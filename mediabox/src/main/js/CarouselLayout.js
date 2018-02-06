@@ -1,21 +1,4 @@
 const React = require("react");
-// /img/default-placeholder-300x300.png
-class VideoThumbnail extends React.Component {
-    render() {
-        return (
-            <div className="col-md-2 no-padding">
-              <a href={this.props.video.url}>
-                <div className="thumbnail no-margin">
-                  <img className="video-thumbnail" src={this.props.video.thumbnail}/>
-                  <div className="caption">
-                    <h3 className="no-margin">{this.props.video.title} </h3>
-                  </div>
-                </div>
-              </a>
-            </div>
-        );
-    }
-}
 
 class ArrowButton extends React.Component {
     render() {
@@ -73,13 +56,13 @@ export default class CarouselLayout extends React.Component {
                   <ArrowButton dir="left" handler={this.prev}/>
                   <div className="col-md-10">
                     <div className="row row-eq-height">
-                      { rows.map((video, idx) => <VideoThumbnail key={idx} video={video}/>) }
+                      { rows.map((video, idx) => <this.props.thumbnailClass key={idx} video={video}/>) }
+                    </div>
+                  </div>
+                  <ArrowButton dir="right" handler={this.next}/>
+                </div>
+              </div>
             </div>
-                </div>
-                <ArrowButton dir="right" handler={this.next}/>
-                </div>
-                </div>
-                </div>
         );
     }
 }

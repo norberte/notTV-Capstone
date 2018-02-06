@@ -1,6 +1,6 @@
 import NavBar from '../NavBar.js';
-import CarouselLayout from '../browse/CarouselLayout.js';
-import PlaylistCarousel from './playlists.js';
+import CarouselLayout from '../CarouselLayout.js';
+import PlaylistThumbnail from './playlists.js';
 import AuthorHeader from './authorHeader.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -14,23 +14,24 @@ let default_loggedIn_username = "dummy"; // real username from DB that we consid
 let username_fromURLParameter = "";
 
 export default class Profile extends React.Component {
-    constructor(props) {super(props);
-    var urlPath = window.location.pathname;
-    username_fromURLParameter = urlPath.replace('/userProfile/', ''); 
-    // extracts username provided in the URL path and removes "/userProfile/" 
-    // ... TO DO: FIND A BETTER WAY to do this
-    
-    this.state = {
+    constructor(props) {
+        super(props);
+        var urlPath = window.location.pathname;
+        username_fromURLParameter = urlPath.replace('/userProfile/', ''); 
+        // extracts username provided in the URL path and removes "/userProfile/" 
+        // ... TO DO: FIND A BETTER WAY to do this
+        
+        this.state = {
             userid:  [1],
             username: [username_fromURLParameter],
             videos: [],
             playlists: []
-    };
-    
-    this.checkUsernameValidity = this.checkUsernameValidity.bind(this);
-    
-    // check validity of the username provided in the url
-    this.checkUsernameValidity = this.checkUsernameValidity(this.state.username);
+        };
+        
+        this.checkUsernameValidity = this.checkUsernameValidity.bind(this);
+        
+        // check validity of the username provided in the url
+        this.checkUsernameValidity = this.checkUsernameValidity(this.state.username);
     }
     
     //ajax call to check username validity
@@ -60,32 +61,32 @@ export default class Profile extends React.Component {
                 }
             },
             error: (response) => {
-        console.log(response);
-        this.setState({
+                console.log(response);
+                this.setState({
                     userid: [-10],
                     username: ["No such username in notTV's system"]
-        });
+                });
             }
         });
     }
 
     // ajax call for getting the videos
     update_videos(userID) {
-    $.get({
+        $.get({
             url: config.serverUrl + "/info/recentVideos/",
             data: {
-        userid: userID
+                userid: userID
             },
             dataType: "json",
             success: (data) => {
-        this.setState({
-            videos: data
-        });
+                this.setState({
+                    videos: data
+                });
             },
             error: (response) => {
-        console.log(response);
+                console.log(response);
             }
-    });
+        });
     }
     
     // ajax call for getting the playlists
@@ -97,36 +98,36 @@ export default class Profile extends React.Component {
             },
             dataType: "json",
             success: (data) => {
-        this.setState({
+                this.setState({
                     playlists: data
-        });
+                });
             },
             error: (response) => {
-        console.log(response);
+                console.log(response);
             }
         });
     }
     
     render() {
-    return (    
-        <div id ="myContainer">
-        <div className="container">
-        <div className="row">
-                <div className="col-md-10 col-md-offset-1">
-                <div>
-                <AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} loggedIn_userID = {default_loggedIn_userID} />
+        return (    
+            <div id ="myContainer">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-10 col-md-offset-1">
+                            <div>
+                                <AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} loggedIn_userID = {default_loggedIn_userID} />
+                            </div>
+                            <div className="row browse-body">
+                            <CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
+                            </div>
+                            <div className="row browse-body">
+                                <CarouselLayout thumbnailClass={PlaylistThumbnail} title="Playlists" playlists={this.state.playlists}/>
+                            </div>      
+                        </div>
+                    </div>
                 </div>
-                <div className="row browse-body">
-                <CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
-                </div>
-                <div className="row browse-body">
-                <PlaylistCarousel title="Playlists" playlists={this.state.playlists}/>
-                </div>      
-                </div>
-        </div>
-        </div>
-        </div>
-    );
+            </div>
+        );
     }
 }
 
