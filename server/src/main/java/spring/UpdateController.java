@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +27,7 @@ public class UpdateController {
     @Autowired
     JdbcTemplate jdbcTemplate;
     
-    @GetMapping("/subscribe")
+    @PostMapping("/subscribe")
     @ResponseBody
     public boolean subscribe(@RequestParam("authorId") int authorId, @RequestParam("unsub") boolean unsub) {
         log.info("update subscriptions table");
@@ -47,7 +48,7 @@ public class UpdateController {
      * @param reportText - message describing the reason for reporting the video/nature of the violation
      * @return
      */
-    @GetMapping("/report")
+    @PostMapping("/report")
     @ResponseBody
     public boolean report(@RequestParam("videoId") int videoId, @RequestParam("report_text") String reportText) {
         log.info("update subscriptions table");

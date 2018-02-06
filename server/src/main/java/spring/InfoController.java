@@ -23,6 +23,7 @@ import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.Video;
 import spring.view.Playlist;
+import spring.view.VideoData;
 
 @CrossOrigin
 @RestController
@@ -194,21 +195,27 @@ public class InfoController {
     
     @GetMapping("/video-data")
     @ResponseBody
-    public List<VideoData> getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
+    public VideoData getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
     log.info("video data");
-    StringBuilder queryBuilder = new StringBuilder("Select title, description, userid, username ");
-    queryBuilder.append("From Video Inner Join nottv_user On nottv_user.id = Video.userid ");
-    queryBuilder.append("Where video.id = ");
-    queryBuilder.append(videoId);
-    queryBuilder.append(';');
+    StringBuilder queryBuilder = new StringBuilder("Select video.id, title, description, userid, username ");
+    queryBuilder.append("From video Inner Join nottv_user On nottv_user.id = Video.userid ");
+    queryBuilder.append("Where video.id = ?;");
     String query = queryBuilder.toString();
-    log.info(query);
+    log.info(query +" ,"+videoId);
     
-    return jdbcTemplate.query(query, (rs, row) -> new VideoData(
-        rs.getString("title"), 
-        rs.getString("description"),
-        rs.getInt("userid"),
-        rs.getString("username"))
-    ); 
+    return jdbcTemplate.query(query, new Object[] {videoId}, (rs) -> 
+        {    
+        rs.next();
+        int id = rs.getInt("id");
+        String title = rs.getString("title");
+        String desc = rs.getString("description");
+        int userId = rs.getInt("userid");
+        String userName = rs.getString("username");
+        
+        boolean subbed = jdbcTemplate.query("Select 1 From subscribe Where authorid = ? And subscriberid = ?;",
+                                                new Object[] {userId, 1} , (rs2) -> {return rs2.next();});
+        
+        return new VideoData(id, title, desc, userId, userName, subbed);
+        });   
     }
 }
