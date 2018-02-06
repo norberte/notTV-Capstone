@@ -24,7 +24,7 @@ import spring.view.VideoForm;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/set")
 public class ModifyController {
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
     

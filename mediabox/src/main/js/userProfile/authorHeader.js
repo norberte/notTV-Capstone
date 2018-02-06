@@ -1,4 +1,4 @@
-!const React = require("react");
+const React = require("react");
 
 export default class AuthorHeader extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class AuthorHeader extends React.Component {
         console.log(loggedInUser);
         console.log(userFromProfile);
         $.get({
-            url: config.serverUrl + "/info/checkSubscribed",
+            url: config.serverUrl + "/set/checkSubscribed",
             data: {
                 userID1: loggedInUser,
                 userID2: userFromProfile[0] // this is actually an array of 1 element
@@ -46,7 +46,7 @@ export default class AuthorHeader extends React.Component {
     
     subscribe(loggedInUser, userFromProfile){
         $.get({
-            url: config.serverUrl + "/info/subscribe",
+            url: config.serverUrl + "/set/subscribe",
             data: {
                 userID1: loggedInUser,
                 userID2: userFromProfile[0] // this is actually an array of 1 element
@@ -70,7 +70,7 @@ export default class AuthorHeader extends React.Component {
     
     unsubscribe(loggedInUser, userFromProfile){
         $.get({
-            url: config.serverUrl + "/info/unsubscribe",
+            url: config.serverUrl + "/set/unsubscribe",
             data: {
                 userID1: loggedInUser,
                 userID2: userFromProfile[0] // this is actually an array of 1 element

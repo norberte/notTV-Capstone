@@ -154,7 +154,7 @@ class App extends React.Component {
 		// insert video
 		$.ajax({
 		    type: "POST",
-		    url: config.serverUrl + "/upload/videoSubmission",
+		    url: config.serverUrl + "/set/videoSubmission",
 		    contentType: 'application/json',
 		    processData: false,
 		    data: JSON.stringify(formData),

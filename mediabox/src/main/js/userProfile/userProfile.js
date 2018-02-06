@@ -1,7 +1,7 @@
 import NavBar from '../NavBar.js';
 import CarouselLayout from '../browse/CarouselLayout.js';
 import PlaylistCarousel from './playlists.js';
-import AuthorHeader from './authorHeader.js'
+import AuthorHeader from './authorHeader.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
