@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import spring.model.VideoData;
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.Video;

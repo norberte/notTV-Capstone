@@ -26,7 +26,7 @@ import spring.view.VideoForm;
 @RestController
 @RequestMapping("/set")
 public class ModifyController {
-    private static final Logger log = LoggerFactory.getLogger(PostController.class);
+    private static final Logger log = LoggerFactory.getLogger(ModifyController.class);
     
     @Autowired
     private JdbcTemplate jdbc;
