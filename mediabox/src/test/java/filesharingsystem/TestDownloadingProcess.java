@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import filesharingsystem.process.DownloadProcess;
-import filesharingsystem.process.DownloadProcess.Client;
 import filesharingsystem.process.TtorrentDownloadProcess;
 import filesharingsystem.process.TtorrentUploadProcess;
 import filesharingsystem.process.UploadProcess;
@@ -56,11 +56,12 @@ public class TestDownloadingProcess {
     }
 
     @Test
-    public void testDownload() {
-	// Test if the download process can download video content using the file sharing system
-	DownloadProcess dp = new TtorrentDownloadProcess(torrFile, torrentStorage);
-	Client c = dp.download();
-	c.waitForDownload();
+    public void testDownload() throws Exception {
+        // Test if the download process can download video content using the file sharing system
+	DownloadProcess dp = new TtorrentDownloadProcess(torrFile);
+        Optional<File> result = dp.download();
+        assertTrue(result.isPresent());
+        assertTrue(result.get().exists());
 	assertTrue(new File(System.getProperty("user.home"), "cat.txt").exists());
     }
 }

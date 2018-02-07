@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 
 import util.storage.StorageService;
@@ -19,43 +21,40 @@ import util.storage.StorageService;
 public class TtorrentDownloadProcess implements DownloadProcess {
     private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
     private final File torrent;
-    private final StorageService videoStorage;
-    public TtorrentDownloadProcess(File torrent, StorageService videoStorage) {
+    @Qualifier("VideoStorage")
+    @Autowired
+    private  StorageService videoStorage;
+    public TtorrentDownloadProcess(File torrent) {
 	this.torrent = torrent;
-	this.videoStorage = videoStorage;
     }
     
     @Override
-    public DownloadProcess.Client download(Consumer<List<File>> fileHook) {
+    public Optional<File> download() {
 	try {
-	    com.turn.ttorrent.client.Client client = new com.turn.ttorrent.client.Client(
-		// This is the interface the client will listen on (you might need something
-		// else than localhost here).
-		InetAddress.getLocalHost(),		
-		SharedTorrent.fromFile(torrent, videoStorage.getBaseDir()));
-	    // client.setMaxDownloadRate(50.0);
-	    // client.setMaxUploadRate(50.0);
-	    client.download();
+            SharedTorrent st = SharedTorrent.fromFile(torrent, videoStorage.getBaseDir());
+            // If the client isn't finished downloading, finish downloading.
+            log.info("Download complete: {}", st.isComplete());
+            log.info("{}", st.isInitialized());
+            if(!st.isComplete()) {
+                Client client = new com.turn.ttorrent.client.Client(
+                    // This is the interface the client will listen on (you might need something
+                    // else than localhost here).
+                    InetAddress.getLocalHost(),		
+                    st
+                );
+                // client.setMaxDownloadRate(50.0);
+                // client.setMaxUploadRate(50.0);
 
-	    return new Client() {
-		
-		@Override
-		public void waitForDownload() {
-		    client.waitForCompletion();
-		}
-		
-		@Override
-		public List<File> files() {
-		    return client.getTorrent().getFilenames().stream().map(fn -> {
-			return videoStorage.get(fn);
-		    }).collect(Collectors.toList());
-		}
-
-	    };
+                client.download();
+                client.waitForCompletion();
+            }
+            // run callback.
+            List<String> names = st.getFilenames();
+            if(names.size() > 0) // callback if there is a file.
+                return Optional.of(videoStorage.get(names.get(0)));
 	} catch (NoSuchAlgorithmException | IOException e) {
 	    log.error("Error downloading torrent.", e);
 	}
-	return null;
+        return Optional.empty();
     }
-    
 }

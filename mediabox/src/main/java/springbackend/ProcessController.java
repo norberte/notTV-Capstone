@@ -3,24 +3,23 @@ package springbackend;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import filesharingsystem.process.DownloadProcess;
-import filesharingsystem.process.TtorrentDownloadProcess;
 
 import util.SeedManager;
 import util.storage.StorageService;
@@ -30,6 +29,9 @@ import util.storage.StorageService;
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
     
+    /*
+     * DI attributes.
+     */
     @Autowired
     private Config config;
     @Autowired
@@ -40,7 +42,10 @@ public class ProcessController {
     private StorageService videoStorage;
     @Autowired
     private SeedManager seedManager;
-    
+    @Autowired
+    private BeanFactory beanFactory; 
+
+
     @PostMapping("upload")
     @ResponseBody
     public String upload(MultipartFile video) {
@@ -64,9 +69,9 @@ public class ProcessController {
 	    return null; // hardcoded urls, so should never happen.
 	}
     }
-    
+
     @RequestMapping(path = "download")
-    public String download(@RequestParam(value="torrentName") String torrentName, @RequestParam("videoId") int videoId, HttpServletRequest request){
+    public String download(@RequestParam(value="torrentName") String torrentName, @RequestParam("videoId") int videoId, RedirectAttributes redir){
 	// get torrent file.
 	File torrentFile = torrentStorage.get(torrentName);
 	try {
@@ -75,19 +80,15 @@ public class ProcessController {
 	    ).execute().saveContent(torrentFile);
 
 	    // download file.
-	    DownloadProcess dp = new TtorrentDownloadProcess(
-		torrentFile, videoStorage);
-	    filesharingsystem.process.DownloadProcess.Client client = dp.download();
-	    client.waitForDownload();
-	    String filename = client.files().get(0).getName();
+	    Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
 
-	    //this assumes the torrent contains a single video file. I don't know how we want to handle other cases, if at all -Daniel
-	    //torrents with multiple files are a bonus feature :P -Levi
-	    log.info(filename);
-	    
-        request.setAttribute("videoId", videoId);
-        request.setAttribute("videoName", filename);
-	    return "forward:/watch";
+            if(result.isPresent()) {
+                File f = result.get();
+                log.info(f.getName());
+                redir.addFlashAttribute("videoId", videoId);
+                redir.addFlashAttribute("videoName", f.getName());
+                return "redirect:/watch"; // because I can't figure out the bloody forward:
+            }
 	} catch (IOException e) {
 	    log.error("Error getting torrent file from server.", e);
 	}
