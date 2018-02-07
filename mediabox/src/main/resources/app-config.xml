@@ -43,6 +43,7 @@
   <!-- UploadProcess -->
 
   <bean id="UploadProcess" class="filesharingsystem.process.TtorrentUploadProcess" scope="prototype" lazy-init="true"/>
+  <bean id="DownloadProcess" class="filesharingsystem.process.TtorrentDownloadProcess" scope="prototype" lazy-init="true"/>
   <bean id="SeedManager" class="util.SeedManager"/>
   
   <mvc:interceptors>

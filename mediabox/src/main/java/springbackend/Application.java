@@ -13,8 +13,7 @@ import filesharingsystem.PortMapper;
 
 import util.SeedManager;
 
-
-@SpringBootApplication()
+@SpringBootApplication
 @ImportResource("classpath:app-config.xml")
 public class Application implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Application.class);

@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import util.storage.StorageService;
@@ -36,18 +34,31 @@ public class ViewController {
     @Qualifier("VideoStorage")
     private StorageService videoStorage;
 
+    private void defaultSetup(String page, Model model) {
+        // Copy model values from any redirects.
+        Map<String, ?> modelMap = model.asMap();
+        List<String> keys = new ArrayList<>(modelMap.size());
+        List<Object> values = new ArrayList<>(modelMap.size());
+        modelMap.entrySet().forEach(e -> {
+            keys.add(e.getKey());
+            values.add(e.getValue());
+        });
+        model.addAttribute("modelKeys", keys);
+        model.addAttribute("modelValues", values);
+	model.addAttribute("title", StringUtils.capitalize(page));
+	model.addAttribute("page_name", page);
+        log.info("Sanity check: {}", model.asMap());
+    }
+
     @RequestMapping({"/","/home"})
     public String home(Model model){
-        String home = "browse";
-        model.addAttribute("title", StringUtils.capitalize(home));
-        model.addAttribute("page_name", home);
+        defaultSetup("browse", model);
         return "default_page";
     }
     
     @RequestMapping("{page}")
     public String defaultPage(@PathVariable String page, Model model) {
-	model.addAttribute("title", StringUtils.capitalize(page));
-	model.addAttribute("page_name", page);
+        defaultSetup(page, model);
 	return "default_page";
     }
 

@@ -75,8 +75,8 @@ class Video extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            videoId: GetURLParameter('videoId'),
-            videoName: GetURLParameter('videoName'),
+            videoId: props.videoId,
+            videoName: props.videoName,
             video_data: ""
         };
 
@@ -136,19 +136,6 @@ class Video extends React.Component{
 }
 
 ReactDOM.render(
-    <Video />,
+    <Video videoId={videoId} videoName={videoName}/>,
     document.getElementById('root')
 );
-
-
-//reads URL parameters - from http://www.jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
-function GetURLParameter(sParam) {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) {
-            return sParameterName[1];
-        }
-    }
-}

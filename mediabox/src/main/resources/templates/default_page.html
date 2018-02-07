@@ -11,6 +11,11 @@
     <script th:inline="javascript">
     /*<![CDATA[*/
     const config = /*[[${config}]]*/ {};
+    const keys = /*[[${modelKeys}]]*/ [];
+    const values = /*[[${modelValues}]]*/ [];
+    for(var i = 0; i<keys.length; i++) {
+        window[keys[i]] = values[i];
+    }
     /*]]>*/
     </script>
     <script src="/js/bundle/common.js"/>
