@@ -22,11 +22,11 @@ export default class AuthorHeader extends React.Component {
         console.log(loggedInUser);
         console.log(userFromProfile);
         $.get({
-            url: config.serverUrl + "/set/checkSubscribed",
+            url: config.serverUrl + "/update/checkSubscribed",
             data: {
-                userID1: loggedInUser,
-                userID2: userFromProfile[0] // this is actually an array of 1 element
-                },
+                subscriber: loggedInUser,
+                author: userFromProfile[0] // this is actually an array of 1 element
+            },
             dataType: "json",
             success: (data) => {
                 console.log("Successfully checked if user is subscribed.");
@@ -46,11 +46,11 @@ export default class AuthorHeader extends React.Component {
     
     subscribe(loggedInUser, userFromProfile){
         $.get({
-            url: config.serverUrl + "/set/subscribe",
+            url: config.serverUrl + "/update/subscribe",
             data: {
-                userID1: loggedInUser,
-                userID2: userFromProfile[0] // this is actually an array of 1 element
-                },
+                subscriber: loggedInUser,
+                author: userFromProfile[0] // this is actually an array of 1 element
+            },
             dataType: "json",
             success: (data) => {
                 console.log("Successfully subscribed.");
@@ -62,7 +62,7 @@ export default class AuthorHeader extends React.Component {
                 }
             },
             error: (response) => {
-            console.log("Unsuccessful subscribe!");
+                console.log("Unsuccessful subscribe!");
             }
         });
     }
@@ -70,11 +70,11 @@ export default class AuthorHeader extends React.Component {
     
     unsubscribe(loggedInUser, userFromProfile){
         $.get({
-            url: config.serverUrl + "/set/unsubscribe",
+            url: config.serverUrl + "/update/unsubscribe",
             data: {
-                userID1: loggedInUser,
-                userID2: userFromProfile[0] // this is actually an array of 1 element
-                },
+                subscriber: loggedInUser,
+                author: userFromProfile[0] // this is actually an array of 1 element
+            },
             dataType: "json",
             success: (data) => {    
                 console.log("Successfully unsubscribed.");
@@ -86,25 +86,25 @@ export default class AuthorHeader extends React.Component {
                 }
             },
             error: (response) => {
-            console.log("Unsuccessful unsubscribe.");
+                console.log("Unsuccessful unsubscribe.");
             }
         });
     }
     
     render() {
         return (
-                <div className="media">
-                    <div className="media-left">
-                        <img src="../img/user.png"></img>
-                    </div>
-                    <div className="media-body">
-                        <h4 className="media-heading">{this.props.username}</h4>
-                        <p>{this.props.description}</p>
-                        <div>
-                            <button className="btn btn-default" type="button" onClick={ (this.state.subscribed == true) ? (() => this.unsubscribe(this.props.loggedIn_userID, this.props.userID)) : (() => this.subscribe(this.props.loggedIn_userID, this.props.userID)) }> { (this.state.subscribed == true) ? this.state.unsub : this.state.sub } </button> 
-                        </div>
-                    </div>
+            <div className="media">
+              <div className="media-left">
+                <img src="../img/user.png"></img>
+              </div>
+              <div className="media-body">
+                <h4 className="media-heading">{this.props.username}</h4>
+                <p>{this.props.description}</p>
+                <div>
+                  <button className="btn btn-default" type="button" onClick={ (this.state.subscribed == true) ? (() => this.unsubscribe(this.props.loggedIn_userID, this.props.userID)) : (() => this.subscribe(this.props.loggedIn_userID, this.props.userID)) }> { (this.state.subscribed == true) ? this.state.unsub : this.state.sub } </button> 
                 </div>
+              </div>
+            </div>
         );
     }
 }
