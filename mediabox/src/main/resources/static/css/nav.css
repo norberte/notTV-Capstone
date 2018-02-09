@@ -1,0 +1,112 @@
+container{
+    background-color: black;
+}
+
+#rootNav{
+    background-color: black;
+}
+
+#navbar{
+    margin-bottom: -0.75em;
+}
+
+.features-boxed {
+  overflow-y:auto;
+}
+
+.selected {
+  opacity:0.5;
+}
+
+.checked {
+  background-color:lightgrey;
+}
+
+.panel.panel-default {
+  border-radius:0px;
+  margin:0px!important;
+}
+
+.row.display-flex {
+  display:flex;
+}
+
+.row.display-flex > [class*='col-'] {
+  display:flex;
+  flex-direction:column;
+}
+
+.check {
+  position:absolute;
+  top:25%;
+  left:45%;
+  display:inline-block;
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+  height:48px;
+  width:24px;
+  border-bottom:10px solid #3f73b1;
+  border-right:10px solid #3f73b1;
+}
+
+.notTVLogo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 15%;
+    width:  15%;
+}
+
+ul{
+  list-style-type: none;
+  border: 1px solid #494949
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #232323;
+}
+
+li{
+  float: left
+}
+
+li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none !important;
+}
+
+li a:visited{
+  color: white;
+}
+
+li a:focus{
+  color: white;
+}
+
+li a:hover{
+  color: white;
+  background-color: #3e473d;
+}
+
+li a{
+  color: white;
+}
+
+.active {
+  background-color: #727a71;
+}
+
+#rootLeft{
+
+}
+
+#rootRight{
+  float: right;
+  margin-right: 2em;
+  margin-left: 34em;
+  padding-left: 1em;
+  border-left: 2px solid black;
+}
