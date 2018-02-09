@@ -83,12 +83,12 @@ public class UpdateController {
      */
     @PostMapping("/report")
     @ResponseBody
-    public boolean report(@RequestParam("videoId") int videoId, @RequestParam("report_text") String reportText) {
+    public boolean report(@RequestParam("videoId") int videoId, @RequestParam("reportText") String reportText) {
         log.info("update subscriptions table");
         //TODO: add reportText to query after we add that column to the database 
-        String query = new String("Insert Into flag (userid, videoid) Values (?,?);"); 
+        String query = new String("Insert Into flag (userid, videoid, message) Values (?,?,?);"); 
         log.info(query);
-        jdbc.update(query, 1, videoId); //userid is hard-coded as 1 for now
+        jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
         return true;
     }
 

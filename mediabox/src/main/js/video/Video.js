@@ -46,7 +46,7 @@ class ReportDialog extends React.Component{
             url: config.serverUrl + "/update/report",
             data:{
                 videoId: this.props.videoId,
-                report_text: $("#report-text").val()
+                reportText: $("#report-text").val()
             },
             success: () => {this.setState({visible: false});}
         });
