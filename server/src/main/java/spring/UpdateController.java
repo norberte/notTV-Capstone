@@ -38,7 +38,7 @@ public class UpdateController {
     @Autowired
     JdbcTemplate jdbc;
 
-    @PutMapping("/unsubscribe")
+    @PostMapping("/unsubscribe")
     @ResponseBody
     public boolean unsubscribe(@RequestParam(value="author", required=true) int author,
     @RequestParam(value="subscriber", required=true) int subscriber) {
@@ -58,7 +58,7 @@ public class UpdateController {
         }        
     }
 
-    @PutMapping("/subscribe")
+    @PostMapping("/subscribe")
     @ResponseBody
     public boolean subscribe(@RequestParam(value="subscriber", required=true) int subscriber,
     @RequestParam(value="author", required=true) int author ) {

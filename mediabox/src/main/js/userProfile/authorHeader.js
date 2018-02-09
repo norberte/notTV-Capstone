@@ -45,7 +45,7 @@ export default class AuthorHeader extends React.Component {
     }
     
     subscribe(loggedInUser, userFromProfile){
-        $.get({
+        $.post({
             url: config.serverUrl + "/update/subscribe",
             data: {
                 subscriber: loggedInUser,
@@ -69,7 +69,7 @@ export default class AuthorHeader extends React.Component {
     
     
     unsubscribe(loggedInUser, userFromProfile){
-        $.get({
+        $.post({
             url: config.serverUrl + "/update/unsubscribe",
             data: {
                 subscriber: loggedInUser,
