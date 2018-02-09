@@ -12,6 +12,13 @@ class ArrowButton extends React.Component {
     }
 }
 
+/*
+ * Usage: pass in a list of entries to be displayed, and a thumbnailClass to render each entry.
+ * The thumbnailClass will recieve a single props: entry={entry}, where entry is one of the items in the entries prop.
+ * @param title - title of Carousel.
+ * @param entries - list of data for entries.
+ * @param thumbnailClass - class to render each entry.
+ */
 export default class CarouselLayout extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +32,7 @@ export default class CarouselLayout extends React.Component {
 
     next() {
         // check if there is a video to the right not shown.
-        if(this.state.start + 6 < this.props.videos.length)
+        if(this.state.start + 6 < this.props.entries.length)
             this.setState({
                 start: this.state.start + 1
             });
@@ -40,7 +47,7 @@ export default class CarouselLayout extends React.Component {
     }
     
     render() {
-        let rows = this.props.videos.slice(
+        let rows = this.props.entries.slice(
             this.state.start,
             this.state.start + 6
         );
@@ -56,7 +63,7 @@ export default class CarouselLayout extends React.Component {
                   <ArrowButton dir="left" handler={this.prev}/>
                   <div className="col-md-10">
                     <div className="row row-eq-height">
-                      { rows.map((video, idx) => <this.props.thumbnailClass key={idx} video={video}/>) }
+                      { rows.map((entry, idx) => <this.props.thumbnailClass key={idx} entry={entry}/>) }
                     </div>
                   </div>
                   <ArrowButton dir="right" handler={this.next}/>

@@ -121,7 +121,7 @@ export default class Profile extends React.Component {
                             <CarouselLayout title="Recently Uploaded Videos" videos={this.state.videos}/>
                             </div>
                             <div className="row browse-body">
-                                <CarouselLayout thumbnailClass={PlaylistThumbnail} title="Playlists" playlists={this.state.playlists}/>
+                                <CarouselLayout thumbnailClass={PlaylistThumbnail} title="Playlists" entries={this.state.playlists}/>
                             </div>      
                         </div>
                     </div>
