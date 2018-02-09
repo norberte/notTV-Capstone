@@ -118,7 +118,7 @@ export default class Profile extends React.Component {
                                 <AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} loggedIn_userID = {default_loggedIn_userID} />
                             </div>
                             <div className="row browse-body">
-                <CarouselLayout title="Recently Uploaded Videos" thumbnailClass={PlaylistThumbnail} entries={this.state.videos}/>
+                <CarouselLayout title="Recently Uploaded Videos" thumbnailClass={VideoThumbnail} entries={this.state.videos}/>
                             </div>
                             <div className="row browse-body">
                                 <CarouselLayout title="Playlists" thumbnailClass={PlaylistThumbnail} entries={this.state.playlists}/>
