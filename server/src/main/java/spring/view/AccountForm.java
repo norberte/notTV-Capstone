@@ -2,7 +2,6 @@ package spring.view;
 
 public class AccountForm {
     String currentUsername;
-    String newUsername;
     String newEmail;
     String autoDownload;
     String newPass;
@@ -15,12 +14,7 @@ public class AccountForm {
     public void setCurrentUsername(String currentUsername) {
         this.currentUsername = currentUsername;
     }
-    public String getNewUsername() {
-        return newUsername;
-    }
-    public void setNewUsername(String newUsername) {
-        this.newUsername = newUsername;
-    }
+    
     public String getNewEmail() {
         return newEmail;
     }
