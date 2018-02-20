@@ -46,7 +46,7 @@ class ReportDialog extends React.Component{
             url: config.serverUrl + "/update/report",
             data:{
                 videoId: this.props.videoId,
-                report_text: $("#report-text").val()
+                reportText: $("#report-text").val()
             },
             success: () => {this.setState({visible: false});}
         });
@@ -123,7 +123,7 @@ class Video extends React.Component{
                   <a href={'#'/*user page ?=video_data.userid*/} ><h2 className="media-heading">{this.state.username}</h2></a>
                   <SubscribeButton 
                      subState = {this.state.subscribed ? "Unsubscribe" : "Subscribe"} 
-                     onClick={() => this.subscribe()}
+                     onClick = {() => this.subscribe()}
                     />
                 </div>
                 <p></p>

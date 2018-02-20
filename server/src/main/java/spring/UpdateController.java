@@ -38,7 +38,7 @@ public class UpdateController {
     @Autowired
     JdbcTemplate jdbc;
 
-    @PutMapping("/unsubscribe")
+    @PostMapping("/unsubscribe")
     @ResponseBody
     public boolean unsubscribe(@RequestParam(value="author", required=true) int author,
     @RequestParam(value="subscriber", required=true) int subscriber) {
@@ -58,7 +58,7 @@ public class UpdateController {
         }        
     }
 
-    @PutMapping("/subscribe")
+    @PostMapping("/subscribe")
     @ResponseBody
     public boolean subscribe(@RequestParam(value="subscriber", required=true) int subscriber,
     @RequestParam(value="author", required=true) int author ) {
@@ -83,12 +83,12 @@ public class UpdateController {
      */
     @PostMapping("/report")
     @ResponseBody
-    public boolean report(@RequestParam("videoId") int videoId, @RequestParam("report_text") String reportText) {
+    public boolean report(@RequestParam("videoId") int videoId, @RequestParam("reportText") String reportText) {
         log.info("update subscriptions table");
         //TODO: add reportText to query after we add that column to the database 
-        String query = new String("Insert Into flag (userid, videoid) Values (?,?);"); 
+        String query = new String("Insert Into flag (userid, videoid, message) Values (?,?,?);"); 
         log.info(query);
-        jdbc.update(query, 1, videoId); //userid is hard-coded as 1 for now
+        jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
         return true;
     }
 
