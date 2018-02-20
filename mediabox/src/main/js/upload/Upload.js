@@ -1,6 +1,6 @@
-//import ajaxSubmit from '../ajaxSubmit.js';
 import NavBar from '../NavBar.js';
-import './CriteriaList.js';
+import CriteriaList from './CriteriaList.js';
+import BreadCrumb from './BreadCrumb.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
@@ -297,4 +297,86 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("rootLeft"));
+/*
+ A containter that iterates through a list of React Components.
+*/
+class UploadContainer extends React.Component {
+    render() {
+        const disableNext = this.props.curr === this.props.items.length - 1 ? " disabled" : "";
+        const disablePrev = this.props.curr === 0 ? " disabled" : "";
+        return (
+            <div className="row">
+              <div className="col-md-12 upload-container">
+                <div className="row">
+                  {this.props.items[this.props.curr]}
+                </div>
+
+                <div className="row">
+                  <ul className="pager">
+                    <li className={"previous" + disablePrev}>
+                      <a onClick={()=>this.props.increment(-1)}>
+                        <span aria-hidden="true">&larr;</span> Go Back
+                      </a>
+                    </li>
+                    <li className={"next" + disableNext}>
+                      <a onClick={()=>this.props.increment(1)}>
+                        Continue <span aria-hidden="true">&rarr;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        );
+    }
+}
+
+class Test extends React.Component {
+    render() {
+        return (
+            <div>
+              {this.props.content}
+            </div>
+        );
+    }
+}
+
+class UploadForm extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            curr: 0
+        };
+
+        this.increment = this.increment.bind(this);
+    }
+
+    increment(amount) {
+        const newVal = this.state.curr + amount;
+
+        if(newVal >=0 && newVal < this.props.items.length)
+            this.setState({
+                curr: newVal
+            });
+    }
+    render() {
+        return (
+            <div className="col-md-12">
+              <div className="row bc-parent">
+                <BreadCrumb curr={this.state.curr} items={["Browse", "Compare", "Order Confirmation"]} />
+              </div>
+              <div className="row">
+                <div className="col-md-8">
+                  <UploadContainer curr={this.state.curr} increment={this.increment} items={this.props.items}/>
+                </div>
+                <div className="col-md-4">
+                  <CriteriaList/>
+                </div>
+              </div>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<UploadForm items={[<Test content="1"/>, <Test content="2"/>, <Test content="3"/>]}/>, document.getElementById("root"));
