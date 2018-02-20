@@ -50,8 +50,8 @@ public class InfoController {
 	    )
 	));
     }
-    
-    // gets playlists owned by a user. 
+
+    // gets playlists owned by a user.
     // takes in a userID parameter
     @GetMapping("/playlists")
     @ResponseBody
@@ -62,7 +62,7 @@ public class InfoController {
         // Make the query.
         String query = "Select title,thumbnailurl, downloadurl From Playlist Where owner = ?";
         log.info(query);
-    
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -70,13 +70,13 @@ public class InfoController {
                 return ps;
             }
         };
-    
+
         return jdbcTemplate.query(psc, (rs, row) -> new Playlist(
-            rs.getString("title"), 
+            rs.getString("title"),
             rs.getString("thumbnailurl"), // TODO: make sure this is correct.
             rs.getString("downloadurl") // TODO: implement the download for a whole playlist
         )
-        ); 
+        );
     }
 
     @GetMapping("/getUserID")
@@ -88,7 +88,7 @@ public class InfoController {
         // Make the query.
         String query = "Select id From nottv_user Where username = ?;";
         log.info(query);
-    
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -96,10 +96,10 @@ public class InfoController {
                 return ps;
             }
         };
-    
-        return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id"))); 
+
+        return jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("id")));
     }
-    
+
     @GetMapping("/checkSubscribed")
     @ResponseBody
     public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
@@ -109,7 +109,7 @@ public class InfoController {
         // Make the query.
         String query = "Select authorId From subscribe Where subscriberId = ? AND authorId = ?;";
         log.info(query);
-    
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -118,7 +118,7 @@ public class InfoController {
                 return ps;
             }
         };
-    
+
         List<Integer> result = jdbcTemplate.query(psc, (rs, row) -> new Integer(rs.getInt("authorId")));
         log.info("Query result: " + Arrays.toString(result.toArray()));
         if(result.size() > 0) {
@@ -129,9 +129,9 @@ public class InfoController {
             return false;
         }
     }
-    
-    
-    
+
+
+
     @GetMapping("/recentVideos")
     @ResponseBody
     public List<Video> getRecentVideos(@RequestParam(value="userid[]", required=true) int[] userid) {
@@ -141,7 +141,7 @@ public class InfoController {
         // Make the query.
         String query = "Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10";
         log.info(query);
-    
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -149,14 +149,14 @@ public class InfoController {
                 return ps;
             }
         };
-    
+
         return jdbcTemplate.query(psc, (rs, row) -> new Video(
-            rs.getString("title"), 
+            rs.getString("title"),
             rs.getString("thumbnailurl"), //TODO: make sure this is correct.
             "/process/download?torrentName="+rs.getString("downloadurl"))
-        ); 
-    }    
-    
+        );
+    }
+
     @GetMapping("/public-ip")
     @ResponseBody
     public String getPublicIp(HttpServletRequest request) {
@@ -173,7 +173,7 @@ public class InfoController {
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
 	StringBuilder queryBuilder = new StringBuilder("Select id, title, downloadurl, thumbnailurl From Video ");
-	
+
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
 	    queryBuilder.append("Where id in (");
 	    for(int i=0; i<categories.length;i++) {
@@ -189,15 +189,15 @@ public class InfoController {
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();
 	log.info(query);
-	
+
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
-	    rs.getString("title"), 
+	    rs.getString("title"),
 	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
 	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("id"))
-	); 
+	);
     }
-    
-    
+
+
     @GetMapping("/video-data")
     @ResponseBody
     public VideoData getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
@@ -207,20 +207,20 @@ public class InfoController {
     queryBuilder.append("Where video.id = ?;");
     String query = queryBuilder.toString();
     log.info(query +" ,"+videoId);
-    
-    return jdbcTemplate.query(query, new Object[] {videoId}, (rs) -> 
-        {    
+
+    return jdbcTemplate.query(query, new Object[] {videoId}, (rs) ->
+        {
         rs.next();
         int id = rs.getInt("id");
         String title = rs.getString("title");
         String desc = rs.getString("description");
         int userId = rs.getInt("userid");
         String userName = rs.getString("username");
-        
+
         boolean subbed = jdbcTemplate.query("Select 1 From subscribe Where authorid = ? And subscriberid = ?;",
                                                 new Object[] {userId, 1} , (rs2) -> {return rs2.next();});
-        
+
         return new VideoData(id, title, desc, userId, userName, subbed);
-        });   
+        });
     }
 }

@@ -11,7 +11,8 @@ module.exports = {
         browse: './src/main/js/browse/Browse.js',
         upload: './src/main/js/upload/Upload.js',
         userProfile: './src/main/js/userProfile/userProfile.js',
-        watch:  './src/main/js/video/Video.js'
+        watch:  './src/main/js/video/Video.js',
+        account: './src/main/js/account/Account.js'
     },
     output: {
         path: path.join(__dirname, 'src/main/resources/static/js/bundle'),

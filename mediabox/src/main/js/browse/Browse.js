@@ -29,7 +29,7 @@ class Browse extends React.Component {
             categories: [],
             videos: []
         };
-        
+
         // get the categories.
         $.get({
             url: config.serverUrl + "/info/categories",
@@ -44,7 +44,7 @@ class Browse extends React.Component {
         // TODO: Get videos for each category.
         // get videos
         this.update_videos([]);
-        
+
         this.update_videos = this.update_videos.bind(this);
     }
 
@@ -69,7 +69,7 @@ class Browse extends React.Component {
             }
         });
     }
-    
+
     render() {
         return (
             <div className="row display-flex categories-row">

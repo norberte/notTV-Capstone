@@ -55,7 +55,7 @@ public class ViewController {
         defaultSetup("browse", model);
         return "default_page";
     }
-    
+
     @RequestMapping("{page}")
     public String defaultPage(@PathVariable String page, Model model) {
         defaultSetup(page, model);
@@ -67,7 +67,12 @@ public class ViewController {
 	return "upload";
     }
 
-    @RequestMapping("userProfile/{username}") 
+    @RequestMapping("account")
+    public String account() {
+    return "account";
+    }
+
+    @RequestMapping("userProfile/{username}")
     public String userProfile(@PathVariable("username") String username, Model model) {
     //public String userProfile() {
         model.addAttribute("username", username);
@@ -75,7 +80,7 @@ public class ViewController {
         model.addAttribute("page_name", "userProfile");
         return "default_page";
     }
-    
+
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
     public void video(@PathVariable(value="videoFile") String source,

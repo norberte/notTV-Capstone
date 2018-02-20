@@ -45,7 +45,7 @@ export default class CarouselLayout extends React.Component {
                 start: this.state.start - 1
             });
     }
-    
+
     render() {
         let rows = this.props.entries.slice(
             this.state.start,

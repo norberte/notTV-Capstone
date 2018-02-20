@@ -10,11 +10,11 @@ export default class NavBar extends React.Component {
                 <ul>
                   <li><a href="/browse">Watch </a></li>
                   <li><a href="/upload">Submit Video</a></li>
-                  <li><a href="#">Account </a></li>
-                </ul>
-              </nav>
-            </div>
-        );
+                  <li><a href="/account">Account </a></li>
+		</ul>
+	      </nav>
+	    </div>
+	);
     }
 }
 
