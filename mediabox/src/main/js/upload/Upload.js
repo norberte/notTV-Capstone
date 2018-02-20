@@ -4,107 +4,78 @@ import BreadCrumb from './BreadCrumb.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-class Label extends React.Component {
-    render() {
-	const activeClass = this.props.active ? 'active' : '';
-	return(
-	    <li>
-	      <a href="#"
-		 className={activeClass}
-		 onClick={this.props.handleClick}>
-		{this.props.label}
-	      </a>
-	    </li>
-	);
-    }
-}
+class CategoryPane extends React.Component {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            categories: [],
+            currValues: []
+        };
 
-class Tabs extends React.Component {
-    constructor(props){
-	super(props);
-	this.state = {
-	    selected: 0
-	};
+        // get the categories.
+        $.get({
+            url: config.serverUrl + "/info/categories",
+            dataType: "json",
+            success: (data) => {
+                this.setState({
+                    categories: data,
+                    currValues: data.length > 0 ? data[0].values : []
+                });
+            }
+        });
 
-	this.handlClick = this.handleClick.bind(this);
-    this.iterate = this.iterate.bind(this);
+        this.selectChange = this.selectChange.bind(this);
     }
 
-    displayName: 'Tabs';
-
-    handleClick(index, event){
-	    event.preventDefault();
-	    this.setState({
-	           selected: index
-	    });
-    }
-
-    iterate(i, event){
-        event.preventDefault();
+    selectChange(option) {
+        console.log(option.target);
         this.setState({
-            selected: this.state.selected + i
+            currValues: this.state.categories[option.target.selectedIndex].values
         });
     }
-
-  render(){
-    //The below two cont's are the condition for when it is tru to have a button disabled
-    //Currently, does not work.
-    const disableNext = this.state.selected == this.props.children.length;
-    const disablePrev = this.state.selected == 0;
-	return(
-	    <div className="tabs">
-	      <ul className="tabs__labels">
-
-		{
-		    this.props.children.map((child, idx) => {
-			return (
-			    <Label
-			       key={idx}
-			       label={child.props.label}
-			       active={this.state.selected === idx}
-			       handleClick={(e)=>this.handleClick(idx, e)}/>
-			);
-		    })
-		}
-
-            </ul>
-		<div className="tab__content">
-		{this.props.children[this.state.selected]}
-	   </div>
-
-     <div id = "iterateButtonsDiv">
-         <button className="iterationButtons" type="button" onClick = {(e)=>this.iterate(1, e)} disabled={this.disableNext}>Next</button>
-         <button className="iterateButtons" type="button" onClick = {(e)=>this.iterate(-1, e)} disabled={this.disablePrev}>Previous</button>
-     </div>
-
-		</div>
-
-	);
-    }
-}
-
-class Pane extends React.Component {
-    displayName: 'Pane';
-    render(){
-        return(
-	    <div>
-	      {this.props.children}
+    
+    render() {
+        return (
+            <div className="upload-pane">
+              <select className="selectpicker" onChange={this.selectChange}>
+                {
+                    this.state.categories.map((cat, idx) => {
+                        return <option idx={idx} key={idx}>{cat.name}</option>;
+                    })
+                }
+              </select>
+              <div className="list-group">
+                {
+                    this.state.currValues.map((val, idx) => {
+                        return <a key={idx} className="list-group-item">{val.name}</a>;
+                    })
+                }
+              </div>
             </div>
-	);
+        );
     }
 }
 
+/* 
+ Select Video and Thumbnail Files.
+ */
 class FilePane extends React.Component {
     render() {
 	return (
-	      <div className="tab">
-		<h1>{this.props.label}</h1>
-		<p>
-		  <input type="file" name="videoFile" accept="video/*"
-			 ref={(input) => { this.videoFile = input; }} onChange={()=>this.props.onChange(this.videoFile.files)}/>
-		</p>
-	      </div>
+	    <div className="upload-pane">
+	      <h1>Video File</h1>
+	      <p>
+		<input type="file" name="videoFile" accept="video/*"
+		       ref={(input) => { this.videoFile = input; }} onChange={()=>this.props.setVideo(this.videoFile.files)}/>
+	      </p>
+
+              <h1>Video File</h1>
+              <p>
+                <input type="file" name="videoFile" accept="img/*"
+		       ref={(input) => { this.thumbnailFile = input; }} onChange={()=>this.props.setThumbnail(this.thumbnailFile.files)}/>
+              </p>
+	    </div>
 	);
     }
 }
@@ -140,10 +111,20 @@ class App extends React.Component {
 	    }
 	};
 
+        this.increment = this.increment.bind(this);
 	this.handleChange = this.handleChange.bind(this);
 	this.fileChange = this.fileChange.bind(this);
 	this.imgFileChange = this.imgFileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    increment(amount) {
+        const newVal = this.state.curr + amount;
+
+        if(newVal >=0 && newVal < this.state.items.length)
+            this.setState({
+                curr: newVal
+            });
     }
 
     //handles a change in an input from the form and gives that new change to the state.
@@ -361,22 +342,44 @@ class UploadForm extends React.Component {
             });
     }
     render() {
+        const disableNext = this.state.curr === this.state.items.length - 1 ? " disabled" : "";
+        const disablePrev = this.state.curr === 0 ? " disabled" : "";
         return (
             <div className="col-md-12">
               <div className="row bc-parent">
                 <BreadCrumb curr={this.state.curr} items={["Browse", "Compare", "Order Confirmation"]} />
               </div>
               <div className="row">
-                <div className="col-md-8">
-                  <UploadContainer curr={this.state.curr} increment={this.increment} items={this.props.items}/>
+                <div className="col-md-7">
+                  <div className="row">
+                    <div className="col-md-12 upload-container">
+                      <div className="row">
+                        {this.state.items[this.state.curr]}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-5">
                   <CriteriaList/>
                 </div>
               </div>
+              <div className="row">
+                <ul className="pager">
+                  <li className={"previous" + disablePrev}>
+                    <a onClick={()=>this.increment(-1)}>
+                      <span aria-hidden="true">&larr;</span> Go Back
+                    </a>
+                    </li>
+                    <li className={"next" + disableNext}>
+                      <a onClick={()=>this.increment(1)}>
+                        Continue <span aria-hidden="true">&rarr;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
             </div>
         );
     }
 }
 
-ReactDOM.render(<UploadForm items={[<Test content="1"/>, <Test content="2"/>, <Test content="3"/>]}/>, document.getElementById("root"));
+ReactDOM.render(<UploadForm />, document.getElementById("root"));

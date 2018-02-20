@@ -16,9 +16,9 @@ export default class CriteriaList extends React.Component {
 	};
 
         $.get({
-            url: config.serverUrl + "/criteria",
+            url: config.serverUrl + "/info/criteria",
             dataType: "json",
-            succuss: (data) => {
+            success: (data) => {
                 this.setState({
                     criteria: data
                 });
