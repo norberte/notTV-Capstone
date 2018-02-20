@@ -1,12 +1,17 @@
 package spring;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.view.VideoForm;
+import spring.storage.StorageService;
 
 
 /**
@@ -37,6 +43,10 @@ public class UpdateController {
 
     @Autowired
     JdbcTemplate jdbc;
+    
+    @Autowired
+    @Qualifier("ImageStorage")
+    private StorageService thumbnailStorage;
 
     @PostMapping("/unsubscribe")
     @ResponseBody
@@ -99,6 +109,18 @@ public class UpdateController {
         // insert statement
         final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
 
+        
+        File file = videoForm.getThumbnail();
+        ThumbnailUploadController thumbnailUploader = new ThumbnailUploadController(thumbnailStorage);
+        
+        try {
+        	thumbnailUploader.storeThumbnailOnServer(file);
+    	} catch (IllegalStateException e) {
+    	    log.error("Error saving uploaded file.", e);
+    	}
+        
+        Path thumbnailURL = thumbnailUploader.getUploadPath(file.getName());
+        
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
@@ -108,7 +130,8 @@ public class UpdateController {
                 ps.setString(4, videoForm.getFiletype());
                 ps.setString(5, videoForm.getLicense());
                 ps.setInt(6, videoForm.getUserid());
-                ps.setString(7, videoForm.getThumbnailurl());
+                //ps.setString(7, videoForm.getThumbnailurl());
+                ps.setString(7, thumbnailURL.toString());
                 ps.setString(8, videoForm.getDownloadurl());
                 return ps;
             }

@@ -2,6 +2,7 @@ package spring;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,19 @@ public class ThumbnailUploadController {
         "serveFile", path.getFileName().toString()).build().toString())
         .collect(Collectors.toList());
     }
+    
+    
+    /**
+     * returns thumbnailURL
+     *
+     * @param String filename
+     * @return
+     */
+    @GetMapping("/list-thumbnails")
+    @ResponseBody
+    public Path getUploadPath(String filename){    
+    	return thumbnailStorage.load(filename);
+    }
 
     
     /**
@@ -72,11 +86,10 @@ public class ThumbnailUploadController {
      * Uploads a thumbnail to the server.
      *
      * @param file
-     * @param redirectAttributes
      */
     @PostMapping("/upload-thumbnail")
     @ResponseStatus(value = HttpStatus.OK)
-    public void storeThumbnailOnServer(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        thumbnailStorage.store(file);
+    public void storeThumbnailOnServer(@RequestParam("file") File file) {
+        thumbnailStorage.store((MultipartFile) file);
     }
 }

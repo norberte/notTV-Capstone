@@ -1,6 +1,9 @@
 package spring.view;
 
+import java.io.File;
+
 public class VideoForm {
+	File thumbnail;
     String title;
     String description;
     int version;
@@ -11,7 +14,22 @@ public class VideoForm {
     String tags; // TEMPORARY
     int userid;
 
+    
     /**
+     * @return the thumbnail img
+     */
+    public File getThumbnail() {
+		return thumbnail;
+	}
+
+    /**
+     * @param thumbnail: thumbnail img file to set
+     */
+	public void setThumbnail(File thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	/**
      * @return the title
      */
     public String getTitle() {

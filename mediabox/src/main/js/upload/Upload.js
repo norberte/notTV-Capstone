@@ -158,6 +158,7 @@ class App extends React.Component {
 	    success: (torrentFile) => {
 		// TODO: loop through formData
 		const formData = {
+			thumbnail: this.state.videoThumbnail,
 			title: this.state.formData.title,
 			description: this.state.formData.description,
 			version: this.state.formData.version,
