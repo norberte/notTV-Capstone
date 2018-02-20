@@ -48,7 +48,7 @@ public class UpdateController {
         String query = "Delete From subscribe Where subscriberId = ? AND authorId = ?;";
         log.info(query);
         
-        int numberOfRowAffected = jdbc.update(query, author, subscriber);
+        int numberOfRowAffected = jdbc.update(query, subscriber, author);
         if(numberOfRowAffected > 0) {
             return true; // successfully unsubscribe
         } else {

@@ -9,18 +9,24 @@ class VideoThumbnail extends React.Component {
     render() {
         return (
             <div className="col-md-2 no-padding">
-              <a href={this.props.entry.url}>
                 <div className="thumbnail no-margin">
-                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
-                  <div className="caption">
-                    <h3 className="no-margin">{this.props.entry.title} </h3>
-                  </div>
-                </div>
-              </a>
+	                <a href={this.props.entry.url}>
+	                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
+	                  <div className="caption">
+	                    <h3 className="no-margin">{this.props.entry.title} </h3>
+	                  </div>
+	               </a>
+	               <a href={this.props.entry.authorUrl}>
+		               <div className="caption">
+		           			<h3 className="no-margin">{this.props.entry.author} </h3>
+		           		</div>	
+	               </a>
+	           </div>
             </div>
         );
     }
 }
+
 
 class Browse extends React.Component {
     constructor(props) {
