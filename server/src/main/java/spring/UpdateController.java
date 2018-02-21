@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import spring.view.VideoForm;
 import spring.storage.StorageService;
@@ -109,17 +110,25 @@ public class UpdateController {
         // insert statement
         final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
 
+        // if thumbnail was uploaded, store it on the server using the methods from ThumbnailUploadController
+        MultipartFile file = videoForm.getThumbnail();
+        Path thumbnailURL = null;
         
-        File file = videoForm.getThumbnail();
-        ThumbnailUploadController thumbnailUploader = new ThumbnailUploadController(thumbnailStorage);
+        if(file != null) {
+            ThumbnailUploadController thumbnailUploader = new ThumbnailUploadController(thumbnailStorage);
+            try {
+                thumbnailUploader.storeThumbnailOnServer(file);
+            } catch (IllegalStateException e) {
+                log.error("Error saving uploaded file.", e);
+            }
+            
+            thumbnailURL = thumbnailUploader.getUploadPath(file.getName());
+        }
         
-        try {
-        	thumbnailUploader.storeThumbnailOnServer(file);
-    	} catch (IllegalStateException e) {
-    	    log.error("Error saving uploaded file.", e);
-    	}
-        
-        Path thumbnailURL = thumbnailUploader.getUploadPath(file.getName());
+        // if a new ThumbnailURL was returned by the thumbnailUploader, then overwrite the default thumbnailURL
+        if(thumbnailURL != null) {
+            videoForm.setThumbnailurl(thumbnailURL.toString());
+        } 
         
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -130,8 +139,7 @@ public class UpdateController {
                 ps.setString(4, videoForm.getFiletype());
                 ps.setString(5, videoForm.getLicense());
                 ps.setInt(6, videoForm.getUserid());
-                //ps.setString(7, videoForm.getThumbnailurl());
-                ps.setString(7, thumbnailURL.toString());
+                ps.setString(7, videoForm.getThumbnailurl());
                 ps.setString(8, videoForm.getDownloadurl());
                 return ps;
             }

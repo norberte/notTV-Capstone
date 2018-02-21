@@ -1,6 +1,5 @@
 package spring;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -89,7 +88,7 @@ public class ThumbnailUploadController {
      */
     @PostMapping("/upload-thumbnail")
     @ResponseStatus(value = HttpStatus.OK)
-    public void storeThumbnailOnServer(@RequestParam("file") File file) {
-        thumbnailStorage.store((MultipartFile) file);
+    public void storeThumbnailOnServer(@RequestParam("file") MultipartFile file) {
+        thumbnailStorage.store(file);
     }
 }

@@ -109,6 +109,20 @@ class FilePane extends React.Component {
     }
 }
 
+class ImgFilePane extends React.Component {
+    render() {
+	return (
+	      <div className="tab">
+		<h1>{this.props.label}</h1>
+		<p>
+		  <input type="file" name="videoThumbnail" accept="image/*"
+			 ref={(input) => { this.videoThumbnail = input; }} onChange={()=>this.props.onChange(this.videoThumbnail.files)}/>
+		</p>
+	      </div>
+	);
+    }
+}
+
 class App extends React.Component {
     constructor(props){
 	super(props);
@@ -120,14 +134,15 @@ class App extends React.Component {
 		description: '',
 		version: '',
 		license: '',
-		thumbnailurl: '/img/default-placeholder-300x300.png', // ignore for now.
+		thumbnailurl: '/img/default-placeholder-300x300.png', // this is the default video thumbnail... if user uploads an actual thumbnail, the backend will overwrite the default
 		tags: '',
-		userid: '-1' // TODO: mediabox user id.
+		userid: '-1' // TODO: get mediabox user id.
 	    }
 	};
 
 	this.handleChange = this.handleChange.bind(this);
 	this.fileChange = this.fileChange.bind(this);
+	this.imgFileChange = this.imgFileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -142,6 +157,11 @@ class App extends React.Component {
 	if(files.length > 0) // Only one file for now.
 	    this.state.videoFile = files[0];
     }
+    
+    imgFileChange(files) {
+    	if(files.length > 0) // Only one file for now.
+    	    this.state.videoThumbnail = files[0];
+    }
 
     //handles getting state data and giving it to the ajax submit.
     handleSubmit(e){
@@ -149,6 +169,7 @@ class App extends React.Component {
 
 	const localForm = new FormData();
 	localForm.append('video', this.state.videoFile);
+
 	// Start upload process on local mediabox server.
 	$.post({
 	    url: '/process/upload',
@@ -200,7 +221,7 @@ class App extends React.Component {
 		  <Tabs>
 
 		      <FilePane label="Select Video File" onChange={this.fileChange}/>
-		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+		      <ImgFilePane label="Select Video Thumbnail" onChange={this.imgFileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">
