@@ -1,11 +1,6 @@
 package spring.view;
 
-import java.io.File;
-
-import org.springframework.web.multipart.MultipartFile;
-
 public class VideoForm {
-    MultipartFile thumbnail;
     String title;
     String description;
     int version;
@@ -15,21 +10,6 @@ public class VideoForm {
     String thumbnailurl;
     String tags; // TEMPORARY
     int userid;
-
-    
-    /**
-     * @return the thumbnail img
-     */
-    public MultipartFile getThumbnail() {
-		return thumbnail;
-	}
-
-    /**
-     * @param thumbnail: thumbnail img file to set
-     */
-	public void setThumbnail(MultipartFile thumbnail) {
-		this.thumbnail = thumbnail;
-	}
 
 	/**
      * @return the title

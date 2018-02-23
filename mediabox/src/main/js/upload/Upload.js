@@ -144,6 +144,7 @@ class App extends React.Component {
 	this.fileChange = this.fileChange.bind(this);
 	this.imgFileChange = this.imgFileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
+	this.thumbnailUploader = this.thumbnailUploader.bind(this);
     }
 
     //handles a change in an input from the form and gives that new change to the state.
@@ -162,55 +163,87 @@ class App extends React.Component {
     	if(files.length > 0) // Only one file for now.
     	    this.state.videoThumbnail = files[0];
     }
-
+    
+    thumbnailUploader(){
+    	// initialize thumbnailURL with default value
+    	var thumbnailURL = this.state.formData.thumbnailurl;
+    	
+    	// make FormData object to store thumbnail image to be uploaded
+    	const newForm = new FormData();
+    	newForm.append('video', this.state.videoThumbnail);
+    	
+    	// post request to upload thumbnail to server
+        $.post({
+    		url: config.serverUrl + '/upload/thumbnailSubmission',
+    		data: newForm,
+    		processData: false,  // not to process the data (because of the file)
+    		contentType: false,  // not to set contentType
+    		success: (thumbnailURL_returned) => {
+    			// change thumnailURl, if it was uploaded to server, else, leave it as default value
+    			if(thumbnailURL_returned !== ""){
+    				thumbnailURL = thumbnailURL_returned;
+    			} else {
+    				console.log("Thumbnail Submission returned empty String!");
+    			}
+    		},
+    		error: (response) => {
+    			console.log("Thumbnail Submission DID NOT WORK!");
+    		}
+        });
+        return thumbnailURL;
+    }
+    
     //handles getting state data and giving it to the ajax submit.
     handleSubmit(e){
-	e.preventDefault();
+    	e.preventDefault();
 
-	const localForm = new FormData();
-	localForm.append('video', this.state.videoFile);
+    	const localForm = new FormData();
+    	localForm.append('video', this.state.videoFile);
 
-	// Start upload process on local mediabox server.
-	$.post({
-	    url: '/process/upload',
-	    data: localForm,
-	    processData: false,  // tell jQuery not to process the data (because of the file)
-	    contentType: false,  // tell jQuery not to set contentType
-	    success: (torrentFile) => {
-		// TODO: loop through formData
-		const formData = {
-			thumbnail: this.state.videoThumbnail,
-			title: this.state.formData.title,
-			description: this.state.formData.description,
-			version: this.state.formData.version,
-			filetype: this.state.videoFile.type,
-			license: this.state.formData.license,
-			downloadurl: torrentFile,
-			thumbnailurl: this.state.formData.thumbnailurl,
-			tags: this.state.formData.tags,
-			userid: this.state.formData.userid
-		};
+    	// Start upload process on local mediabox server.
+    	$.post({
+    		url: '/process/upload',
+    		data: localForm,
+    		processData: false,  // tell jQuery not to process the data (because of the file)
+    		contentType: false,  // tell jQuery not to set contentType
+    		success: (torrentFile) => {
+    			// have to do this in a separate method, otherwise Cross-Origin Request Blocked
+    			var thumbnailURL = this.thumbnailUploader();
+    			
+    			// ajax request to send video metadata to server
+    			// TODO: loop through formData <-- someone else's comment .. not sure why this is needed
+    			const formData = {
+    					title: this.state.formData.title,
+    					description: this.state.formData.description,
+    					version: this.state.formData.version,
+    					filetype: this.state.videoFile.type,
+    					license: this.state.formData.license,
+    					downloadurl: torrentFile,
+    					thumbnailurl: thumbnailURL,
+    					tags: this.state.formData.tags,
+    					userid: this.state.formData.userid
+    			};
 
-		// insert video
-		$.ajax({
-		    type: "POST",
-		    url: config.serverUrl + "/upload/videoSubmission",
-		    contentType: 'application/json',
-		    processData: false,
-		    data: JSON.stringify(formData),
-		    success: (response) => {
-			console.log(response);
-			alert("Successfully uploaded!");
-		    },
-		    error: (response) => {
-			console.log(response);
-		    }
-		});
-	    },
-	    error: (response) => {
-		console.log(response);
-	    }
-	});
+    			// insert video
+    			$.ajax({
+    				type: "POST",
+    				url: config.serverUrl + "/upload/videoSubmission",
+    				contentType: 'application/json',
+    				processData: false,
+    				data: JSON.stringify(formData),
+    				success: (response) => {
+    					console.log(response);
+    					alert("Successfully uploaded!");
+    				},
+    				error: (response) => {
+    					console.log(response);
+    				}
+    			});
+    		},
+    		error: (response) => {
+    			console.log(response);
+    		}
+    	});
     }
 
     render(){
