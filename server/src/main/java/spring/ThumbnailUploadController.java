@@ -1,5 +1,6 @@
 package spring;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -59,7 +60,7 @@ public class ThumbnailUploadController {
      * returns thumbnailURL
      *
      * @param String filename
-     * @return
+     * @return Resourse
      */
     @PostMapping("/get-thumbnail")
     @ResponseBody

@@ -45,10 +45,6 @@ public class UpdateController {
 
     @Autowired
     JdbcTemplate jdbc;
-    
-    @Autowired
-    @Qualifier("ImageStorage")
-    private StorageService thumbnailStorage;
 
     @PostMapping("/unsubscribe")
     @ResponseBody
@@ -102,43 +98,6 @@ public class UpdateController {
         log.info(query);
         jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
         return true;
-    }
-    
-    @PostMapping("/thumbnailSubmission")
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-    public String processThumnailFile(@RequestBody(required=true) MultipartFile image) {
-        // if thumbnail was uploaded, store it on the server using the methods from ThumbnailUploadController
-        Resource thumbnailURL = null;
-        
-        if(image != null) {
-            ThumbnailUploadController thumbnailUploader = new ThumbnailUploadController(thumbnailStorage);
-            try {
-                thumbnailUploader.storeThumbnailOnServer(image);
-                log.info("Successfully uploaded thumbnail file.");
-            } catch (IllegalStateException e) {
-                log.error("Error saving uploaded file.", e);
-            }
-            
-            // if successfully uploaded inside the try-catch, then the following line should return the thumbnailURL
-            thumbnailURL = thumbnailUploader.getUploadPath(image.getName());
-        }
-        
-        // if a new ThumbnailURL was returned by the thumbnailUploader, then overwrite the default thumbnailURL
-        if(thumbnailURL != null) {
-            try {
-                log.info("thumbnailURL.getURL().toExternalForm() = ", thumbnailURL.getURL().toExternalForm());
-                return thumbnailURL.getURL().toExternalForm();
-            } catch (IOException e) {
-                log.error("Error getting thumbnailURL. IO Exception", e);
-                return "";
-            }
-        } else {
-            log.error("Error getting thumbnailURL. thumbnailURL is NULL");
-            return ""; // empty string returned will signal the post request that the thumbnail was not uploaded
-            // and it should stick with the default thumnailURL .. I think throwing an exception is an overkill
-            // I just don't want to handle exceptions or anything else inside a post request's response
-        }
     }
 
     @PostMapping("/videoSubmission")
