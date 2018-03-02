@@ -50,7 +50,8 @@ class Browse extends React.Component {
         // TODO: Get videos for each category.
         // get videos
         this.update_videos([]);
-
+        
+        this.download_Thumbnails = this.download_Thumbnails.bind(this);
         this.update_videos = this.update_videos.bind(this);
     }
 
@@ -69,6 +70,20 @@ class Browse extends React.Component {
                 this.setState({
                     videos: data
                 });
+            },
+            error: (response) => {
+                console.log(response);
+            }
+        });
+    }
+    
+    // TO DO: FINISH THIS
+    download_Thumbnails(){
+    	$.post({
+            url: "/process/downloadThumbnail",
+            dataType: "json",
+            success: (data) => {
+                
             },
             error: (response) => {
                 console.log(response);
