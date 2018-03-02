@@ -12,7 +12,7 @@ class CategoryValueRow extends React.Component {
                     <input type="text" onChange={this.props.handleEdit} value={this.props.value.name}/>
                 </td>
                 <td className="category-col">
-                    <input id={this.props.value.id} className="deleteButton btn btn-danger" type="button" value="Delete Value" onClick={this.props.handleDelete}/>
+                    <input id={this.props.value.id} className="deleteButton btn btn-danger" type="button" value="Delete" onClick={this.props.handleDelete}/>
                 </td>
             </tr>
         )
@@ -39,7 +39,7 @@ class CategoryTypeRow extends React.Component {
                 </div>
             </td>
             <td className="category-col">
-                <input className="deleteButton btn btn-danger" type="button" value="Delete Category"/>
+                <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleCategoryDelete}/>
             </td>
         </tr>
         {
@@ -52,13 +52,13 @@ class CategoryTypeRow extends React.Component {
                     valueClass={this.state.valueClass} 
                     key={idx}
                     handleEdit={this.props.handleEdit.bind(this.props.handleEdit, val)}
-                    handleDelete={this.props.handleDelete}/>
+                    handleDelete={this.props.handleDelete.bind(this.props.handleDelete, val)}/>
             })
         }
         <tr className={"category-row panel-collapse collapse " + this.state.valueClass}>
           <td>
             <br/>
-            <input type="button" className="btn btn-success" value="New" onClick={this.props.newCategory}/>
+            <input type="button" className="btn btn-success" value="New" onClick={this.props.newCategoryValue}/>
           </td>
         </tr>
     </tbody>
@@ -75,7 +75,8 @@ class CategoryType extends React.Component {
 
 	this.state = {
 	    categoryTypes: [],
-	    updates: []
+	    updates: [],
+	    restore: []
 	};
 
 	$.get({
@@ -84,58 +85,98 @@ class CategoryType extends React.Component {
         success: (data) => {
         console.log(data);
 	    this.setState({
-	        categoryTypes: data
+	        categoryTypes: data,
+	        restore: data
 	    });
         }
     });
 
-    this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleCategoryDelete = this.handleCategoryDelete.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.newCategoryType = this.newCategoryType.bind(this);
-    this.newCategory = this.newCategory.bind(this);
+    this.newCategoryValue = this.newCategoryValue.bind(this);
     this.save = this.save.bind(this);
+    this.overwrite = this.overwrite.bind(this);
     }
     
     // updates state when a CategoryValue name is changed
-    handleEdit(categoryType, categoryVal, event) {
+    handleEdit(categoryType, categoryValue, event) {
         console.log(event.target);
         let newCategoryTypes = this.state.categoryTypes.slice();
         let index1 = newCategoryTypes.indexOf(categoryType);
-        let index2 = newCategoryTypes[index1].values.indexOf(categoryVal);
+        let index2 = newCategoryTypes[index1].values.indexOf(categoryValue);
         newCategoryTypes[index1].values[index2].name = event.target.value;
-            
+        
+        let newUpdates = this.state.updates.slice();
+        newUpdates = this.overwrite(newUpdates, categoryType.name, categoryValue.id).concat([{
+            action: "value edit",
+            category: categoryType.name,
+            id: categoryValue.id,
+            value: event.target.value
+        }]);
+
+        console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
-            updates: this.state.updates.concat([{name: event.target.value}])
+            updates: newUpdates
         });
     }
+    
+    // removes a CategoryType from the tree when the delete button is pressed and adds the action to the updates list
+    handleCategoryDelete(categoryType, event){
+        console.log("Delete Category: " + event.target.parentElement);
+        let newCategoryTypes = this.state.categoryTypes.slice();
+        let index = newCategoryTypes.indexOf(categoryType);
+        newCategoryTypes.splice(index);
+        
+        let newUpdates = this.state.updates.slice();
+        newUpdates = this.overwrite(newUpdates, categoryType.name).concat([{
+            action: "category delete",
+            category: CategoryType.name
+        }]);
+        
+        console.log(newUpdates);
+        this.setState({
+            categoryTypes: newCategoryTypes,
+            updates: newUpdates
+        });
+    }
+    
+    // removes a CategoryValue from the tree when the delete button is pressed and adds the action to the updates list
+    handleDelete(categoryType, categoryValue, event) {
+        console.log("Delete: " + event.target.parentElement);
+        let newCategoryTypes = this.state.categoryTypes.slice();
+        let index1 = newCategoryTypes.indexOf(categoryType);
+        let index2 = newCategoryTypes[index1].values.indexOf(categoryValue);
+        newCategoryTypes[index1].values.splice(index2);
+            
+        let newUpdates = this.state.updates.slice();
+        newUpdates = this.overwrite(newUpdates, categoryType.name, categoryValue.id).concat([{
+            action: "value delete",
+            category: categoryType.name,
+            id: categoryValue.id
+        }]);
 
-    handleDelete(e) {
-        console.log(e.target);
-    /*  $.post({
-            url: config.serverUrl + "/update/categories",
-            data: {},
-            success: (data) => {
-                console.log(data);
-        	    this.setState({
-        	        categoryTypes: data
-        	    });
-            }
-        }); */
+        console.log(newUpdates);
+        this.setState({
+            categoryTypes: newCategoryTypes,
+            updates: newUpdates
+        });
     }
     // Appends a new, empty CategoryType to the list when 'New Category' button is clicked
     newCategoryType() {
-    	console.log("test");
+    	console.log("New Category");
     	this.setState({
     	    categoryTypes: this.state.categoryTypes.concat([{
-    		name: "New Category",
-    		values: []
+        		name: "New Category",
+        		values: []
     	    }])
     	});
     }
     // Adds a new CategoryValue when one of the 'New" buttons are pressed
-    newCategory(categoryType) {
-        console.log("test");
+    newCategoryValue(categoryType) {
+        console.log("New Category Value");
         let newCategoryTypes = this.state.categoryTypes.slice();
         let index = newCategoryTypes.indexOf(categoryType);
         newCategoryTypes[index].values.push({
@@ -150,6 +191,29 @@ class CategoryType extends React.Component {
     }
     save() {
         console.log("save");
+        
+        $.post({
+            url: config.serverUrl + "/update/categories",
+            data: updates,
+            success: (data) => {
+                console.log(data);
+                /*
+                this.setState({
+                    categoryTypes: data
+                });
+                */
+            },
+            error: () => {} //not sure yet how to handle errors 
+        });
+    }
+    
+    //helper method to remove a value update from the update list if a later change overwrites it
+    overwrite(updates, categoryType, catId=null){
+        let index = updates.findIndex((u)=>{u.category == categoryType && u.id == catId});
+        if(index >= 0){
+            updates.splice(index);
+        }
+        return updates;
     }
     
     render() {
@@ -167,8 +231,9 @@ class CategoryType extends React.Component {
     					category={cat}
     					key={idx}
     					handleEdit={this.handleEdit.bind(this, cat)}
-    					handleDelete={this.handleDelete}
-    			        newCategory={this.newCategory.bind(this, cat)}
+    					handleDelete={this.handleDelete.bind(this, cat)}
+                        handleCategoryDelete={this.handleCategoryDelete.bind(this, cat)}
+    			        newCategoryValue={this.newCategoryValue.bind(this, cat)}
     					/>;
     		      })
     		  : NULL_ROW
