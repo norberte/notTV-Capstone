@@ -44,7 +44,7 @@ public class PostController {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
-	log.info("Adding video {}...", videoForm.getTitle());
+        log.info("Adding video {}...", videoForm.getTitle());
         // insert statement
         final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
         
@@ -92,7 +92,7 @@ public class PostController {
         // if a new ThumbnailURL was returned by the thumbnailUploader, then overwrite the default thumbnailURL
         if(thumbnailURL != null) {
             try {
-                log.info("thumbnailURL.getURL().toExternalForm() = ", thumbnailURL.getURL().toExternalForm());
+                log.info("thumbnailURL.getURL().toExternalForm() = " + thumbnailURL.getURL().toExternalForm());
                 return thumbnailURL.getURL().toExternalForm();
             } catch (IOException e) {
                 log.error("Error getting thumbnailURL. IO Exception", e);

@@ -169,8 +169,7 @@ class App extends React.Component {
     	
     	// initialize a "global" thumbnailURL with default value that each post request can access
     	var thumbnailURL = this.state.formData.thumbnailurl;
-    	var torrentF = "";
-
+    	
     	const localForm = new FormData();
     	localForm.append('video', this.state.videoFile);
     	
@@ -181,68 +180,65 @@ class App extends React.Component {
     		processData: false,  // tell jQuery not to process the data (because of the file)
     		contentType: false,  // tell jQuery not to set contentType
     		success: (torrentFile) => {
-    			torrentF = torrentFile;
+    			// make FormData object to store thumbnail image to be uploaded
+    	    	const newForm = new FormData();
+    	    	newForm.append('image', this.state.videoThumbnail);
+
+    	    	// post request to upload thumbnail to server
+    	        $.post({
+    	    		url: config.serverUrl + '/upload/thumbnailSubmission',
+    	    		data: newForm,
+    	    		processData: false,  // not to process the data (because of the file)
+    	    		contentType: false,  // not to set contentType
+    	    		success: (thumbnailURL_returned) => {
+    	    			// change thumnailURl, if it was uploaded to server, else, leave it as default value
+    	    			if(thumbnailURL_returned !== ""){
+    	    				thumbnailURL = thumbnailURL_returned.substring(thumbnailURL_returned.indexOf("/img/"));
+    	    				console.log("Thumbnail Submission returned an actual THUMBNAIL URL: " + thumbnailURL_returned);
+    	    			} else {
+    	    				console.log("Thumbnail Submission returned empty String!");
+    	    				// keep thumbnailURL to the default picture
+    	    			}
+    	    			
+    	    			// ajax request to send video metadata to server
+    	    			// TODO: loop through formData <-- someone else's comment .. not sure why this is needed
+    	    			const formData = {
+    	    					title: this.state.formData.title,
+    	    					description: this.state.formData.description,
+    	    					version: this.state.formData.version,
+    	    					filetype: this.state.videoFile.type,
+    	    					license: this.state.formData.license,
+    	    					downloadurl: torrentFile,
+    	    					thumbnailurl: thumbnailURL,
+    	    					tags: this.state.formData.tags,
+    	    					userid: this.state.formData.userid
+    	    			};
+
+    	    			// insert video-metadata
+    	    			$.ajax({
+    	    				type: "POST",
+    	    				url: config.serverUrl + "/upload/videoSubmission",
+    	    				contentType: 'application/json',
+    	    				processData: false,
+    	    				data: JSON.stringify(formData),
+    	    				success: (response) => {
+    	    					console.log(response);
+    	    					alert("Successfully uploaded!");
+    	    				},
+    	    				error: (response) => {
+    	    					console.log(response);
+    	    				}
+    	    			});
+    	    		},
+    	    		error: (response) => {
+    	    			console.log("Thumbnail Submission DID NOT WORK!");
+    	    		}
+    	        });
     		},
     		error: (response) => {
     			console.log(response);
     		}
     	});
-    	
-    	// make FormData object to store thumbnail image to be uploaded
-    	const newForm = new FormData();
-    	newForm.append('image', this.state.videoThumbnail);
-
-    	// post request to upload thumbnail to server
-        $.post({
-    		url: config.serverUrl + '/upload/thumbnailSubmission',
-    		data: newForm,
-    		processData: false,  // not to process the data (because of the file)
-    		contentType: false,  // not to set contentType
-    		success: (thumbnailURL_returned) => {
-    			// change thumnailURl, if it was uploaded to server, else, leave it as default value
-    			if(thumbnailURL_returned !== ""){
-    				thumbnailURL = thumbnailURL_returned;
-    				console.log("Thumbnail Submission returned an actual THUMBNAIL URL: " + thumbnailURL_returned);
-    			} else {
-    				console.log("Thumbnail Submission returned empty String!");
-    			}
-    		},
-    		error: (response) => {
-    			console.log("Thumbnail Submission DID NOT WORK!");
-    		}
-        });
-    	
-    	console.log("THUMBNAIL URL = " + thumbnailURL);
-		
-		// ajax request to send video metadata to server
-		// TODO: loop through formData <-- someone else's comment .. not sure why this is needed
-		const formData = {
-				title: this.state.formData.title,
-				description: this.state.formData.description,
-				version: this.state.formData.version,
-				filetype: this.state.videoFile.type,
-				license: this.state.formData.license,
-				downloadurl: torrentF,
-				thumbnailurl: thumbnailURL,
-				tags: this.state.formData.tags,
-				userid: this.state.formData.userid
-		};
-
-		// insert video
-		$.ajax({
-			type: "POST",
-			url: config.serverUrl + "/upload/videoSubmission",
-			contentType: 'application/json',
-			processData: false,
-			data: JSON.stringify(formData),
-			success: (response) => {
-				console.log(response);
-				alert("Successfully uploaded!");
-			},
-			error: (response) => {
-				console.log(response);
-			}
-		});
     }
 
     render(){
