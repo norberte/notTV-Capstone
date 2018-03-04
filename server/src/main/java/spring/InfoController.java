@@ -43,6 +43,7 @@ public class InfoController {
 	// CategoryValue(id, name)
 	// CategoryType(name, CategoryValue[] values)
 	return jdbcTemplate.query("Select * From category_type;", (rs, rowNum) -> new CategoryType(
+	    rs.getInt("id"),
 	    rs.getString("name"),
 	    jdbcTemplate.query(
 		"Select id, name From category_value Where categorytypeid=?;",

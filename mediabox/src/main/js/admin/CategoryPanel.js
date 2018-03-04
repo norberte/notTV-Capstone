@@ -1,11 +1,20 @@
 const React = require("react");
 
+const new_category_type = 1;
+const new_category_value = 2;
+const edit_category_value = 3;
+const edit_category_type = 4;
+const delete_category_value = 5;
+const delete_category_type = 6;
+
 class CategoryValueRow extends React.Component {
     constructor(props) {
         super(props);
     }
     
     render(){
+        let temp = this.props.value.display;
+        // change it to false here
         return (
             <tr className={"category-row panel-collapse collapse " + (this.props.value.display?"in ":"") + this.props.valueClass}>
                 <td className="panel-body">
@@ -39,7 +48,7 @@ class CategoryTypeRow extends React.Component {
                 </div>
             </td>
             <td className="category-col">
-                <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleCategoryDelete}/>
+                <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleDeleteCategoryType}/>
             </td>
         </tr>
         {
@@ -92,7 +101,7 @@ class CategoryType extends React.Component {
     });
 
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleCategoryDelete = this.handleCategoryDelete.bind(this);
+    this.handleDeleteCategoryType = this.handleDeleteCategoryType.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.newCategoryType = this.newCategoryType.bind(this);
     this.newCategoryValue = this.newCategoryValue.bind(this);
@@ -109,10 +118,10 @@ class CategoryType extends React.Component {
         newCategoryTypes[index1].values[index2].name = event.target.value;
         
         let newUpdates = this.state.updates.slice();
-        newUpdates = this.overwrite(newUpdates, categoryType.name, categoryValue.id).concat([{
-            action: "value edit",
-            category: categoryType.name,
-            id: categoryValue.id,
+        newUpdates = this.overwrite(newUpdates, categoryType.id, categoryValue.id).concat([{
+            action: edit_category_value,
+            categoryTypeId: categoryType.id,
+            categoryValueId: categoryValue.id,
             value: event.target.value
         }]);
 
@@ -124,16 +133,16 @@ class CategoryType extends React.Component {
     }
     
     // removes a CategoryType from the tree when the delete button is pressed and adds the action to the updates list
-    handleCategoryDelete(categoryType, event){
-        console.log("Delete Category: " + event.target.parentElement);
+    handleDeleteCategoryType(categoryType, event){
+        console.log("Delete Category: " + event.target.parentNode.parentNode);
         let newCategoryTypes = this.state.categoryTypes.slice();
         let index = newCategoryTypes.indexOf(categoryType);
-        newCategoryTypes.splice(index);
+        console.log(newCategoryTypes.splice(index, 1));
         
         let newUpdates = this.state.updates.slice();
-        newUpdates = this.overwrite(newUpdates, categoryType.name).concat([{
-            action: "category delete",
-            category: CategoryType.name
+        newUpdates = newUpdates.concat([{
+            action: delete_category_type,
+            categoryTypeId: categoryType.id
         }]);
         
         console.log(newUpdates);
@@ -145,17 +154,17 @@ class CategoryType extends React.Component {
     
     // removes a CategoryValue from the tree when the delete button is pressed and adds the action to the updates list
     handleDelete(categoryType, categoryValue, event) {
-        console.log("Delete: " + event.target.parentElement);
+        console.log("Delete: " + event.target.parentNode.parentNode);
         let newCategoryTypes = this.state.categoryTypes.slice();
         let index1 = newCategoryTypes.indexOf(categoryType);
         let index2 = newCategoryTypes[index1].values.indexOf(categoryValue);
-        newCategoryTypes[index1].values.splice(index2);
+        console.log(newCategoryTypes[index1].values.splice(index2, 1));
             
         let newUpdates = this.state.updates.slice();
-        newUpdates = this.overwrite(newUpdates, categoryType.name, categoryValue.id).concat([{
-            action: "value delete",
-            category: categoryType.name,
-            id: categoryValue.id
+        newUpdates = newUpdates.concat([{
+            action: delete_category_value,
+            categoryTypeId: categoryType.id,
+            categoryValueId: categoryValue.id
         }]);
 
         console.log(newUpdates);
@@ -171,6 +180,10 @@ class CategoryType extends React.Component {
     	    categoryTypes: this.state.categoryTypes.concat([{
         		name: "New Category",
         		values: []
+    	    }]),
+    	    updates: this.state.updates.concat([{
+                action: new_category_type,
+                value: "New Category"
     	    }])
     	});
     }
@@ -186,34 +199,40 @@ class CategoryType extends React.Component {
         });
             
         this.setState({
-            categoryTypes: newCategoryTypes
+            categoryTypes: newCategoryTypes,
+            updates: this.state.updates.concat([{
+                action: new_category_value,
+                categoryTypeId: categoryType.id,
+                value: "New"
+            }])
         });
     }
     save() {
         console.log("save");
-        
+        console.log(JSON.stringify(this.state.updates));
         $.post({
             url: config.serverUrl + "/update/categories",
-            data: updates,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({updateList: this.state.updates}),
+            processData: false,
             success: (data) => {
                 console.log(data);
-                /*
                 this.setState({
-                    categoryTypes: data
+                    updates: [],    //clear update list
+                //  categoryTypes: data //reset state to make sure it's consistent with database?
                 });
-                */
             },
             error: () => {} //not sure yet how to handle errors 
         });
     }
     
     //helper method to remove a value update from the update list if a later change overwrites it
-    overwrite(updates, categoryType, catId=null){
-        let index = updates.findIndex((u)=>{u.category == categoryType && u.id == catId});
+    overwrite(updateList, catTypeId, catValId=null){
+        let index = updateList.findIndex(function(u){return (u.categoryTypeId == catTypeId && u.categoryValueId == catValId);});
         if(index >= 0){
-            updates.splice(index);
+            updateList.splice(index, 1);
         }
-        return updates;
+        return updateList;
     }
     
     render() {
@@ -232,7 +251,7 @@ class CategoryType extends React.Component {
     					key={idx}
     					handleEdit={this.handleEdit.bind(this, cat)}
     					handleDelete={this.handleDelete.bind(this, cat)}
-                        handleCategoryDelete={this.handleCategoryDelete.bind(this, cat)}
+                        handleDeleteCategoryType={this.handleDeleteCategoryType.bind(this, cat)}
     			        newCategoryValue={this.newCategoryValue.bind(this, cat)}
     					/>;
     		      })

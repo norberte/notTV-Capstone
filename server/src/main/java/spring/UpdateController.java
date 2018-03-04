@@ -3,6 +3,7 @@ package spring;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import spring.view.CategoryUpdate;
+import spring.view.CategoryUpdateList;
 import spring.view.VideoForm;
 
 
@@ -33,6 +36,13 @@ import spring.view.VideoForm;
 @RequestMapping("/update")
 public class UpdateController {
     private static final Logger log = LoggerFactory.getLogger(InfoController.class);
+    
+    private static final int NEW_CATEGORY_TYPE = 1;
+    private static final int NEW_CATEGORY_VALUE = 2;
+    private static final int EDIT_CATEGORY_VALUE = 3;
+    private static final int EDIT_CATEGORY_TYPE = 4;
+    private static final int DELETE_CATEGORY_VALUE = 5;
+    private static final int DELETE_CATEGORY_TYPE = 6;
 
     @Autowired
     JdbcTemplate jdbc;
@@ -84,8 +94,7 @@ public class UpdateController {
     @ResponseBody
     public boolean report(@RequestParam("videoId") int videoId, @RequestParam("reportText") String reportText) {
         log.info("update subscriptions table");
-        //TODO: add reportText to query after we add that column to the database 
-        String query = new String("Insert Into flag (userid, videoid, message) Values (?,?,?);"); 
+        String query = "Insert Into flag (userid, videoid, message) Values (?,?,?);"; 
         log.info(query);
         jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
         return true;
@@ -112,5 +121,47 @@ public class UpdateController {
         };
 
         this.jdbc.update(psc);
+    }
+    @PostMapping("/categories")
+    @ResponseBody
+    public void updateCategories(@RequestBody CategoryUpdateList jsonString) {
+        
+        List<CategoryUpdate> updateList = jsonString.getUpdateList();
+        //updateList.sort((a, b) -> a.action - b.action); // sort update list by action: delete first, then insert, then update
+        
+        String sql = null;
+
+        for(CategoryUpdate update: updateList){
+            switch(update.action){
+                case DELETE_CATEGORY_VALUE:
+                    sql = "Delete From category_value Where id = ?;";
+                    jdbc.update(sql, update.categoryValueId);
+                    break;
+                case DELETE_CATEGORY_TYPE:
+                    sql = "Delete From category_value Where categoryTypeId = ?; Delete From category_type Where id = ?;";
+                    jdbc.update(sql, update.categoryTypeId, update.categoryTypeId);
+                    break;
+                case NEW_CATEGORY_TYPE:
+                    sql = "Insert Into category_type (name) Values (?);";
+                    jdbc.update(sql, update.value);
+                    break;
+                case NEW_CATEGORY_VALUE:
+                    sql = "Insert Into category_value (categoryTypeId, name) Values (?, ?);";
+                    jdbc.update(sql, update.categoryTypeId, update.value);
+                    break;
+                case EDIT_CATEGORY_VALUE:
+                    sql = "Update category_value Set name = ? Where id = ?;";
+                    jdbc.update(sql, update.value, update.categoryValueId);
+                    break;
+                case EDIT_CATEGORY_TYPE:
+                    sql = "Update category_type Set name = ? Where id = ?;";
+                    jdbc.update(sql, update.value, update.categoryTypeId);
+                    break;
+                default:
+                    log.info("shit");
+                    break;
+            }
+            log.info(sql);
+        }     
     }
 }
