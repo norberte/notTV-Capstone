@@ -57,7 +57,11 @@ public class ThumbnailUploadController {
     
     
     /**
-     * returns thumbnailURL
+     * returns thumbnailURL as a resource ...
+     * almost the same as /get-thumbnail/{filename:.+}, 
+     * but it is used differently in the back end...
+     * it's a hack that makes things easy in the backend
+     * so do not delete it
      *
      * @param String filename
      * @return Resourse

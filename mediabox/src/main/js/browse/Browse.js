@@ -33,7 +33,8 @@ class Browse extends React.Component {
         super(props);
         this.state = {
             categories: [],
-            videos: []
+            videos: [],
+            thumbnails: []
         };
 
         // get the categories.
@@ -51,8 +52,8 @@ class Browse extends React.Component {
         // get videos
         this.update_videos([]);
         
-        this.download_Thumbnails = this.download_Thumbnails.bind(this);
         this.update_videos = this.update_videos.bind(this);
+        this.dowloadThumbnails = this.dowloadThumbnails.bind(this);
     }
 
     /**
@@ -77,15 +78,19 @@ class Browse extends React.Component {
         });
     }
     
-    // TO DO: FINISH THIS
-    download_Thumbnails(){
-    	$.post({
-            url: "/process/downloadThumbnail",
+    // provide a list of thumbnail files to be downloaded, then store returned files inside the state
+    dowloadThumbnails(fileName){
+    	$.get({
+            url: '/process/downloadThumbnail',
+            data: {
+            	thumbnailName: fileName
+            },
             dataType: "json",
             success: (data) => {
-                
+            	console.log("Successfully downloaded thumbnails. Response = " + data);
             },
             error: (response) => {
+            	console.log("Could not download thumbnails");
                 console.log(response);
             }
         });
@@ -99,11 +104,13 @@ class Browse extends React.Component {
                    categories={this.state.categories}
                    update_handler={this.update_videos}/>
               </div>
+                {this.dowloadThumbnails('index.png')}
+                {this.dowloadThumbnails('default-placeholder-300x300.png')}
               <div className="col-md-10 results-container">
                 <TopBar/>
                 <div className="row browse-body">
                   <div className="col-md-12">
-                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos}/>
+                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos} thumbnail = {this.state.thumbnails}  />
                   </div>
                 </div>
               </div>

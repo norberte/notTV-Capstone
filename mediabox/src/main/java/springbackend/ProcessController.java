@@ -3,25 +3,21 @@ package springbackend;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,65 +86,32 @@ public class ProcessController {
 	}
     }
     
-    // because I am casting Request.Get(...).execute().returnContent() to List<String>
-    @SuppressWarnings("unchecked")
-    @PostMapping("downloadThumbnail")
+    @GetMapping("downloadThumbnail")
     @ResponseBody
-    public void thumbnailDownload(){
-        // get a list of all thumbnail names.
-        List<String> thumbnailNames = Collections.EMPTY_LIST;
-        try {
-            thumbnailNames = (List<String>) Request.Get(
-            String.format("%s/list-thumbnails", this.config.getServerUrl())
-            ).execute().returnContent();
-        } catch (IOException e) {
-            log.error("Error getting thumbnail list from server.", e);
-        }
-        
-        // there could be multiple videos with the same thumbnail... so only download a unique set of thumbnails
-        Set<String> uniqueSetOfThumbnails = new HashSet<>(thumbnailNames);
-        File[] thumbnailFiles = new File[uniqueSetOfThumbnails.size()];
-        int idx = 0;
-        
-        // iterate though each unique thumbnail, download them, then store them in a File array
-        Iterator<String> itr = uniqueSetOfThumbnails.iterator();
-        String temp;
-        while(itr.hasNext()) {
-            temp = itr.next();
+    public List<File> thumbnailDownload(@RequestParam(value="thumbnailName") String thumbnailName){
+        List<File> thumbnailFiles = Collections.emptyList();
+        File tempFile;
+        //for (int i = 0; i < thumbnailNames.length; i++) {
+            tempFile = null;
             try {
                 Request.Get(
-                        String.format("%s/get-thumbnail/%s", this.config.getServerUrl(), temp)
-                        ).execute().saveContent(thumbnailFiles[idx++]);
+                  String.format("%s/get-thumbnail/index.png", this.config.getServerUrl())
+                        ).execute().saveContent(tempFile);
+                
+                InputStream instream = new FileInputStream(tempFile);
+                
+                String response = Request.Post(
+                        String.format("/img/%s", thumbnailName)
+                        ).bodyStream(instream).execute().returnContent().asString();
+                log.info("Successfully downloaded " + thumbnailName + " from server. \n Post request response = " + response);
+            
+                thumbnailFiles.add(tempFile);
             } catch (IOException e) {
-                log.error("Error getting the thumbnail file from server.", e);
+                //thumbnailFiles.add(null);
+                log.error("Error getting thumbnail file: " + thumbnailName + " from server.", e);
             }
-        }
-        
-        // go through each thumbnail file and upload it to the Browse page
-        for (int i = 0; i < thumbnailFiles.length; i++) {
-            MultipartFile file = (MultipartFile) thumbnailFiles[i];
-            if (!file.isEmpty()) {
-                String uploadsDir = "/img/";
-                // need to get the servlet context
-                String realPathtoUploads =  request.getServletContext().getRealPath(uploadsDir);
-                if(! new File(realPathtoUploads).exists()){
-                    new File(realPathtoUploads).mkdir();
-                }
-
-                log.info("realPathtoUploads = {}", realPathtoUploads);
-
-                String orgName = file.getOriginalFilename();
-                String filePath = realPathtoUploads + orgName;
-                File dest = new File(filePath);
-                try {
-                    file.transferTo(dest);
-                } catch (IllegalStateException e) {
-                    log.error("Error getting thumbnail file to front end.", e);
-                } catch (IOException e) {
-                    log.error("Error getting thumbnail file to front end.", e);
-                }
-            }
-        }
+        //}
+        return thumbnailFiles;
     }  
 
     @RequestMapping(path = "download")
