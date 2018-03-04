@@ -7,25 +7,17 @@ const edit_category_type = 4;
 const delete_category_value = 5;
 const delete_category_type = 6;
 
-class CategoryValueRow extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    
-    render(){
-        let temp = this.props.value.display;
-        // change it to false here
-        return (
-            <tr className={"category-row panel-collapse collapse " + (this.props.value.display?"in ":"") + this.props.valueClass}>
-                <td className="panel-body">
-                    <input type="text" onChange={this.props.handleEdit} value={this.props.value.name}/>
-                </td>
-                <td className="category-col">
-                    <input id={this.props.value.id} className="deleteButton btn btn-danger" type="button" value="Delete" onClick={this.props.handleDelete}/>
-                </td>
-            </tr>
-        )
-    }
+function CategoryValueRow(props) {
+    return (
+        <tr className={"category-row panel-collapse collapse " + (props.value.display?"in ":"") + props.valueClass}>
+            <td className="panel-body">
+                <input type="text" onChange={props.handleEdit} value={props.value.name}/>
+            </td>
+            <td className="category-col">
+                <input id={props.value.id} className="deleteButton btn btn-danger" type="button" value="Delete" onClick={props.handleDelete}/>
+            </td>
+        </tr>
+    );
 }
 class CategoryTypeRow extends React.Component {
     constructor(props) {
