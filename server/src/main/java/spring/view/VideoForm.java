@@ -1,14 +1,15 @@
 package spring.view;
 
+import java.io.File;
+
 public class VideoForm {
     String title;
     String description;
     int version;
-    String filetype;
     String license;
     String downloadurl;
-    String thumbnailurl;
-    String tags; // TEMPORARY
+    File thumbnailFile;
+    int[] tags; // TEMPORARY
     int userid;
 
 	/**
@@ -54,20 +55,6 @@ public class VideoForm {
     }
 
     /**
-     * @return the filetype
-     */
-    public String getFiletype() {
-	return filetype;
-    }
-
-    /**
-     * @param filetype the filetype to set
-     */
-    public void setFiletype(String filetype) {
-	this.filetype = filetype;
-    }
-
-    /**
      * @return the license
      */
     public String getLicense() {
@@ -96,30 +83,16 @@ public class VideoForm {
     }
 
     /**
-     * @return the thumbnailurl
-     */
-    public String getThumbnailurl() {
-	return thumbnailurl;
-    }
-
-    /**
-     * @param thumbnailurl the thumbnailurl to set
-     */
-    public void setThumbnailurl(String thumbnailurl) {
-	this.thumbnailurl = thumbnailurl;
-    }
-
-    /**
      * @return the tags
      */
-    public String getTags() {
+    public int[] getTags() {
 	return tags;
     }
 
     /**
      * @param tags the tags to set
      */
-    public void setTags(String tags) {
+    public void setTags(int[] tags) {
 	this.tags = tags;
     }
 

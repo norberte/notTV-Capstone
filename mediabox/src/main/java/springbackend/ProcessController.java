@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -70,7 +71,7 @@ public class ProcessController {
      */
     @PostMapping("upload")
     @ResponseBody
-    public String upload(MultipartFile video) {
+    public String upload(@NotNull MultipartFile video) {
 	log.info(video.getOriginalFilename());
 	String name = video.getOriginalFilename();
 	//TODO: use a hash or something to make a unique name

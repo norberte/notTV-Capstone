@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import spring.storage.StorageService;
 import spring.view.AccountForm;
@@ -53,7 +51,7 @@ public class PostController {
                 ps.setString(1, videoForm.getTitle());
                 ps.setString(2, videoForm.getDescription());
                 ps.setInt(3, videoForm.getVersion());
-                ps.setString(4, videoForm.getFiletype());
+                ps.setString(4, ""); // TODO: remove this from the db.
                 ps.setString(5, videoForm.getLicense());
                 ps.setInt(6, videoForm.getUserid());
                 ps.setString(7, videoForm.getDownloadurl());

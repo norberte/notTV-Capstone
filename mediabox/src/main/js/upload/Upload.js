@@ -22,22 +22,40 @@ class CategoryPane extends React.Component {
                     categories: data,
                     currValues: data.length > 0 ? data[0].values : []
                 });
+            },
+            failure: (data) => {
+                console.log(data);
+                this.setState({
+                    categories: ["Empty"],
+                    currValues: ["Can't connect to the server"]
+                });
             }
         });
 
         this.selectChange = this.selectChange.bind(this);
+        this.selected = this.selected.bind(this);
     }
 
     selectChange(option) {
-        console.log(option.target);
         this.setState({
             currValues: this.state.categories[option.target.selectedIndex].values
         });
+    }
+
+    selected(event) {
+        const selected = this.props.data.tags;
+        const id = parseInt(event.target.id);
+        if(selected.has(id))
+            selected.delete(id);
+        else
+            selected.add(id);
+        this.props.setTags(selected);
     }
     
     render() {
         return (
             <div className="upload-pane">
+              <h1>Video Categories/Tags</h1>
               <select className="selectpicker" onChange={this.selectChange}>
                 {
                     this.state.categories.map((cat, idx) => {
@@ -48,7 +66,8 @@ class CategoryPane extends React.Component {
               <div className="list-group">
                 {
                     this.state.currValues.map((val, idx) => {
-                        return <a key={idx} className="list-group-item">{val.name}</a>;
+                        return <a className={(this.props.data.tags.has(val.id) ? "cat-selected " : "") + "list-group-item"}
+                                      key={idx} id={val.id} onClick={this.selected}>{val.name}</a>;
                     })
                 }
               </div>
@@ -57,24 +76,51 @@ class CategoryPane extends React.Component {
     }
 }
 
+// Basic Info:
+class FileInput extends React.Component {
+    render() {
+        const name = toCamel(this.props.title);
+        const input_id = name + "-file";
+        return(
+            <div>
+              <h3>{this.props.title}</h3>
+              <div className="file-input">
+                <label className="file-button" htmlFor={input_id}>Choose</label>
+                <label className="file-label">{this.props.file === null ? "No file selected." : this.props.file.name}</label>
+	        <input type="file" id={input_id} className="hidden" name={name} accept={this.props.accept} 
+		       ref={(input) => { this.inputRef = input; }} onChange={()=>this.props.set(this.inputRef.files)}/>
+	      </div>
+            </div>
+        );
+    }
+}
+
+class TextInput extends React.Component {
+    render() {
+        return (
+            <div>
+              <h3>{this.props.title}</h3>
+              <input type="text" name={toCamel(this.props.title)} value={this.props.value} onChange={this.props.handleChange}/>
+            </div>
+        );
+    }
+}
+
 /* 
  Select Video and Thumbnail Files.
  */
-class FilePane extends React.Component {
+class EssentialPane extends React.Component {
     render() {
 	return (
 	    <div className="upload-pane">
-	      <h1>Video File</h1>
-	      <p>
-		<input type="file" name="videoFile" accept="video/*"
-		       ref={(input) => { this.videoFile = input; }} onChange={()=>this.props.setVideo(this.videoFile.files)}/>
-	      </p>
-
-              <h1>Video File</h1>
-              <p>
-                <input type="file" name="videoFile" accept="img/*"
-		       ref={(input) => { this.thumbnailFile = input; }} onChange={()=>this.props.setThumbnail(this.thumbnailFile.files)}/>
-              </p>
+              <h1>Basic Info</h1>
+              <TextInput title="Title" value={this.props.data.title} handleChange={this.props.handleChange("title")}/>
+              <h3>Description</h3>
+              <textarea rows="4" cols="50" name="description" value={this.props.data.description} onChange={this.props.handleChange("description")}>
+                Enter the description of the video here.
+              </textarea>
+              <FileInput title="Video File" accept="video/*" set={this.props.fileChange("videoFile")} file={this.props.data.videoFile}/>
+              <FileInput title="Thumbnail File" accept="img/*" set={this.props.fileChange("thumbnailFile")} file={this.props.data.thumbnailFile}/>
 	    </div>
 	);
     }
@@ -116,27 +162,45 @@ class App extends React.Component {
 	this.fileChange = this.fileChange.bind(this);
 	this.imgFileChange = this.imgFileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
+        this.setTags = this.setTags.bind(this);
     }
 
+    setTags(newTags) {
+        const fd = this.state.formData;
+        fd['tags'] = newTags;
+        this.setState({
+            formData: fd
+        });
+    }
+    
     increment(amount) {
         const newVal = this.state.curr + amount;
 
-        if(newVal >=0 && newVal < this.state.items.length)
+        if(newVal >=0 && newVal < this.props.items.length)
             this.setState({
                 curr: newVal
             });
     }
 
     //handles a change in an input from the form and gives that new change to the state.
-    handleChange(e){
-	const state = this.state;
-	state.formData[e.target.name] = e.target.value;
-	this.setState(state);
+    handleChange(field){
+        return (e) => {
+	    const state = this.state;
+	    state.formData[field] = e.target.value;
+	    this.setState(state);
+        };
     }
 
-    fileChange(files) {
-	if(files.length > 0) // Only one file for now.
-	    this.state.videoFile = files[0];
+    fileChange(field) {
+        return (files) => {
+	    if(files.length > 0) { // Only one file for now.
+                const data = this.state.formData;
+	        data[field] = files[0];
+                this.setState({
+                    formData: data
+                });
+            }
+        };
     }
     
     imgFileChange(files) {
@@ -342,19 +406,24 @@ class UploadForm extends React.Component {
             });
     }
     render() {
-        const disableNext = this.state.curr === this.state.items.length - 1 ? " disabled" : "";
-        const disablePrev = this.state.curr === 0 ? " disabled" : "";
+        const CompClass = this.props.items[this.state.curr];
         return (
             <div className="col-md-12">
               <div className="row bc-parent">
-                <BreadCrumb curr={this.state.curr} items={["Browse", "Compare", "Order Confirmation"]} />
+                <BreadCrumb curr={this.state.curr} items={this.props.titles} />
               </div>
               <div className="row">
                 <div className="col-md-7">
                   <div className="row">
                     <div className="col-md-12 upload-container">
                       <div className="row">
-                        {this.state.items[this.state.curr]}
+                        {  // Pass in all methods and data to the current component.
+                            <CompClass
+                                   data={this.state.formData}
+                                   handleChange={this.handleChange}
+                                   fileChange={this.fileChange}
+                                   setTags={this.setTags}/>
+                        }
                       </div>
                     </div>
                   </div>
@@ -364,22 +433,16 @@ class UploadForm extends React.Component {
                 </div>
               </div>
               <div className="row">
-                <ul className="pager">
-                  <li className={"previous" + disablePrev}>
-                    <a onClick={()=>this.increment(-1)}>
-                      <span aria-hidden="true">&larr;</span> Go Back
-                    </a>
-                    </li>
-                    <li className={"next" + disableNext}>
-                      <a onClick={()=>this.increment(1)}>
-                        Continue <span aria-hidden="true">&rarr;</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                <ul className="pager cat-nav">
+                  <PrevButton increment={this.increment} curr={this.state.curr}/>
+                  <NextButton increment={this.increment} submit={this.handleSubmit} curr={this.state.curr} length={this.props.items.length}/>
+                </ul>
+              </div>
             </div>
         );
     }
 }
 
-ReactDOM.render(<UploadForm />, document.getElementById("root"));
+const ITEMS = [EssentialPane, CategoryPane];
+const TITLES = ["Basic Info", "Video Tags"];
+ReactDOM.render(<UploadForm items={ITEMS} titles={TITLES}/>, document.getElementById("root"));
