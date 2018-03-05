@@ -52,6 +52,24 @@ public class InfoController {
 	    )
 	));
     }
+    
+    // Returns a new unique id for the category_type table
+    @GetMapping("/category-type-id")
+    @ResponseBody
+    public int getNextCategoryTypeId() {
+        int id = jdbcTemplate.query("Select nextval('category_type_id_seq');", (rs) -> {rs.next(); return rs.getInt(1);});
+        log.info("Next categoryType id: " + id);
+        return id;
+    }
+    
+    // Returns a new unique id for the category_value table
+    @GetMapping("/category-value-id")
+    @ResponseBody
+    public int getNextCategoryValueId() {
+        int id = jdbcTemplate.query("Select nextval('category_value_id_seq');", (rs) -> {rs.next(); return rs.getInt(1);});
+        log.info("Next categoryValue id: " + id);
+        return id;
+    }
 
     // gets playlists owned by a user.
     // takes in a userID parameter

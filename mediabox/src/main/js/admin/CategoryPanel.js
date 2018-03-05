@@ -57,8 +57,7 @@ class CategoryTypeRow extends React.Component {
             })
         }
         <tr className={"category-row panel-collapse collapse in"}>
-          <td>
-            <br/>
+          <td className="panel-body">
             <input type="button" className="btn btn-success" value="New" onClick={this.props.newCategoryValue}/>
           </td>
         </tr>
@@ -99,22 +98,33 @@ class CategoryType extends React.Component {
     this.newCategoryType = this.newCategoryType.bind(this);
     this.newCategoryValue = this.newCategoryValue.bind(this);
     this.save = this.save.bind(this);
-    this.overwrite = this.overwrite.bind(this);
+    this.cancelChanges = this.cancelChanges.bind(this);
     }
     
     handleCategoryTypeEdit(categoryType, event){
         console.log(event.target);
         let newCategoryTypes = this.state.categoryTypes.slice();
-        let index1 = newCategoryTypes.indexOf(categoryType);
-        newCategoryTypes[index1].name = event.target.value;
+        let index = newCategoryTypes.indexOf(categoryType);
+        newCategoryTypes[index].name = event.target.value;
         
         let newUpdates = this.state.updates.slice();
-        newUpdates = this.overwrite(newUpdates, categoryType.id).concat([{
-            action: edit_category_type,
-            categoryTypeId: categoryType.id,
-            value: event.target.value
-        }]);
-
+        index = newUpdates.findIndex(function(u){return (u.categoryTypeId == categoryType.id && u.categoryValueId == undefined);});
+        // if a previous update on this element exists in the update list, just modify the value
+        if(index > -1){
+            if(newUpdates[index].action == edit_category_type || newUpdates[index].action == new_category_type){
+                newUpdates[index].value =  event.target.value;
+            }
+            else{
+                console.error("Error: Invalid update operation."); //This should never EVER happen
+            }
+        }
+        else{   //else append a new update to the list
+            newUpdates = newUpdates.concat([{
+                action: edit_category_type,
+                categoryTypeId: categoryType.id,
+                value: event.target.value
+            }]);
+        }
         console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
@@ -130,13 +140,24 @@ class CategoryType extends React.Component {
         newCategoryTypes[index1].values[index2].name = event.target.value;
         
         let newUpdates = this.state.updates.slice();
-        newUpdates = this.overwrite(newUpdates, categoryType.id, categoryValue.id).concat([{
-            action: edit_category_value,
-            categoryTypeId: categoryType.id,
-            categoryValueId: categoryValue.id,
-            value: event.target.value
-        }]);
-
+        let index = newUpdates.findIndex(function(u){return (u.categoryTypeId == categoryType.id && u.categoryValueId == categoryValue.id);});
+        // if a previous update on this element exists in the update list, just modify the value
+        if(index > -1){
+            if(newUpdates[index].action == edit_category_value || newUpdates[index].action == new_category_value){
+                newUpdates[index].value =  event.target.value;
+            }
+            else{
+                console.error("Error: Invalid update operation.")
+            }
+        }
+        else{   //else append a new update to the list
+            newUpdates = newUpdates.concat([{
+                action: edit_category_value,
+                categoryTypeId: categoryType.id,
+                categoryValueId: categoryValue.id,
+                value: event.target.value
+            }]);
+        }
         console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
@@ -152,11 +173,29 @@ class CategoryType extends React.Component {
         console.log(newCategoryTypes.splice(index, 1));
         
         let newUpdates = this.state.updates.slice();
-        newUpdates = newUpdates.concat([{
-            action: delete_category_type,
-            categoryTypeId: categoryType.id
-        }]);
+        index = newUpdates.findIndex(function(u){return (u.categoryTypeId == categoryType.id && u.categoryValueId == undefined);});
         
+        if(index > -1){
+            if(newUpdates[index].action == new_category_type){
+                newUpdates.splice(index, 1);    //if the element isn't in the database yet, just remove the insert instruction
+            }
+            else if(newUpdates[index].action == edit_category_type){
+                newUpdates.splice(index, 1);    //else delete the update instruction and append a deletion
+                newUpdates = newUpdates.concat([{
+                    action: delete_category_type,
+                    categoryTypeId: categoryType.id
+                }]);
+            }
+            else{
+                console.error("Error: Invalid delete operation."); 
+            }
+        }
+        else{   //else append a new delete to the list
+            newUpdates = newUpdates.concat([{
+                action: delete_category_type,
+                categoryTypeId: categoryType.id
+            }]);
+        }
         console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
@@ -171,14 +210,33 @@ class CategoryType extends React.Component {
         let index1 = newCategoryTypes.indexOf(categoryType);
         let index2 = newCategoryTypes[index1].values.indexOf(categoryValue);
         console.log(newCategoryTypes[index1].values.splice(index2, 1));
-            
+        
         let newUpdates = this.state.updates.slice();
-        newUpdates = newUpdates.concat([{
-            action: delete_category_value,
-            categoryTypeId: categoryType.id,
-            categoryValueId: categoryValue.id
-        }]);
-
+        let index = newUpdates.findIndex(function(u){return (u.categoryTypeId == categoryType.id && u.categoryValueId == categoryValue.id);});
+        
+        if(index > -1){
+            if(newUpdates[index].action == new_category_type){
+                newUpdates.splice(index, 1);    //if the element isn't in the database yet, just remove the insert instruction
+            }
+            else if(newUpdates[index].action == edit_category_type){
+                newUpdates.splice(index, 1);    //else delete the update instruction and append a deletion
+                newUpdates = newUpdates.concat([{
+                    action: delete_category_value,
+                    categoryTypeId: categoryType.id,
+                    categoryValueId: categoryValue.id
+                }]);
+            }
+            else{
+                console.error("Error: Invalid delete operation."); 
+            }
+        }
+        else{   //else append a new delete to the list
+            newUpdates = newUpdates.concat([{
+                action: delete_category_value,
+                categoryTypeId: categoryType.id,
+                categoryValueId: categoryValue.id
+            }]);
+        }
         console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
@@ -187,35 +245,51 @@ class CategoryType extends React.Component {
     }
     // Appends a new, empty CategoryType to the list when 'New Category' button is clicked
     newCategoryType() {
-    	console.log("New Category");
-    	this.setState({
-    	    categoryTypes: this.state.categoryTypes.concat([{
-        		name: "New Category",
-        		values: []
-    	    }]),
-    	    updates: this.state.updates.concat([{
-                action: new_category_type,
-                value: "New Category"
-    	    }])
-    	});
+    	$.get({
+            url: config.serverUrl + "/info/category-type-id",
+            dataType: "text",
+            success: (id) => {
+                console.log("New Category: id = "+ id);
+                this.setState({
+                    categoryTypes: this.state.categoryTypes.concat([{
+                        id: id,
+                        name: "New Category",
+                        values: []
+                    }]),
+                    updates: this.state.updates.concat([{
+                        action: new_category_type,
+                        categoryTypeId: id,
+                        value: "New Category"
+                    }])
+                });
+            }
+        });
     }
     // Adds a new CategoryValue when one of the 'New" buttons are pressed
     newCategoryValue(categoryType) {
-        console.log("New Category Value");
-        let newCategoryTypes = this.state.categoryTypes.slice();
-        let index = newCategoryTypes.indexOf(categoryType);
-        newCategoryTypes[index].values.push({
-            id: 1, //TODO: figure out how to assign correct id
-            name: "New"
-        });
-            
-        this.setState({
-            categoryTypes: newCategoryTypes,
-            updates: this.state.updates.concat([{
-                action: new_category_value,
-                categoryTypeId: categoryType.id,
-                value: "New"
-            }])
+        $.get({
+            url: config.serverUrl + "/info/category-value-id",
+            dataType: "text",
+            success: (id) => {
+                console.log("New Category Value: id = "+ id);
+                
+                let newCategoryTypes = this.state.categoryTypes.slice();
+                let index = newCategoryTypes.indexOf(categoryType);
+                newCategoryTypes[index].values.push({
+                    id: id,
+                    name: "New"
+                });
+                    
+                this.setState({
+                    categoryTypes: newCategoryTypes,
+                    updates: this.state.updates.concat([{
+                        action: new_category_value,
+                        categoryTypeId: categoryType.id,
+                        categoryValueId: id,
+                        value: "New"
+                    }])
+                });
+            }
         });
     }
     save() {
@@ -230,20 +304,18 @@ class CategoryType extends React.Component {
                 console.log(data);
                 this.setState({
                     updates: [],    //clear update list
-                //  categoryTypes: data //reset state to make sure it's consistent with database?
+                    restore: this.categoryTypes
                 });
             },
             error: () => {} //not sure yet how to handle errors 
         });
     }
-    
-    //helper method to remove a value update from the update list if a later change overwrites it
-    overwrite(updateList, catTypeId, catValId=null){
-        let index = updateList.findIndex(function(u){return (u.categoryTypeId == catTypeId && u.categoryValueId == catValId);});
-        if(index >= 0){
-            updateList.splice(index, 1);
-        }
-        return updateList;
+    cancelChanges(){
+        console.log("reverting to previous save");
+        this.setState({
+            categoryTypes: this.state.restore,
+            updates: []
+        });
     }
     
     render() {
@@ -272,15 +344,20 @@ class CategoryType extends React.Component {
     	      <tbody>
         		<tr>
         		  <td>
-        		    <br/>
+        		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategoryType}/>
         		  </td>
         		</tr>
         		<tr>
-        		  <td>
-        		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategoryType}/>
-        		    <input type="button" className="btn btn-info" value="Save" onClick={this.save}/>
-        		  </td>
-        		</tr>
+                <td>
+                  <br/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="button" className="btn btn-info" value="Save" onClick={this.save}/>
+                  <input type="button" className="btn btn-warning" value="Cancel Changes" onClick={this.cancelChanges}/>
+                </td>
+              </tr>
     	      </tbody>
     	    </table>
         );

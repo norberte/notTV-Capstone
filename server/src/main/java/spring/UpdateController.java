@@ -142,12 +142,12 @@ public class UpdateController {
                     jdbc.update(sql, update.categoryTypeId, update.categoryTypeId);
                     break;
                 case NEW_CATEGORY_TYPE:
-                    sql = "Insert Into category_type (name) Values (?);";
-                    jdbc.update(sql, update.value);
+                    sql = "Insert Into category_type (id, name) Values (?, ?);";
+                    jdbc.update(sql, update.categoryTypeId, update.value);
                     break;
                 case NEW_CATEGORY_VALUE:
-                    sql = "Insert Into category_value (categoryTypeId, name) Values (?, ?);";
-                    jdbc.update(sql, update.categoryTypeId, update.value);
+                    sql = "Insert Into category_value (id, categoryTypeId, name) Values (?, ?, ?);";
+                    jdbc.update(sql, update.categoryValueId, update.categoryTypeId, update.value);
                     break;
                 case EDIT_CATEGORY_VALUE:
                     sql = "Update category_value Set name = ? Where id = ?;";
