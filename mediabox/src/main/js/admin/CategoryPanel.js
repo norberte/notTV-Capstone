@@ -36,7 +36,8 @@ class CategoryTypeRow extends React.Component {
             <td className="category-col">
                 <div  className="panel-title">
                     <i className="glyphicon glyphicon-menu-up"/>
-                    {" " + this.props.category.name}
+                    {/*" " + this.props.category.name*/}
+                    <input type="text" onChange={this.props.handleCategoryTypeEdit} value={this.props.category.name}/>
                 </div>
             </td>
             <td className="category-col">
@@ -49,9 +50,6 @@ class CategoryTypeRow extends React.Component {
         this.props.category.values.map((val, idx) => {
             return <CategoryValueRow
                     value={val}
-                    name={val.name} //remove these later
-                    id={val.id}
-                    display={val.display}
                     valueClass={this.state.valueClass} 
                     key={idx}
                     handleEdit={this.props.handleEdit.bind(this.props.handleEdit, val)}
@@ -93,7 +91,8 @@ class CategoryType extends React.Component {
 	    });
         }
     });
-
+	
+	this.handleCategoryTypeEdit = this.handleCategoryTypeEdit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDeleteCategoryType = this.handleDeleteCategoryType.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -103,6 +102,25 @@ class CategoryType extends React.Component {
     this.overwrite = this.overwrite.bind(this);
     }
     
+    handleCategoryTypeEdit(categoryType, event){
+        console.log(event.target);
+        let newCategoryTypes = this.state.categoryTypes.slice();
+        let index1 = newCategoryTypes.indexOf(categoryType);
+        newCategoryTypes[index1].name = event.target.value;
+        
+        let newUpdates = this.state.updates.slice();
+        newUpdates = this.overwrite(newUpdates, categoryType.id).concat([{
+            action: edit_category_type,
+            categoryTypeId: categoryType.id,
+            value: event.target.value
+        }]);
+
+        console.log(newUpdates);
+        this.setState({
+            categoryTypes: newCategoryTypes,
+            updates: newUpdates
+        });
+    }
     // updates state when a CategoryValue name is changed
     handleEdit(categoryType, categoryValue, event) {
         console.log(event.target);
@@ -188,8 +206,7 @@ class CategoryType extends React.Component {
         let index = newCategoryTypes.indexOf(categoryType);
         newCategoryTypes[index].values.push({
             id: 1, //TODO: figure out how to assign correct id
-            name: "New",
-            display: true
+            name: "New"
         });
             
         this.setState({
@@ -243,6 +260,7 @@ class CategoryType extends React.Component {
     			  return <CategoryTypeRow
     					category={cat}
     					key={idx}
+    			        handleCategoryTypeEdit={this.handleCategoryTypeEdit.bind(this, cat)}
     					handleEdit={this.handleEdit.bind(this, cat)}
     					handleDelete={this.handleDelete.bind(this, cat)}
                         handleDeleteCategoryType={this.handleDeleteCategoryType.bind(this, cat)}
