@@ -9,7 +9,7 @@ const delete_category_type = 6;
 
 function CategoryValueRow(props) {
     return (
-        <tr className={"category-row panel-collapse collapse " + (props.value.display?"in ":"") + props.valueClass}>
+        <tr className={"category-row panel-collapse collapse in"}>
             <td className="panel-body">
                 <input type="text" onChange={props.handleEdit} value={props.value.name}/>
             </td>
@@ -30,8 +30,8 @@ class CategoryTypeRow extends React.Component {
         console.log(this.props.category);
         const id = this.props.category.name + "-accordian";
         return (
-                
-    <tbody className="panel panel-default">
+      <React.Fragment>       
+      <tbody className="panel panel-default">
         <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + this.state.valueClass}>
             <td className="category-col">
                 <div  className="panel-title">
@@ -43,6 +43,8 @@ class CategoryTypeRow extends React.Component {
                 <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleDeleteCategoryType}/>
             </td>
         </tr>
+      </tbody>
+      <tbody className={"panel-collapse collapse " + this.state.valueClass}>
         {
         this.props.category.values.map((val, idx) => {
             return <CategoryValueRow
@@ -56,14 +58,14 @@ class CategoryTypeRow extends React.Component {
                     handleDelete={this.props.handleDelete.bind(this.props.handleDelete, val)}/>
             })
         }
-        <tr className={"category-row panel-collapse collapse " + this.state.valueClass}>
+        <tr className={"category-row panel-collapse collapse in"}>
           <td>
             <br/>
             <input type="button" className="btn btn-success" value="New" onClick={this.props.newCategoryValue}/>
           </td>
         </tr>
-    </tbody>
-	    
+      </tbody>
+	  </React.Fragment>
         );
     }
 }
