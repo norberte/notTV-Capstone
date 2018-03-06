@@ -1,16 +1,11 @@
 package springbackend;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
@@ -20,13 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import filesharingsystem.process.DownloadProcess;
@@ -59,9 +53,14 @@ public class ProcessController {
     @Autowired
     private BeanFactory beanFactory; 
     
-    private HttpServletRequest request;
-
-
+    /**
+     * Uploads the given video to the network.
+     * I.e, creates a .torrent, uploads the .torrent to the server, 
+     * and starts seeding.
+     *
+     * @param video
+     * @return
+     */
     @PostMapping("upload")
     @ResponseBody
     public String upload(MultipartFile video) {
@@ -86,32 +85,33 @@ public class ProcessController {
 	}
     }
     
-    @GetMapping("downloadThumbnail")
+    /**
+     * Gets the thumbnail for a particular video.
+     *
+     * @param videoId: id of video
+     * @return
+     */
+    @GetMapping("get-thumbnail/<int:id>")
     @ResponseBody
-    public List<File> thumbnailDownload(@RequestParam(value="thumbnailName") String thumbnailName){
-        List<File> thumbnailFiles = Collections.emptyList();
-        File tempFile;
-        //for (int i = 0; i < thumbnailNames.length; i++) {
-            tempFile = null;
-            try {
-                Request.Get(
-                  String.format("%s/get-thumbnail/index.png", this.config.getServerUrl())
-                        ).execute().saveContent(tempFile);
-                
-                InputStream instream = new FileInputStream(tempFile);
-                
-                String response = Request.Post(
-                        String.format("/img/%s", thumbnailName)
-                        ).bodyStream(instream).execute().returnContent().asString();
-                log.info("Successfully downloaded " + thumbnailName + " from server. \n Post request response = " + response);
-            
-                thumbnailFiles.add(tempFile);
-            } catch (IOException e) {
-                //thumbnailFiles.add(null);
-                log.error("Error getting thumbnail file: " + thumbnailName + " from server.", e);
-            }
-        //}
-        return thumbnailFiles;
+    public File getThumbnail(@PathVariable int id, HttpServletResponse response){
+        String thumbnailName = String.valueOf(id);
+        File thumbnail = thumbnailStorage.get(thumbnailName);
+
+        // if it exists, just return it
+        if(thumbnailStorage.has(thumbnailName)) // Maybe implement an ImageStorage class that uses a StorageService and can accept id as an int.
+            return thumbnail;
+
+        // else download then return it.
+        try {
+            Request.Get(
+                String.format("%s/thumbnail/%d", config.getServerUrl(), id)
+            ).execute().saveContent(thumbnail);
+            return thumbnail;
+        } catch (IOException e) {
+            log.error("Error getting thumbnail file: " + thumbnailName + " from server.", e);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // tell client file not found.
+            return thumbnailStorage.get("placeholder");
+        }
     }  
 
     @RequestMapping(path = "download")

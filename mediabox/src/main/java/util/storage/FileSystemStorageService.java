@@ -65,4 +65,9 @@ public class FileSystemStorageService implements StorageService {
     public File getBaseDir() {
 	return rootDir;
     }
+    
+    @Override
+    public boolean has(String filename) {
+        return false;
+    }
 }

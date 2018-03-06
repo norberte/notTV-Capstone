@@ -11,15 +11,15 @@ class VideoThumbnail extends React.Component {
             <div className="col-md-2 no-padding">
                 <div className="thumbnail no-margin">
 	                <a href={this.props.entry.url}>
-	                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
+	                  <img className="video-thumbnail" src={"/process/get-thumbnail/"+this.props.entry.id}/>
 	                  <div className="caption">
 	                    <h3 className="no-margin">{this.props.entry.title} </h3>
 	                  </div>
 	               </a>
 	               <a href={this.props.entry.authorUrl}>
-		               <div className="caption">
-		           			<h3 className="no-margin">{this.props.entry.author} </h3>
-		           		</div>	
+		         <div className="caption">
+		           <h3 className="no-margin">{this.props.entry.author} </h3>
+		         </div>	
 	               </a>
 	           </div>
             </div>
@@ -33,8 +33,7 @@ class Browse extends React.Component {
         super(props);
         this.state = {
             categories: [],
-            videos: [],
-            thumbnails: []
+            videos: []
         };
 
         // get the categories.
@@ -51,9 +50,7 @@ class Browse extends React.Component {
         // TODO: Get videos for each category.
         // get videos
         this.update_videos([]);
-        
         this.update_videos = this.update_videos.bind(this);
-        this.dowloadThumbnails = this.dowloadThumbnails.bind(this);
     }
 
     /**
@@ -78,24 +75,6 @@ class Browse extends React.Component {
         });
     }
     
-    // provide a list of thumbnail files to be downloaded, then store returned files inside the state
-    dowloadThumbnails(fileName){
-    	$.get({
-            url: '/process/downloadThumbnail',
-            data: {
-            	thumbnailName: fileName
-            },
-            dataType: "json",
-            success: (data) => {
-            	console.log("Successfully downloaded thumbnails. Response = " + data);
-            },
-            error: (response) => {
-            	console.log("Could not download thumbnails");
-                console.log(response);
-            }
-        });
-    }
-
     render() {
         return (
             <div className="row display-flex categories-row">
@@ -104,13 +83,11 @@ class Browse extends React.Component {
                    categories={this.state.categories}
                    update_handler={this.update_videos}/>
               </div>
-                {this.dowloadThumbnails('index.png')}
-                {this.dowloadThumbnails('default-placeholder-300x300.png')}
               <div className="col-md-10 results-container">
                 <TopBar/>
                 <div className="row browse-body">
                   <div className="col-md-12">
-                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos} thumbnail = {this.state.thumbnails}  />
+                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos}/>
                   </div>
                 </div>
               </div>
