@@ -43,6 +43,7 @@ public class InfoController {
 	// CategoryValue(id, name)
 	// CategoryType(name, CategoryValue[] values)
 	return jdbcTemplate.query("Select * From category_type;", (rs, rowNum) -> new CategoryType(
+	    rs.getInt("id"),
 	    rs.getString("name"),
 	    jdbcTemplate.query(
 		"Select id, name From category_value Where categorytypeid=?;",
@@ -50,6 +51,24 @@ public class InfoController {
 		rs.getInt("id")
 	    )
 	));
+    }
+    
+    // Returns a new unique id for the category_type table
+    @GetMapping("/category-type-id")
+    @ResponseBody
+    public int getNextCategoryTypeId() {
+        int id = jdbcTemplate.query("Select nextval('category_type_id_seq');", (rs) -> {rs.next(); return rs.getInt(1);});
+        log.info("Next categoryType id: " + id);
+        return id;
+    }
+    
+    // Returns a new unique id for the category_value table
+    @GetMapping("/category-value-id")
+    @ResponseBody
+    public int getNextCategoryValueId() {
+        int id = jdbcTemplate.query("Select nextval('category_value_id_seq');", (rs) -> {rs.next(); return rs.getInt(1);});
+        log.info("Next categoryValue id: " + id);
+        return id;
     }
 
     // gets playlists owned by a user.
