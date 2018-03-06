@@ -6,21 +6,40 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 
 class VideoThumbnail extends React.Component {
+    constructor(props) {
+        super(props);
+
+        // get thumbnail if it isn't loaded already.
+        if(!props.entry.thumbnail)
+            utils.getThumbnail(this.props.entry.id, (file) => {
+                this.props.entry.thumbnail = file;
+                this.forceUpdate();
+            });
+    }
     render() {
+        const thumbnail = this.props.entry.thumbnail ? this.props.entry.thumbnail : "/img/default-placeholder-300x300.png";
         return (
             <div className="col-md-2 no-padding">
-              <a href={this.props.entry.url}>
-                <div className="thumbnail no-margin">
-                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
-                  <div className="caption">
-                    <h3 className="no-margin">{this.props.entry.title} </h3>
+              <div className="thumbnail no-margin">
+	        <a href={this.props.entry.url}>
+                  <div className="video-thumbnail">
+	            <img className="video-thumbnail-content" src={thumbnail}/>
                   </div>
-                </div>
-              </a>
+	          <div className="caption">
+	            <h3 className="no-margin">{this.props.entry.title} </h3>
+	          </div>
+	        </a>
+	        <a href={this.props.entry.authorUrl}>
+		  <div className="caption">
+		    <h3 className="no-margin">{this.props.entry.author} </h3>
+		  </div>	
+	        </a>
+	      </div>
             </div>
         );
     }
 }
+
 
 class Browse extends React.Component {
     constructor(props) {
@@ -44,7 +63,6 @@ class Browse extends React.Component {
         // TODO: Get videos for each category.
         // get videos
         this.update_videos([]);
-
         this.update_videos = this.update_videos.bind(this);
     }
 
@@ -69,7 +87,7 @@ class Browse extends React.Component {
             }
         });
     }
-
+    
     render() {
         return (
             <div className="row display-flex categories-row">

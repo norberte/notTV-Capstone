@@ -1,7 +1,5 @@
 package spring.view;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class VideoData {
     int id;
     String title;
@@ -16,7 +14,7 @@ public class VideoData {
     boolean subscribed;
     
     public VideoData(int id, String title, String description, int userid,  String username, boolean subscribed) {
-    this.id = id;
+        this.id = id;
 	this.title = title;
 	this.description = description;
 	this.userid = userid;
@@ -26,30 +24,30 @@ public class VideoData {
     
     public int getId() {
         return id;
-        }
+    }
     public String getTitle() {
         return title;
-        }
+    }
     public String getDescription() {
-    return description;
+        return description;
     }
     public int getVersion() {
-    return version;
+        return version;
     }
     public String getFiletype() {
-    return filetype;
+        return filetype;
     }
     public String getLicense() {
-    return license;
+        return license;
     }
     public String getDownloadurl() {
-    return downloadurl;
+        return downloadurl;
     }
     public String getThumbnailurl() {
-    return thumbnailurl;
+        return thumbnailurl;
     }
     public int getUserid() {
-    return userid;
+        return userid;
     }
     public String getUsername(){
         return username;

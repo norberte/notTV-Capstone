@@ -20,9 +20,9 @@ export default class AuthorHeader extends React.Component {
     
     checkForSubscribed(loggedInUser, userFromProfile){
         console.log(loggedInUser);
-        console.log(userFromProfile);
+        console.log(userFromProfile[0]);
         $.get({
-            url: config.serverUrl + "/update/checkSubscribed",
+            url: config.serverUrl + "/info/checkSubscribed",
             data: {
                 subscriber: loggedInUser,
                 author: userFromProfile[0] // this is actually an array of 1 element

@@ -17,8 +17,8 @@
   
   <bean id="Config" class="springbackend.Config">
     <!-- <property name="serverUrl" value="http://nottv.levimiller.ca"/> -->
-    <!-- <property name="serverUrl" value="//localhost:1248"/> -->
-    <property name="serverUrl" value="http://35.160.102.229:1248"/>
+    <!-- <property name="serverUrl" value="http://localhost:1248"/>  -->
+    <property name="serverUrl" value="http://35.160.102.229:1248"/> 
     <property name="trackerUrl" value="http://35.160.102.229:6969"/>
   </bean>
 
@@ -27,6 +27,15 @@
     <constructor-arg>
       <bean class="util.storage.StorageProperties">
   	<constructor-arg  value="torrents"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+  
+  <!-- Thumbnail Storage -->
+  <bean id="ImageStorage" class="util.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg value="img"/>
       </bean>
     </constructor-arg>
   </bean>

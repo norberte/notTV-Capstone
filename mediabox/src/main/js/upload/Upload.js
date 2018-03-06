@@ -109,6 +109,20 @@ class FilePane extends React.Component {
     }
 }
 
+class ImgFilePane extends React.Component {
+    render() {
+	return (
+	      <div className="tab">
+		<h1>{this.props.label}</h1>
+		<p>
+		  <input type="file" name="videoThumbnail" accept="image/*"
+			 ref={(input) => { this.videoThumbnail = input; }} onChange={()=>this.props.onChange(this.videoThumbnail.files)}/>
+		</p>
+	      </div>
+	);
+    }
+}
+
 class App extends React.Component {
     constructor(props){
 	super(props);
@@ -120,14 +134,15 @@ class App extends React.Component {
 		description: '',
 		version: '',
 		license: '',
-		thumbnailurl: '/img/default-placeholder-300x300.png', // ignore for now.
+		thumbnailurl: '/img/default-placeholder-300x300.png', // this is the default video thumbnail... if user uploads an actual thumbnail, the backend will overwrite the default
 		tags: '',
-		userid: '-1' // TODO: mediabox user id.
+		userid: '-1' // TODO: get mediabox user id.
 	    }
 	};
 
 	this.handleChange = this.handleChange.bind(this);
 	this.fileChange = this.fileChange.bind(this);
+	this.imgFileChange = this.imgFileChange.bind(this);
 	this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -142,53 +157,88 @@ class App extends React.Component {
 	if(files.length > 0) // Only one file for now.
 	    this.state.videoFile = files[0];
     }
-
+    
+    imgFileChange(files) {
+    	if(files.length > 0) // Only one file for now.
+    	    this.state.videoThumbnail = files[0];
+    }
+    
     //handles getting state data and giving it to the ajax submit.
     handleSubmit(e){
-	e.preventDefault();
+    	e.preventDefault();
+    	
+    	// initialize a "global" thumbnailURL with default value that each post request can access
+    	var thumbnailURL = this.state.formData.thumbnailurl;
+    	
+    	const localForm = new FormData();
+    	localForm.append('video', this.state.videoFile);
+    	
+    	// Start upload process on local mediabox server.
+    	$.post({
+    		url: '/process/upload',
+    		data: localForm,
+    		processData: false,  // tell jQuery not to process the data (because of the file)
+    		contentType: false,  // tell jQuery not to set contentType
+    		success: (torrentFile) => {
+    			// make FormData object to store thumbnail image to be uploaded
+    	    	const newForm = new FormData();
+    	    	newForm.append('image', this.state.videoThumbnail);
 
-	const localForm = new FormData();
-	localForm.append('video', this.state.videoFile);
-	// Start upload process on local mediabox server.
-	$.post({
-	    url: '/process/upload',
-	    data: localForm,
-	    processData: false,  // tell jQuery not to process the data (because of the file)
-	    contentType: false,  // tell jQuery not to set contentType
-	    success: (torrentFile) => {
-		// TODO: loop through formData
-		const formData = {
-			title: this.state.formData.title,
-			description: this.state.formData.description,
-			version: this.state.formData.version,
-			filetype: this.state.videoFile.type,
-			license: this.state.formData.license,
-			downloadurl: torrentFile,
-			thumbnailurl: this.state.formData.thumbnailurl,
-			tags: this.state.formData.tags,
-			userid: this.state.formData.userid
-		};
+    	    	// post request to upload thumbnail to server
+    	        $.post({
+    	    		url: config.serverUrl + '/upload/thumbnailSubmission',
+    	    		data: newForm,
+    	    		processData: false,  // not to process the data (because of the file)
+    	    		contentType: false,  // not to set contentType
+    	    		success: (thumbnailURL_returned) => {
+    	    			// change thumnailURl, if it was uploaded to server, else, leave it as default value
+    	    			if(thumbnailURL_returned !== ""){
+    	    				thumbnailURL = thumbnailURL_returned.substring(thumbnailURL_returned.indexOf("/img/"));
+    	    				console.log("Thumbnail Submission returned an actual THUMBNAIL URL: " + thumbnailURL_returned);
+    	    			} else {
+    	    				console.log("Thumbnail Submission returned empty String!");
+    	    				// keep thumbnailURL to the default picture
+    	    			}
+    	    			
+    	    			// ajax request to send video metadata to server
+    	    			// TODO: loop through formData <-- someone else's comment .. not sure why this is needed
+    	    			const formData = {
+    	    					title: this.state.formData.title,
+    	    					description: this.state.formData.description,
+    	    					version: this.state.formData.version,
+    	    					filetype: this.state.videoFile.type,
+    	    					license: this.state.formData.license,
+    	    					downloadurl: torrentFile,
+    	    					thumbnailurl: thumbnailURL,
+    	    					tags: this.state.formData.tags,
+    	    					userid: this.state.formData.userid
+    	    			};
 
-		// insert video
-		$.ajax({
-		    type: "POST",
-		    url: config.serverUrl + "/upload/videoSubmission",
-		    contentType: 'application/json',
-		    processData: false,
-		    data: JSON.stringify(formData),
-		    success: (response) => {
-			console.log(response);
-			alert("Successfully uploaded!");
-		    },
-		    error: (response) => {
-			console.log(response);
-		    }
-		});
-	    },
-	    error: (response) => {
-		console.log(response);
-	    }
-	});
+    	    			// insert video-metadata
+    	    			$.ajax({
+    	    				type: "POST",
+    	    				url: config.serverUrl + "/upload/videoSubmission",
+    	    				contentType: 'application/json',
+    	    				processData: false,
+    	    				data: JSON.stringify(formData),
+    	    				success: (response) => {
+    	    					console.log(response);
+    	    					alert("Successfully uploaded!");
+    	    				},
+    	    				error: (response) => {
+    	    					console.log(response);
+    	    				}
+    	    			});
+    	    		},
+    	    		error: (response) => {
+    	    			console.log("Thumbnail Submission DID NOT WORK!");
+    	    		}
+    	        });
+    		},
+    		error: (response) => {
+    			console.log(response);
+    		}
+    	});
     }
 
     render(){
@@ -199,7 +249,7 @@ class App extends React.Component {
 		  <Tabs>
 
 		      <FilePane label="Select Video File" onChange={this.fileChange}/>
-		      <FilePane label="Select Video Thumbnail" onChange={this.fileChange}/>
+		      <ImgFilePane label="Select Video Thumbnail" onChange={this.imgFileChange}/>
 
 		    <Pane label="Add Video Details">
 		      <div className="tab">

@@ -28,6 +28,14 @@ public interface StorageService {
     File get(String filename);
 
     /**
+     * Checks whether a file exists with the given filename.
+     *
+     * @param filename
+     * @return
+     */
+    boolean has(String filename);
+    
+    /**
      * Gets the base directory.
      *
      * @return

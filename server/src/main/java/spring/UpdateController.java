@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +47,7 @@ public class UpdateController {
         String query = "Delete From subscribe Where subscriberId = ? AND authorId = ?;";
         log.info(query);
         
-        int numberOfRowAffected = jdbc.update(query, author, subscriber);
+        int numberOfRowAffected = jdbc.update(query, subscriber, author);
         if(numberOfRowAffected > 0) {
             return true; // successfully unsubscribe
         } else {
@@ -98,7 +97,7 @@ public class UpdateController {
     public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
         // insert statement
         final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
-
+        
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(INSERT_SQL);

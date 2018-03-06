@@ -91,7 +91,7 @@ public class TtorrentUploadProcess implements UploadProcess {
 
 	    // Create request
 	    CloseableHttpClient httpClient = HttpClients.createDefault();
-	    HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload-torrent"));
+	    HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
 	    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 	    // This attaches the file to the POST:
 	    builder.addBinaryBody(

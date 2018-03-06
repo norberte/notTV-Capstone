@@ -18,10 +18,16 @@ module.exports = {
         path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
         filename: '[name]-bundle.js'
     },
+    resolve: { // resolve utilities file.
+        alias: {
+            utils: path.resolve(__dirname, './src/main/js/utils.js')  
+        }
+    },
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            utils: "utils"
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'commons',

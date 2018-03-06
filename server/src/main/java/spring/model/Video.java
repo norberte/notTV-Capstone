@@ -8,7 +8,6 @@ public class Video {
     String filetype;
     String license;
     String downloadurl;
-    String thumbnailurl;
     int userid;
 
     public Video(int id, String title, String downloadurl) {
@@ -113,20 +112,6 @@ public class Video {
      */
     public void setDownloadurl(String downloadurl) {
 	this.downloadurl = downloadurl;
-    }
-
-    /**
-     * @return the thumbnailurl
-     */
-    public String getThumbnailurl() {
-	return thumbnailurl;
-    }
-
-    /**
-     * @param thumbnailurl the thumbnailurl to set
-     */
-    public void setThumbnailurl(String thumbnailurl) {
-	this.thumbnailurl = thumbnailurl;
     }
 
     /**

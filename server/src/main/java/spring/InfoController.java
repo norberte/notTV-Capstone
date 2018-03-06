@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
-import spring.view.Video;
+import spring.view.NotTVUser;
 import spring.view.Playlist;
+import spring.view.Video;
 import spring.view.VideoData;
 
 @CrossOrigin
@@ -102,8 +103,8 @@ public class InfoController {
 
     @GetMapping("/checkSubscribed")
     @ResponseBody
-    public boolean checkForSubscription(@RequestParam(value="userID1", required=true) int userID1,
-    @RequestParam(value="userID2", required=true) int userID2 ) {
+    public boolean checkForSubscription(@RequestParam(value="subscriber", required=true) int userID1,
+    @RequestParam(value="author", required=true) int userID2 ) {
         log.info("Given userID1 and userID2, check if userid1 is subscripted to userId2");
 
         // Make the query.
@@ -128,34 +129,7 @@ public class InfoController {
             log.info("user is unsubscibed");
             return false;
         }
-    }
-
-
-
-    @GetMapping("/recentVideos")
-    @ResponseBody
-    public List<Video> getRecentVideos(@RequestParam(value="userid[]", required=true) int[] userid) {
-        // Video(title, thumbnail_url, download_url)
-        log.info("recent videos");
-
-        // Make the query.
-        String query = "Select title, downloadurl, thumbnailurl From Video Where userid = ? Limit 10";
-        log.info(query);
-
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(query);
-                ps.setInt(1, userid[0]); // json of length 1 is sent, with only one userid inside the json object
-                return ps;
-            }
-        };
-
-        return jdbcTemplate.query(psc, (rs, row) -> new Video(
-            rs.getString("title"),
-            rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-            "/process/download?torrentName="+rs.getString("downloadurl"))
-        );
-    }
+    } 
 
     @GetMapping("/public-ip")
     @ResponseBody
@@ -172,10 +146,11 @@ public class InfoController {
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-	StringBuilder queryBuilder = new StringBuilder("Select id, title, downloadurl, thumbnailurl From Video ");
+        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id");
 
+        // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
-	    queryBuilder.append("Where id in (");
+            queryBuilder.append("Where v.id in (");
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
@@ -190,13 +165,17 @@ public class InfoController {
 	String query = queryBuilder.toString();
 	log.info(query);
 
+        // put the data into a view object.
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
-	    rs.getString("title"),
-	    rs.getString("thumbnailurl"), //TODO: make sure this is correct.
-	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("id"))
-	);
+            rs.getInt("vid"),
+	    rs.getString("title"), 
+	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("vid"),
+            new NotTVUser(
+                rs.getInt("uid"),
+                rs.getString("username")
+            )
+	)); 
     }
-
 
     @GetMapping("/video-data")
     @ResponseBody
