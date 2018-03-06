@@ -9,14 +9,25 @@ class VideoThumbnail extends React.Component {
     constructor(props) {
         super(props);
 
+        this.getThumbnail = this.getThumbnail.bind(this);
+        this.getThumbnail();
+    }
+
+    getThumbnail() {
         // get thumbnail if it isn't loaded already.
-        if(!props.entry.thumbnail)
+        if(!this.props.entry.thumbnail)
             utils.getThumbnail(this.props.entry.id, (file) => {
                 this.props.entry.thumbnail = file;
                 this.forceUpdate();
             });
     }
+
     render() {
+        // need to call here because the constructor isn't always called for entries.
+        // I think React may be reusing existing ones, so it doesn't create new VideoThumbnails?
+        // We need to do it in the constructor also, because the component needs
+        // to be mounted first to forceUpdate().
+        this.getThumbnail();
         const thumbnail = this.props.entry.thumbnail ? this.props.entry.thumbnail : "/img/default-placeholder-300x300.png";
         return (
             <div className="col-md-2 no-padding">
