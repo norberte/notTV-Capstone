@@ -258,24 +258,26 @@ class UploadForm extends React.Component {
 		    license: this.state.formData.license,
 		    downloadurl: torrentFile,
                     thumbnail: this.state.formData.thumbnailFile,
-		    tags: this.state.formData.tags,
+		    tags: Array.from(this.state.formData.tags),
 		    userid: this.state.formData.userid
 		};
 
 		// insert video
 		$.ajax({
 		    type: "POST",
-		    url: config.serverUrl + "/upload/videoSubmission",
+		    url: config.serverUrl + "/upload/add-video",
 		    contentType: 'application/json',
 		    processData: false,
 		    data: JSON.stringify(formData),
 		    success: (response) => {
+                        // insert 
 			console.log(response);
-			BootstrapDialog.show({
-                            title: "Success!",
-                            message: "Successfully uploaded!",
-                            type: BootstrapDialog.TYPE_SUCCESS
-                        });
+                        alert("Successfully Uploaded!");
+			// BootstrapDialog.show({
+                        //     title: "Success!",
+                        //     message: "Successfully uploaded!",
+                        //     type: BootstrapDialog.TYPE_SUCCESS
+                        // });
 		    },
 		    error: (response) => {
 			console.log(response);

@@ -2,7 +2,9 @@ package spring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,18 +45,17 @@ public class PostController {
     public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
         log.info("Adding video {}...", videoForm.getTitle());
         // insert statement
-        final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, downloadURL) VALUES(?,?,?,?,?,?,?)";
-        
+        final String INSERT_SQL = "INSERT INTO video (title, description, version, license, userID, downloadURL) VALUES(?,?,?,?,?,?)";
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
+                PreparedStatement ps = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, videoForm.getTitle());
                 ps.setString(2, videoForm.getDescription());
                 ps.setInt(3, videoForm.getVersion());
-                ps.setString(4, ""); // TODO: remove this from the db.
-                ps.setString(5, videoForm.getLicense());
-                ps.setInt(6, videoForm.getUserid());
-                ps.setString(7, videoForm.getDownloadurl());
+                ps.setString(4, videoForm.getLicense());
+                ps.setInt(5, videoForm.getUserid());
+                ps.setString(6, videoForm.getDownloadurl());
                 return ps;
             }
         };
