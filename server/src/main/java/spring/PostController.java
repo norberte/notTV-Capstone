@@ -1,6 +1,5 @@
 package spring;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -18,14 +16,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import spring.view.VideoForm;
 import spring.storage.StorageService;
 import spring.view.AccountForm;
+import spring.view.VideoForm;
 
 @CrossOrigin
 @RestController
@@ -40,15 +39,14 @@ public class PostController {
     @Qualifier("ImageStorage")
     private StorageService thumbnailStorage;
     
-    @PostMapping("/videoSubmission")
+    @PostMapping("/add-video")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
         log.info("Adding video {}...", videoForm.getTitle());
         // insert statement
-        final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
+        final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, downloadURL) VALUES(?,?,?,?,?,?,?)";
         
-        log.info("Video's thumbnail URL is {} ...", videoForm.getThumbnailurl());
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
@@ -58,8 +56,7 @@ public class PostController {
                 ps.setString(4, videoForm.getFiletype());
                 ps.setString(5, videoForm.getLicense());
                 ps.setInt(6, videoForm.getUserid());
-                ps.setString(7, videoForm.getThumbnailurl());
-                ps.setString(8, videoForm.getDownloadurl());
+                ps.setString(7, videoForm.getDownloadurl());
                 return ps;
             }
         };
@@ -67,43 +64,15 @@ public class PostController {
         this.jdbc.update(psc);
     }
     
-    @PostMapping("/thumbnailSubmission")
+    /**
+     * Uploads a thumbnail to the server.
+     *
+     * @param file
+     */
+    @PostMapping("/upload-thumbnail")
     @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-    public String processThumnailFile(@RequestBody(required=true) MultipartFile image) {
-        // if thumbnail was uploaded, store it on the server using the methods from ThumbnailUploadController
-        Resource thumbnailURL = null;
-        if(image != null) {
-            log.info("Thubnail image name is: " + image.getOriginalFilename());
-            ThumbnailUploadController thumbnailUploader = new ThumbnailUploadController(thumbnailStorage);
-            try {
-                thumbnailUploader.storeThumbnailOnServer(image);
-                log.info("Successfully uploaded thumbnail file.");
-            } catch (IllegalStateException e) {
-                log.error("Error saving uploaded file.", e);
-            }
-            
-            // if successfully uploaded inside the try-catch, then the following line should return the thumbnailURL
-            thumbnailURL = thumbnailUploader.getUploadPath(image.getOriginalFilename());
-        } else {
-             log.error("image parameter is NULL");
-        }
-        
-        // if a new ThumbnailURL was returned by the thumbnailUploader, then overwrite the default thumbnailURL
-        if(thumbnailURL != null) {
-            try {
-                log.info("thumbnailURL.getURL().toExternalForm() = " + thumbnailURL.getURL().toExternalForm());
-                return thumbnailURL.getURL().toExternalForm();
-            } catch (IOException e) {
-                log.error("Error getting thumbnailURL. IO Exception", e);
-                return "";
-            }
-        } else {
-            log.error("Error getting thumbnailURL: thumbnailURL is NULL");
-            return ""; // empty string returned will signal the post request that the thumbnail was not uploaded
-            // and it should stick with the default thumnailURL .. I think throwing an exception is an overkill
-            // I just don't want to handle exceptions or anything else inside a post request's response
-        }
+    public void storeThumbnailOnServer(@RequestParam("file") MultipartFile file) {
+        thumbnailStorage.store(file);
     }
     
     private int getUserID(String username) {

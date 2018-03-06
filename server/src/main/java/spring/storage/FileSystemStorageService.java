@@ -16,8 +16,6 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import spring.PostController;
-
 public class FileSystemStorageService implements StorageService {
     private static final Logger log = LoggerFactory.getLogger(FileSystemStorageService.class);
     private final Path rootLocation;

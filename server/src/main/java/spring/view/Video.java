@@ -1,17 +1,16 @@
 package spring.view;
 
 public class Video {
+    public int id;
     public String title;
     public String thumbnail;
     public String url;
-    public String author;
-    public String authorUrl;
+    public NotTVUser user;
 
-    public Video(String title, String thumbnail, String url, String author, String authorUrl) {
+    public Video(int id, String title, String url, NotTVUser user) {
+        this.id = id;
 	this.title = title;
-	this.thumbnail = thumbnail;
 	this.url = url;
-	this.author = author;
-	this.authorUrl = authorUrl;
+        this.user = user;
     }
 }
