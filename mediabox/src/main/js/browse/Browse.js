@@ -37,12 +37,12 @@ class VideoThumbnail extends React.Component {
 	            <img className="video-thumbnail-content" src={thumbnail}/>
                   </div>
 	          <div className="caption">
-	            <h3 className="no-margin">{this.props.entry.title} </h3>
+	            <h4 className="no-margin">{this.props.entry.title} </h4>
 	          </div>
 	        </a>
-	        <a href={this.props.entry.authorUrl}>
+	        <a href={"/userProfile/" +this.props.entry.author.username}>
 		  <div className="caption">
-		    <h3 className="no-margin">{this.props.entry.author} </h3>
+		    <h6 className="no-margin">{this.props.entry.author.username} </h6>
 		  </div>	
 	        </a>
 	      </div>
