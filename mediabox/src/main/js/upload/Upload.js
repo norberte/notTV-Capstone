@@ -187,7 +187,7 @@ class UploadForm extends React.Component {
 		version: '',
 		license: '',
 		tags: new Set(),
-		userid: '-1' // TODO: mediabox user id.
+		userid: -1 // TODO: mediabox user id.
             }
         };
 
@@ -251,24 +251,32 @@ class UploadForm extends React.Component {
 	    success: (torrentFile) => {
 		// TODO: loop through formData
                 console.log("local success");
-		const formData = {
-		    title: this.state.formData.title,
-		    description: this.state.formData.description,
-		    version: this.state.formData.version,
-		    license: this.state.formData.license,
-		    downloadurl: torrentFile,
-                    thumbnail: this.state.formData.thumbnailFile,
-		    tags: Array.from(this.state.formData.tags),
-		    userid: this.state.formData.userid
-		};
+                // https://stackoverflow.com/questions/21329426/spring-mvc-multipart-request-with-json
+                const serverForm = new FormData();
+                serverForm.append('videoForm', new Blob([JSON.stringify({
+                    title: this.state.formData.title,
+                    description: this.state.formData.description,
+                    version: this.state.formData.version,
+                    license: this.state.formData.license,
+                    downloadurl: torrentFile,
+                    tags: Array.from(this.state.formData.tags),
+                    userid: this.state.formData.userid
+                })], {
+                    type: "application/json"
+                }));
+                serverForm.append('thumbnail', this.state.formData.thumbnailFile);
+                console.log(serverForm);
 
 		// insert video
 		$.ajax({
 		    type: "POST",
 		    url: config.serverUrl + "/upload/add-video",
-		    contentType: 'application/json',
 		    processData: false,
-		    data: JSON.stringify(formData),
+                    contentType: false,
+                    headers: {
+                        "Content-Type": undefined
+                    },
+		    data: serverForm,
 		    success: (response) => {
                         // insert 
 			console.log(response);

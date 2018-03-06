@@ -1,6 +1,5 @@
 package spring.view;
 
-import java.io.File;
 
 public class VideoForm {
     String title;
@@ -8,7 +7,6 @@ public class VideoForm {
     int version;
     String license;
     String downloadurl;
-    File thumbnailFile;
     int[] tags; 
     int userid;
 
@@ -80,20 +78,6 @@ public class VideoForm {
      */
     public void setDownloadurl(String downloadurl) {
         this.downloadurl = downloadurl;
-    }
-
-    /**
-     * @return the thumbnailFile
-     */
-    public File getThumbnailFile() {
-        return thumbnailFile;
-    }
-
-    /**
-     * @param thumbnailFile the thumbnailFile to set
-     */
-    public void setThumbnailFile(File thumbnailFile) {
-        this.thumbnailFile = thumbnailFile;
     }
 
     /**

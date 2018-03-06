@@ -140,7 +140,7 @@ public class InfoController {
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id");
+        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
 
         // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
