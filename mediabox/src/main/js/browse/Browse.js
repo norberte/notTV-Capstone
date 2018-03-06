@@ -10,25 +10,11 @@ class VideoThumbnail extends React.Component {
         super(props);
 
         // get thumbnail if it isn't loaded already.
-        if(!props.entry.thumbnail) {
-            $.ajax({
-                type: "GET",
-                url: "/process/get-thumbnail/"+this.props.entry.id,
-                dataType: "binary",
-                // responseType:'arraybuffer',
-                processData: false,
-                success: (file) => {
-                    if(file !== null) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            this.props.entry.thumbnail = reader.result;
-                            this.forceUpdate();
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                }
+        if(!props.entry.thumbnail)
+            utils.getThumbnail(this.props.entry.id, (file) => {
+                this.props.entry.thumbnail = file;
+                this.forceUpdate();
             });
-        }
     }
     render() {
         const thumbnail = this.props.entry.thumbnail ? this.props.entry.thumbnail : "/img/default-placeholder-300x300.png";
