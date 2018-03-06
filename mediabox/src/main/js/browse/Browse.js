@@ -56,6 +56,8 @@ class Browse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchText: "",
+            filters: [],
             categories: [],
             videos: []
         };
@@ -81,11 +83,12 @@ class Browse extends React.Component {
      * Gets a list of videos filtered by 'filters'
      * filters = [ cat1_id, cat2_id, ...]
      */
-    update_videos(filters) {
+    update_videos() {
         $.get({
             url: config.serverUrl + "/info/videos",
             data: {
-                categories: filters
+                searchText: this.state.searchText,
+                categories: this.state.filters
             },
             dataType: "json",
             success: (data) => {
@@ -105,10 +108,16 @@ class Browse extends React.Component {
               <div className="col-md-2 categories-column">
                 <CategoryFilter
                    categories={this.state.categories}
-                   update_handler={this.update_videos}/>
+                   selected={this.state.filters}
+                   update_selected={(selected)=> {
+                       this.setState({filters: selected});
+                       this.update_videos(); // always update when filters change.
+                   }}/>
               </div>
               <div className="col-md-10 results-container">
-                <TopBar/>
+                <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
+                  updateVideos={this.update_videos}
+                  searchText={this.state.searchText}/>
                 <div className="row browse-body">
                   <div className="col-md-12">
                     <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos}/>

@@ -133,7 +133,7 @@ public class InfoController {
 
     @GetMapping("/videos")
     @ResponseBody
-    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories) {
+    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories, @RequestParam(value="searchText", required=false) String searchText) {
 	// Video(title, thumbnail_url, download_url)
 	log.info("videos");
 
@@ -141,7 +141,7 @@ public class InfoController {
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
         StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
-
+        
         // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
             queryBuilder.append("Where v.id in (");
@@ -155,6 +155,12 @@ public class InfoController {
 	    }
 	    queryBuilder.append(')');
 	}
+
+        //TODO: improved searching.
+        if(searchText != null && searchText.length() > 0)
+            queryBuilder.append(" And title LIKE '")
+                .append(searchText)
+                .append("%'");
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();
 	log.info(query);

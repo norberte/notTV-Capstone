@@ -18,8 +18,22 @@ class SearchTagDropdown extends React.Component {
 }
 
 class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    handleKeyPress(e) {
+        if (e.key === 'Enter') { // apply 
+            this.props.updateVideos();
+        }
+    }
+    
     render() {
-        return <input type="text" placeholder="Search" className="search-bar"/>;
+        return (
+            <input type="text" placeholder="Search" className="search-bar"
+                   value={this.props.value} onChange={this.props.handleChange} onKeyPress={this.handleKeyPress}/>
+        );
     }
 }
 
@@ -72,10 +86,12 @@ export default class TopBar extends React.Component {
         return (
             <div className="row">
               <div className="col-md-1 search-tag-dropdown-parent">
-                <SearchTagDropdown />
+                <SearchTagDropdown/>
               </div>
               <div className="col-md-8">
-                <SearchBar />
+                <SearchBar handleChange={this.props.handleChange}
+                  updateVideos={this.props.updateVideos}
+                  values={this.props.searchText}/>
               </div>
               <div className="col-md-3">
                 <div className="row">
