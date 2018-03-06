@@ -9,19 +9,19 @@ class VideoThumbnail extends React.Component {
     render() {
         return (
             <div className="col-md-2 no-padding">
-                <div className="thumbnail no-margin">
-	                <a href={this.props.entry.url}>
-	                  <img className="video-thumbnail" src={"/process/get-thumbnail/"+this.props.entry.id}/>
-	                  <div className="caption">
-	                    <h3 className="no-margin">{this.props.entry.title} </h3>
-	                  </div>
-	               </a>
-	               <a href={this.props.entry.authorUrl}>
-		         <div className="caption">
-		           <h3 className="no-margin">{this.props.entry.author} </h3>
-		         </div>	
-	               </a>
-	           </div>
+              <div className="thumbnail no-margin">
+	        <a href={this.props.entry.url}>
+	          <img className="video-thumbnail" src={"/process/get-thumbnail/"+this.props.entry.id}/>
+	          <div className="caption">
+	            <h3 className="no-margin">{this.props.entry.title} </h3>
+	          </div>
+	        </a>
+	        <a href={this.props.entry.authorUrl}>
+		  <div className="caption">
+		    <h3 className="no-margin">{this.props.entry.author} </h3>
+		  </div>	
+	        </a>
+	      </div>
             </div>
         );
     }
