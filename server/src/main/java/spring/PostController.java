@@ -2,9 +2,15 @@ package spring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,29 +45,55 @@ public class PostController {
     @Qualifier("ImageStorage")
     private StorageService thumbnailStorage;
     
-    @PostMapping("/add-video")
+    @PostMapping(value="/add-video", consumes={"multipart/form-data"})
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
+    public void processVideoInfo(
+        @RequestPart("videoForm") @Valid VideoForm videoForm,
+        @RequestPart("thumbnail") @Valid @NotNull @NotBlank MultipartFile thumbnail
+    ) {
         log.info("Adding video {}...", videoForm.getTitle());
         // insert statement
-        final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, downloadURL) VALUES(?,?,?,?,?,?,?)";
-        
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
-                ps.setString(1, videoForm.getTitle());
-                ps.setString(2, videoForm.getDescription());
-                ps.setInt(3, videoForm.getVersion());
-                ps.setString(4, videoForm.getFiletype());
-                ps.setString(5, videoForm.getLicense());
-                ps.setInt(6, videoForm.getUserid());
-                ps.setString(7, videoForm.getDownloadurl());
-                return ps;
-            }
-        };
+        final String SQL = "INSERT INTO video (title, description, version, license, userID, downloadURL) VALUES(?,?,?,?,?,?)";
+        final String CAT_SQL = "Insert Into video_category_value_join (videoid, categoryvalueid) Values(?,?);";
+        try (
+            Connection connection = jdbc.getDataSource().getConnection();
+            PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement catPs = connection.prepareStatement(CAT_SQL);    
+        ) {
+            ps.setString(1, videoForm.getTitle());
+            ps.setString(2, videoForm.getDescription());
+            ps.setInt(3, videoForm.getVersion());
+            ps.setString(4, videoForm.getLicense());
+            ps.setInt(5, videoForm.getUserid());
+            ps.setString(6, videoForm.getDownloadurl());
+            int affectedRows = ps.executeUpdate();
 
-        this.jdbc.update(psc);
+            if (affectedRows == 0)
+                throw new SQLException("Failed to create video, no rows affected.");
+
+            int id;
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    id = generatedKeys.getInt(1);
+                else 
+                    throw new SQLException("Failed to create video, no ID obtained.");
+            }
+
+            // Store thumbnail
+            thumbnailStorage.store(String.valueOf(id), thumbnail);
+
+            // add categories
+            catPs.setInt(1, id);
+            for(int cat : videoForm.getTags()) {
+                catPs.setInt(2, cat); // categoryvalueid = cat
+                catPs.executeUpdate();
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
     
     private int getUserID(String username) {

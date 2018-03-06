@@ -96,7 +96,7 @@ public class UpdateController {
     @ResponseBody
     public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
         // insert statement
-        final String INSERT_SQL = "INSERT INTO video (title, description, version, fileType, license, userID, thumbnailURL, downloadURL) VALUES(?,?,?,?,?,?,?,?)";
+        final String INSERT_SQL = "INSERT INTO video (title, description, version, license, userID, downloadURL) VALUES(?,?,?,?,?,?)";
         
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -104,11 +104,9 @@ public class UpdateController {
                 ps.setString(1, videoForm.getTitle());
                 ps.setString(2, videoForm.getDescription());
                 ps.setInt(3, videoForm.getVersion());
-                ps.setString(4, videoForm.getFiletype());
-                ps.setString(5, videoForm.getLicense());
-                ps.setInt(6, videoForm.getUserid());
-                ps.setString(7, videoForm.getThumbnailurl());
-                ps.setString(8, videoForm.getDownloadurl());
+                ps.setString(4, videoForm.getLicense());
+                ps.setInt(5, videoForm.getUserid());
+                ps.setString(6, videoForm.getDownloadurl());
                 return ps;
             }
         };

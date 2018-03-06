@@ -68,6 +68,6 @@ public class FileSystemStorageService implements StorageService {
     
     @Override
     public boolean has(String filename) {
-        return false;
+        return new File(rootDir, filename).exists();
     }
 }

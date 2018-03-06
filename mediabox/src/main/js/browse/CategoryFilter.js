@@ -45,10 +45,6 @@ class CategoryType extends React.Component {
 export default class CategoryFilter extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            selected: []
-        };
         
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
     }
@@ -56,17 +52,14 @@ export default class CategoryFilter extends React.Component {
     handleCategorySelect(categoryValue) {
         const id = categoryValue.props.entry.id;
         // if already selected
-        const idx = this.state.selected.indexOf(id);
-        const selected = this.state.selected;
+        const idx = this.props.selected.indexOf(id);
+        const selected = this.props.selected;
         if(idx >=0 ) {
             selected.splice(idx, 1); // remove
         } else {
             selected.push(id);
         }
-        this.setState({
-            selected: selected
-        });
-        this.props.update_handler(selected);
+        this.props.update_selected(selected);
     }
     
     render() {
@@ -79,7 +72,7 @@ export default class CategoryFilter extends React.Component {
                                     num={idx + 1}
                                     name={cat.name}
                                     entries={cat.values}
-                                    selected={this.state.selected}
+                                    selected={this.props.selected}
                                     handleCategorySelect={this.handleCategorySelect}/>;
                   })
               }

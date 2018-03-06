@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -70,7 +71,7 @@ public class ProcessController {
      */
     @PostMapping("upload")
     @ResponseBody
-    public String upload(MultipartFile video) {
+    public String upload(@NotNull MultipartFile video) {
 	log.info(video.getOriginalFilename());
 	String name = video.getOriginalFilename();
 	//TODO: use a hash or something to make a unique name
@@ -103,7 +104,7 @@ public class ProcessController {
     public ResponseEntity<FileSystemResource> getThumbnail(@PathVariable int id, HttpServletResponse response){
         String thumbnailName = String.valueOf(id);
         File thumbnail = thumbnailStorage.get(thumbnailName);
-        log.info("{}", thumbnail);
+        log.debug("{}", thumbnail);
         // if it exists, just return it
         if(thumbnailStorage.has(thumbnailName)) // Maybe implement an ImageStorage class that uses a StorageService and can accept id as an int.
             return ResponseEntity.ok().body(new FileSystemResource(thumbnail));
@@ -114,7 +115,7 @@ public class ProcessController {
                 String.format("%s/get/thumbnail/%d", config.getServerUrl(), id)
             ).execute();
             HttpResponse httpResponse = r.returnResponse();
-            log.info("{}", httpResponse.getStatusLine().getStatusCode());
+            log.debug("{} - {}", id, httpResponse.getStatusLine().getStatusCode());
             // return placeholder if not successful.
             if(httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
                 return ResponseEntity.notFound().build();

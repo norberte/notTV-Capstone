@@ -9,14 +9,25 @@ class VideoThumbnail extends React.Component {
     constructor(props) {
         super(props);
 
+        this.getThumbnail = this.getThumbnail.bind(this);
+        this.getThumbnail();
+    }
+
+    getThumbnail() {
         // get thumbnail if it isn't loaded already.
-        if(!props.entry.thumbnail)
+        if(!this.props.entry.thumbnail)
             utils.getThumbnail(this.props.entry.id, (file) => {
                 this.props.entry.thumbnail = file;
                 this.forceUpdate();
             });
     }
+
     render() {
+        // need to call here because the constructor isn't always called for entries.
+        // I think React may be reusing existing ones, so it doesn't create new VideoThumbnails?
+        // We need to do it in the constructor also, because the component needs
+        // to be mounted first to forceUpdate().
+        this.getThumbnail();
         const thumbnail = this.props.entry.thumbnail ? this.props.entry.thumbnail : "/img/default-placeholder-300x300.png";
         return (
             <div className="col-md-2 no-padding">
@@ -45,6 +56,8 @@ class Browse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchText: "",
+            filters: [],
             categories: [],
             videos: []
         };
@@ -70,11 +83,12 @@ class Browse extends React.Component {
      * Gets a list of videos filtered by 'filters'
      * filters = [ cat1_id, cat2_id, ...]
      */
-    update_videos(filters) {
+    update_videos() {
         $.get({
             url: config.serverUrl + "/info/videos",
             data: {
-                categories: filters
+                searchText: this.state.searchText,
+                categories: this.state.filters
             },
             dataType: "json",
             success: (data) => {
@@ -94,10 +108,16 @@ class Browse extends React.Component {
               <div className="col-md-2 categories-column">
                 <CategoryFilter
                    categories={this.state.categories}
-                   update_handler={this.update_videos}/>
+                   selected={this.state.filters}
+                   update_selected={(selected)=> {
+                       this.setState({filters: selected});
+                       this.update_videos(); // always update when filters change.
+                   }}/>
               </div>
               <div className="col-md-10 results-container">
-                <TopBar/>
+                <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
+                  updateVideos={this.update_videos}
+                  searchText={this.state.searchText}/>
                 <div className="row browse-body">
                   <div className="col-md-12">
                     <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos}/>

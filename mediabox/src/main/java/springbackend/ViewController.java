@@ -61,12 +61,7 @@ public class ViewController {
         defaultSetup(page, model);
 	return "default_page";
     }
-
-    @RequestMapping("upload")
-    public String upload() {
-	return "upload";
-    }
-
+    
     @RequestMapping("account")
     public String account() {
     return "account";

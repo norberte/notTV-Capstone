@@ -14,6 +14,13 @@ public interface StorageService {
      */
     void store(MultipartFile file);
 
+    /**      
+     * Stores the given file with the given name
+     *                       
+     * @param file           
+     */    
+    void store(String name, MultipartFile file);
+
     Stream<Path> loadAll();
 
     Path load(String filename);

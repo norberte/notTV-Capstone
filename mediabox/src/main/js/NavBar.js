@@ -7,7 +7,7 @@ export default class NavBar extends React.Component {
             <div id="navbar">
               <nav>
                 <a href="/browse"><img className="notTVLogo" src="/img/notTV_logo_white.png" alt="notTV Logo"/></a>
-                <ul>
+                <ul className="nav-ul">
                   <li><a href="/browse">Watch </a></li>
                   <li><a href="/upload">Submit Video</a></li>
                   <li><a href="/account">Account </a></li>
