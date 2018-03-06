@@ -3,7 +3,6 @@ package spring.view;
 public class Video {
     public int id;
     public String title;
-    public String thumbnail;
     public String url;
     public NotTVUser user;
 

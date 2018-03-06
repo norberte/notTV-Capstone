@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import spring.storage.StorageFileNotFoundException;
 import spring.storage.StorageService;
 
 @CrossOrigin
@@ -75,15 +77,20 @@ public class FileController {
     public ResponseEntity<Resource> serveFile(@PathVariable String type, @PathVariable String filename) {
         if(!storage.containsKey(type))
             return ResponseEntity.badRequest().body(null);
-        
-        Resource file = storage.get(type).loadAsResource(filename);
-	HttpHeaders responseHeaders = new HttpHeaders();
-	responseHeaders.add(
-	    HttpHeaders.CONTENT_DISPOSITION,
-	    "attachment; filename=" + file.getFilename()
-	);
-	responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/torrent");
-	return ResponseEntity.ok().headers(responseHeaders).body(file);
+
+        try {
+            Resource file = storage.get(type).loadAsResource(filename);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + file.getFilename()
+            );
+            responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/file");
+            return ResponseEntity.ok().headers(responseHeaders).body(file);
+        } catch(StorageFileNotFoundException e) {
+            // if no file, return not found.
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**

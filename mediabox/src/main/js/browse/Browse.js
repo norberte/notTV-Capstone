@@ -6,12 +6,39 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 
 class VideoThumbnail extends React.Component {
+    constructor(props) {
+        super(props);
+
+        // get thumbnail if it isn't loaded already.
+        if(!props.entry.thumbnail) {
+            $.ajax({
+                type: "GET",
+                url: "/process/get-thumbnail/"+this.props.entry.id,
+                dataType: "binary",
+                // responseType:'arraybuffer',
+                processData: false,
+                success: (file) => {
+                    if(file !== null) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            this.props.entry.thumbnail = reader.result;
+                            this.forceUpdate();
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+        }
+    }
     render() {
+        const thumbnail = this.props.entry.thumbnail ? this.props.entry.thumbnail : "/img/default-placeholder-300x300.png";
         return (
             <div className="col-md-2 no-padding">
               <div className="thumbnail no-margin">
 	        <a href={this.props.entry.url}>
-	          <img className="video-thumbnail" src={"/process/get-thumbnail/"+this.props.entry.id}/>
+                  <div className="video-thumbnail">
+	            <img className="video-thumbnail-content" src={thumbnail}/>
+                  </div>
 	          <div className="caption">
 	            <h3 className="no-margin">{this.props.entry.title} </h3>
 	          </div>

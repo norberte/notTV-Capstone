@@ -146,11 +146,11 @@ public class InfoController {
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-        StringBuilder queryBuilder = new StringBuilder("Select video.id, title, downloadurl, nottv_user.id From video INNER JOIN nottv_user ON video.userid = nottv_user.id");
+        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id");
 
         // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
-            queryBuilder.append("Where video.id in (");
+            queryBuilder.append("Where v.id in (");
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
@@ -167,12 +167,12 @@ public class InfoController {
 
         // put the data into a view object.
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
-            rs.getInt("video.id"),
-	    rs.getString("video.title"), 
-	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("id"),
+            rs.getInt("vid"),
+	    rs.getString("title"), 
+	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("vid"),
             new NotTVUser(
-                rs.getInt("nottv_user.id"),
-                rs.getString("nottv_user.username")
+                rs.getInt("uid"),
+                rs.getString("username")
             )
 	)); 
     }

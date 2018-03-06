@@ -1,18 +1,25 @@
 package springbackend;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,26 +98,40 @@ public class ProcessController {
      * @param videoId: id of video
      * @return
      */
-    @GetMapping("get-thumbnail/<int:id>")
+    @GetMapping("get-thumbnail/{id}")
     @ResponseBody
-    public File getThumbnail(@PathVariable int id, HttpServletResponse response){
+    public ResponseEntity<FileSystemResource> getThumbnail(@PathVariable int id, HttpServletResponse response){
         String thumbnailName = String.valueOf(id);
         File thumbnail = thumbnailStorage.get(thumbnailName);
-
+        log.info("{}", thumbnail);
         // if it exists, just return it
         if(thumbnailStorage.has(thumbnailName)) // Maybe implement an ImageStorage class that uses a StorageService and can accept id as an int.
-            return thumbnail;
+            return ResponseEntity.ok().body(new FileSystemResource(thumbnail));
 
         // else download then return it.
         try {
-            Request.Get(
-                String.format("%s/thumbnail/%d", config.getServerUrl(), id)
-            ).execute().saveContent(thumbnail);
-            return thumbnail;
+            Response r = Request.Get(
+                String.format("%s/get/thumbnail/%d", config.getServerUrl(), id)
+            ).execute();
+            HttpResponse httpResponse = r.returnResponse();
+            log.info("{}", httpResponse.getStatusLine().getStatusCode());
+            // return placeholder if not successful.
+            if(httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+                return ResponseEntity.notFound().build();
+            // save and return.
+            try(
+                FileOutputStream out = new FileOutputStream(thumbnail);
+                InputStream is = httpResponse.getEntity().getContent();
+            ) {
+                int inByte;
+                while((inByte = is.read()) != -1)
+                    out.write(inByte);
+            }
+            response.setContentType("application/pdf");
+            return ResponseEntity.ok().body(new FileSystemResource(thumbnail));
         } catch (IOException e) {
             log.error("Error getting thumbnail file: " + thumbnailName + " from server.", e);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // tell client file not found.
-            return thumbnailStorage.get("placeholder");
+            return ResponseEntity.notFound().build(); // tell client not found.
         }
     }  
 
@@ -120,7 +141,7 @@ public class ProcessController {
 	File torrentFile = torrentStorage.get(torrentName);
 	try {
 	    Request.Get(
-		String.format("%s/get-torrent/%s", this.config.getServerUrl(), torrentName)
+		String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrentName)
 	    ).execute().saveContent(torrentFile);
 
 	    // download file.

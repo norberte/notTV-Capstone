@@ -64,17 +64,6 @@ public class PostController {
         this.jdbc.update(psc);
     }
     
-    /**
-     * Uploads a thumbnail to the server.
-     *
-     * @param file
-     */
-    @PostMapping("/upload-thumbnail")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void storeThumbnailOnServer(@RequestParam("file") MultipartFile file) {
-        thumbnailStorage.store(file);
-    }
-    
     private int getUserID(String username) {
         // Make the query.
         StringBuilder queryBuilder = new StringBuilder("Select id From nottv_user Where username = ?;");
