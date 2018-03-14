@@ -71,11 +71,11 @@ public class ProcessController {
      */
     @PostMapping("upload")
     @ResponseBody
-    public String upload(@NotNull MultipartFile video) {
+    public String upload(int id, @NotNull MultipartFile video) {
 	log.info(video.getOriginalFilename());
-	String name = video.getOriginalFilename();
-	//TODO: use a hash or something to make a unique name
-	File localVideo = videoStorage.get(name);
+	String name = String.valueOf(id);
+        // use video id to name the file.
+	File localVideo = videoStorage.get(name); //, FilenameUtils.getExtension(video.getOriginalFilename())));
 	log.info(localVideo.toString());
 	try {
 	    video.transferTo(localVideo);
@@ -137,12 +137,13 @@ public class ProcessController {
     }  
 
     @RequestMapping(path = "download")
-    public String download(@RequestParam(value="torrentName") String torrentName, @RequestParam("videoId") int videoId, RedirectAttributes redir){
+    public String download(@RequestParam("videoId") int videoId, RedirectAttributes redir){
 	// get torrent file.
-	File torrentFile = torrentStorage.get(torrentName);
+        String torrent = String.format("%d.torrent", videoId);
+	File torrentFile = torrentStorage.get(torrent);
 	try {
 	    Request.Get(
-		String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrentName)
+		String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
 	    ).execute().saveContent(torrentFile);
 
 	    // download file.

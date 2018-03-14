@@ -44,17 +44,17 @@ public class PostController {
     @Autowired
     @Qualifier("ImageStorage")
     private StorageService thumbnailStorage;
-    
+
     @PostMapping(value="/add-video", consumes={"multipart/form-data"})
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void processVideoInfo(
+    public int processVideoInfo(
         @RequestPart("videoForm") @Valid VideoForm videoForm,
         @RequestPart("thumbnail") @Valid @NotNull @NotBlank MultipartFile thumbnail
     ) {
         log.info("Adding video {}...", videoForm.getTitle());
         // insert statement
-        final String SQL = "INSERT INTO video (title, description, version, license, userID, downloadURL) VALUES(?,?,?,?,?,?)";
+        final String SQL = "INSERT INTO video (title, description, version, license, userID) VALUES(?,?,?,?,?)";
         final String CAT_SQL = "Insert Into video_category_value_join (videoid, categoryvalueid) Values(?,?);";
         try (
             Connection connection = jdbc.getDataSource().getConnection();
@@ -66,7 +66,6 @@ public class PostController {
             ps.setInt(3, videoForm.getVersion());
             ps.setString(4, videoForm.getLicense());
             ps.setInt(5, videoForm.getUserid());
-            ps.setString(6, videoForm.getDownloadurl());
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows == 0)
@@ -82,18 +81,19 @@ public class PostController {
 
             // Store thumbnail
             thumbnailStorage.store(String.valueOf(id), thumbnail);
-
+            
             // add categories
             catPs.setInt(1, id);
             for(int cat : videoForm.getTags()) {
                 catPs.setInt(2, cat); // categoryvalueid = cat
                 catPs.executeUpdate();
             }
+            return id;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        return -1; // no video.
     }
     
     private int getUserID(String username) {

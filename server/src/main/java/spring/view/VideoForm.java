@@ -6,7 +6,6 @@ public class VideoForm {
     String description;
     int version;
     String license;
-    String downloadurl;
     int[] tags; 
     int userid;
 
@@ -64,20 +63,6 @@ public class VideoForm {
      */
     public void setLicense(String license) {
         this.license = license;
-    }
-
-    /**
-     * @return the downloadurl
-     */
-    public String getDownloadurl() {
-        return downloadurl;
-    }
-
-    /**
-     * @param downloadurl the downloadurl to set
-     */
-    public void setDownloadurl(String downloadurl) {
-        this.downloadurl = downloadurl;
     }
 
     /**

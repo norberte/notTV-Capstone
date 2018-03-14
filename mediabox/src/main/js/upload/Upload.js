@@ -240,57 +240,51 @@ class UploadForm extends React.Component {
     handleSubmit(e){
 	e.preventDefault();
 
-	const localForm = new FormData();
-	localForm.append('video', this.state.formData.videoFile);
-	// Start upload process on local mediabox server.
-	$.post({
-	    url: '/process/upload',
-	    data: localForm,
-	    processData: false,  // tell jQuery not to process the data (because of the file)
-	    contentType: false,  // tell jQuery not to set contentType
-	    success: (torrentFile) => {
-		// TODO: loop through formData
-                console.log("local success");
-                // https://stackoverflow.com/questions/21329426/spring-mvc-multipart-request-with-json
-                const serverForm = new FormData();
-                serverForm.append('videoForm', new Blob([JSON.stringify({
-                    title: this.state.formData.title,
-                    description: this.state.formData.description,
-                    version: this.state.formData.version,
-                    license: this.state.formData.license,
-                    downloadurl: torrentFile,
-                    tags: Array.from(this.state.formData.tags),
-                    userid: this.state.formData.userid
-                })], {
-                    type: "application/json"
-                }));
-                serverForm.append('thumbnail', this.state.formData.thumbnailFile);
-                console.log(serverForm);
-
-		// insert video
-		$.ajax({
-		    type: "POST",
-		    url: config.serverUrl + "/upload/add-video",
-		    processData: false,
-                    contentType: false,
-                    headers: {
-                        "Content-Type": undefined
-                    },
-		    data: serverForm,
-		    success: (response) => {
-                        // insert 
-			console.log(response);
-                        alert("Successfully Uploaded!");
-			// BootstrapDialog.show({
-                        //     title: "Success!",
-                        //     message: "Successfully uploaded!",
-                        //     type: BootstrapDialog.TYPE_SUCCESS
-                        // });
-		    },
-		    error: (response) => {
-			console.log(response);
-		    }
-		});
+        // TODO: loop through formData
+        // https://stackoverflow.com/questions/21329426/spring-mvc-multipart-request-with-json
+        const serverForm = new FormData();
+        serverForm.append('videoForm', new Blob([JSON.stringify({
+            title: this.state.formData.title,
+            description: this.state.formData.description,
+            version: this.state.formData.version,
+            license: this.state.formData.license,
+            tags: Array.from(this.state.formData.tags),
+            userid: this.state.formData.userid
+        })], {
+            type: "application/json"
+        }));
+        serverForm.append('thumbnail', this.state.formData.thumbnailFile);
+        console.log(serverForm);
+	// insert video
+	$.ajax({
+	    type: "POST",
+	    url: config.serverUrl + "/upload/add-video",
+	    processData: false,
+            contentType: false,
+            headers: {
+                "Content-Type": undefined
+            },
+	    data: serverForm,
+	    success: (response) => {
+                // insert 
+		console.log(response);
+                        
+	        const localForm = new FormData();
+                localForm.append('id', response);
+	        localForm.append('video', this.state.formData.videoFile);
+	        // Start upload process on local mediabox server.
+	        $.post({
+	            url: '/process/upload',
+	            data: localForm,
+	            processData: false,  // tell jQuery not to process the data (because of the file)
+	            contentType: false,  // tell jQuery not to set contentType
+	            success: (torrentFile) => {
+	                alert("Successfully Uploaded!");
+	            },
+	            error: (response) => {
+		        console.log(response);
+	            }
+	        });
 	    },
 	    error: (response) => {
 		console.log(response);
