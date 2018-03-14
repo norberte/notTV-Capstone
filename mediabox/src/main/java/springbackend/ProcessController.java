@@ -29,7 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import com.turn.ttorrent.client.strategy.RequestStrategy;
+import com.turn.ttorrent.client.strategy.RequestStrategyImplSequential;
 
 import filesharingsystem.process.DownloadProcess;
 
@@ -40,7 +43,7 @@ import util.storage.StorageService;
 @RequestMapping("process")
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
-
+    private static final RequestStrategy SEQUENTIAL = new RequestStrategyImplSequential();
     /*
      * DI attributes.
      */
@@ -129,28 +132,76 @@ public class ProcessController {
         }
     }
 
-    @RequestMapping(path = "download")
-    public String download(@RequestParam("videoId") int videoId, RedirectAttributes redir) {
-        // get torrent file.
+    /**
+     * Streams the specified video.
+     * Starts a sequential download if it doesn't exist already.
+     * @param videoId
+     * @return
+     */
+    @RequestMapping(path = "video-stream")
+    public StreamingResponseBody stream(@RequestParam("videoId") int videoId){
+	// get torrent file.
         String torrent = String.format("%d.torrent", videoId);
-        File torrentFile = torrentStorage.get(torrent);
-        try {
-            Request.Get(String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)).execute().saveContent(torrentFile);
-
-            // download file.
-            Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
-
-            if (result.isPresent()) {
-                File f = result.get();
-                log.info(f.getName());
-                redir.addFlashAttribute("videoId", videoId);
-                redir.addFlashAttribute("videoName", f.getName());
-                return "redirect:/watch"; // because I can't figure out the bloody forward:
+        String videoName = String.valueOf(videoId);
+        Optional<DownloadProcess> dp = Optional.empty();
+        // only start download if we don't have the video.
+        if(!videoStorage.has(videoName)) {
+            File torrentFile = torrentStorage.get(torrent); // create empty torrent file.
+            try {
+                Request.Get(
+                    String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
+                ).execute().saveContent(torrentFile);
+                
+                // download file sequentially so it is in order, and can be streamed immediately.
+                DownloadProcess proc = beanFactory.getBean(DownloadProcess.class, torrentFile, false, SEQUENTIAL);
+                Optional<File> result = proc.download();
+                dp = Optional.of(proc);
+                
+                // if download actually gave us a file.
+                if(result.isPresent()) {
+                    File f = result.get();
+                    log.info(f.getName());
+                    videoName = f.getName();
+                }
+            } catch (IOException e) {
+                log.error("Error getting torrent file from server.", e);
             }
-        } catch (IOException e) {
-            log.error("Error getting torrent file from server.", e);
         }
+        // return the stream.
+        return beanFactory.getBean(StreamingResponseBody.class, videoId, dp);
+    }
 
-        return "redirect:/";
+    /**
+     * Downloads the file in the background.
+     * This method is intended for the use case where the user doesn't
+     * expect to watch it until it finishes
+     * @param videoId
+     */
+    @RequestMapping(path = "download")
+    public void download(@RequestParam("videoId") int videoId){
+	// get torrent file.
+        String torrent = String.format("%d.torrent", videoId);
+        String videoName = String.valueOf(videoId);
+        // only start download if we don't have the video.
+        if(!videoStorage.has(videoName)) {
+            File torrentFile = torrentStorage.get(torrent); // create empty torrent file.
+            try {
+                Request.Get(
+                    String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
+                ).execute().saveContent(torrentFile);
+                
+                // download file.
+                Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
+
+                // if download actually gave us a file.
+                if(result.isPresent()) {
+                    File f = result.get();
+                    log.info(f.getName());
+                    videoName = f.getName();
+                }
+            } catch (IOException e) {
+                log.error("Error getting torrent file from server.", e);
+            }
+        }
     }
 }
