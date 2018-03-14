@@ -1,28 +1,21 @@
 package spring;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.view.CategoryUpdate;
 import spring.view.CategoryUpdateList;
-import spring.view.VideoForm;
 
 
 /**
@@ -100,28 +93,6 @@ public class UpdateController {
         return true;
     }
 
-    @PostMapping("/videoSubmission")
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-    public void processVideoInfo(@RequestBody(required=true) VideoForm videoForm) {
-        // insert statement
-        final String INSERT_SQL = "INSERT INTO video (title, description, version, license, userID, downloadURL) VALUES(?,?,?,?,?,?)";
-        
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
-                ps.setString(1, videoForm.getTitle());
-                ps.setString(2, videoForm.getDescription());
-                ps.setInt(3, videoForm.getVersion());
-                ps.setString(4, videoForm.getLicense());
-                ps.setInt(5, videoForm.getUserid());
-                ps.setString(6, videoForm.getDownloadurl());
-                return ps;
-            }
-        };
-
-        this.jdbc.update(psc);
-    }
     @PostMapping("/categories")
     @ResponseBody
     public void updateCategories(@RequestBody CategoryUpdateList jsonString) {
