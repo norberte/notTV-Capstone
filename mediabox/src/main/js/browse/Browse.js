@@ -32,7 +32,7 @@ export default class VideoThumbnail extends React.Component {
         return (
             <div className="col-md-2 no-padding">
               <div className="thumbnail no-margin">
-	        <a href={"/process/download?videoId="+this.props.entry.id}>
+	        <a href={"/watch?videoId="+this.props.entry.id}>
                   <div className="video-thumbnail">
 	            <img className="video-thumbnail-content" src={thumbnail}/>
                   </div>

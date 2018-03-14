@@ -76,9 +76,23 @@ class Video extends React.Component{
         super(props);
         this.state = {
             videoId: props.videoId,
-            videoName: props.videoName,
-            video_data: ""
+            video_data: "",
+            video_file: ""
         };
+
+        $.ajax({
+            type: 'post',
+            url: "/process/video-stream?videoId=" + props.videoId,
+            data: {},
+            dataType: 'json',
+            processData: false,
+            xhrFields: {
+                // Getting on progress streaming response
+                onprogress: function(e) {
+                    console.log(e);
+                }
+            }
+        });
 
         //get video metadata from server
         $.get({
@@ -116,7 +130,7 @@ class Video extends React.Component{
     render(){
         return (
             <div className="container">
-              <VideoPlayer source={'/video/'+ this.state.videoName}/>    
+              <VideoPlayer source={this.state.video_file}/>    
               <div>
                 <h1>{this.state.title}</h1>
                 <div>
@@ -136,6 +150,6 @@ class Video extends React.Component{
 }
 
 ReactDOM.render(
-    <Video videoId={videoId} videoName={videoName}/>,
+    <Video videoId={videoId}/>,
     document.getElementById('root')
 );
