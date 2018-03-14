@@ -188,7 +188,6 @@ public class InfoController {
 	return jdbcTemplate.query(query, (rs, row) -> new Video(
             rs.getInt("vid"),
 	    rs.getString("title"), 
-	    "/process/download?torrentName="+rs.getString("downloadurl")+"&videoId="+rs.getInt("vid"),
             new NotTVUser(
                 rs.getInt("uid"),
                 rs.getString("username")
