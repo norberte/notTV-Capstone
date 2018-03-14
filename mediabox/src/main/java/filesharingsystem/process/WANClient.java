@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Random;
 import java.util.UUID;
@@ -31,6 +32,16 @@ import sun.misc.Unsafe;
  * @author
  */
 public class WANClient {
+    static class Pair {
+        public final Client client;
+        public final InetSocketAddress address;
+
+        public Pair(Client client, InetSocketAddress address) {
+            this.client = client;
+            this.address = address;
+        }
+    };
+    
     public static class ClientInitializationException extends Exception {
 	private static final long serialVersionUID = 3182947996648682383L;
 
@@ -62,7 +73,7 @@ public class WANClient {
 	return null;
     }
     
-    public static Client newWANClient(InetAddress bindAddress, InetAddress announceAddress, SharedTorrent torrent) throws IOException, ClientInitializationException {
+    public static Pair newWANClient(InetAddress bindAddress, InetAddress announceAddress, SharedTorrent torrent) throws IOException, ClientInitializationException {
 	if(unsafe == null) {
 	    log.warn("Unsafe isn't initialized, cannot create client.");
 	    throw new ClientInitializationException("Unsafe isn't initialized, so Client can't be created. Check the logs.");
@@ -118,7 +129,7 @@ public class WANClient {
 	    set(c, "connected", new ConcurrentHashMap<String, SharingPeer>());
 	    set(c, "random", new Random(System.currentTimeMillis()));
 
-	    return c;
+	    return new Pair(c, service.getSocketAddress());
 	} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
 	    log.error("Not surprisingly, this didn't work. Can't instantiate WANClient.");
 	    throw new ClientInitializationException("Unable to create client.", e);

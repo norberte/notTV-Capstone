@@ -26,7 +26,9 @@ import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
+import filesharingsystem.PortMapper;
 import filesharingsystem.process.WANClient.ClientInitializationException;
+import filesharingsystem.process.WANClient.Pair;
 
 import springbackend.Config;
 
@@ -45,6 +47,8 @@ public class TtorrentUploadProcess implements UploadProcess {
     private StorageService videoStorage;
     @Autowired
     private Config config;
+    @Autowired
+    private PortMapper portMapper;
     
     /**
      * Creates a new UploadProcess
@@ -107,11 +111,14 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    if(code == 200) {
 		log.info("Successfully uploaded torrent to the server, seeding...");
 		// start seeding.
-		client = WANClient.newWANClient(
+                Pair clientPair = WANClient.newWANClient(
 		    InetAddress.getLocalHost(),
 		    InetAddress.getByName(ip),
 		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
 		);
+                // forward ports:
+                portMapper.add(clientPair.address.getPort());
+                client = clientPair.client;
 		// Should block
 		client.share();
 	    } else {

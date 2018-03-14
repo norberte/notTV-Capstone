@@ -9,6 +9,14 @@ public interface PortMapper {
      */
     void setup() throws PortMapException;
 
+    
+    /**
+     * Adds a new port mapping to the given port
+     *
+     * @param port
+     */
+    void add(int port);
+    
     /**
      * Shuts down the port mapping,
      * deleting all port forwarding done.

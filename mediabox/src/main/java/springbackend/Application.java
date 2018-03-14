@@ -27,7 +27,7 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-	// portMap();
+	portMap();
     }
     
     public void portMap() {
