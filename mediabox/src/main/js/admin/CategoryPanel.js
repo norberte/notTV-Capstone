@@ -83,7 +83,7 @@ class CategoryType extends React.Component {
         }
     });
 	
-	this.hasUpdates = this.hasUpdates.bind(this);
+	this.unsavedWarning = this.unsavedWarning.bind(this);
 	this.handleCategoryTypeEdit = this.handleCategoryTypeEdit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDeleteCategoryType = this.handleDeleteCategoryType.bind(this);
@@ -95,11 +95,10 @@ class CategoryType extends React.Component {
     }
     
     componentDidMount() {
-        var change = this.hasUpdate;
-        window.addEventListener("beforeunload", this.hasUpdates);
+        window.addEventListener("beforeunload", this.unsavedWarning);
     }
     
-    hasUpdates(e){
+    unsavedWarning(e){
         if (this.state.updates.length <= 0) {
             return undefined;
         }
