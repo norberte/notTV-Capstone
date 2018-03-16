@@ -5,7 +5,7 @@ import CarouselLayout from '../CarouselLayout.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-class VideoThumbnail extends React.Component {
+export default class VideoThumbnail extends React.Component {
     constructor(props) {
         super(props);
 
