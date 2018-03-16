@@ -19,52 +19,44 @@ function CategoryValueRow(props) {
         </tr>
     );
 }
-class CategoryTypeRow extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            valueClass: this.props.category.name.replace(/\s/g,"-").toLowerCase() + "-collapse"
-        };
-    }
-    render() {
-        console.log(this.props.category);
-        const id = this.props.category.name + "-accordian";
-        return (
+function CategoryTypeRow(props) {
+    console.log(props.category);
+    const id = props.category.name + "-accordian";
+    const valueClass = props.category.name.replace(/\s/g,"-").toLowerCase() + "-collapse";
+    return (
       <React.Fragment>       
       <tbody className="panel panel-default">
-        <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + this.state.valueClass}>
+        <tr className="panel-heading accordion-toggle category-row" data-toggle="collapse" data-target={"." + valueClass}>
             <td className="category-col">
                 <div  className="panel-title">
                     <i className="glyphicon glyphicon-menu-up"/>
-                    {/*" " + this.props.category.name*/}
-                    <input type="text" onChange={this.props.handleCategoryTypeEdit} value={this.props.category.name}/>
+                    <input type="text" onChange={props.handleCategoryTypeEdit} value={props.category.name}/>
                 </div>
             </td>
             <td className="category-col">
-                <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={this.props.handleDeleteCategoryType}/>
+                <input className="deleteButton btn btn-danger" type="button" value="Delete Category" onClick={props.handleDeleteCategoryType}/>
             </td>
         </tr>
       </tbody>
-      <tbody className={"panel-collapse collapse " + this.state.valueClass}>
+      <tbody className={"panel-collapse collapse " + valueClass}>
         {
-        this.props.category.values.map((val, idx) => {
+        props.category.values.map((val, idx) => {
             return <CategoryValueRow
                     value={val}
-                    valueClass={this.state.valueClass} 
+                    valueClass={valueClass}
                     key={idx}
-                    handleEdit={this.props.handleEdit.bind(this.props.handleEdit, val)}
-                    handleDelete={this.props.handleDelete.bind(this.props.handleDelete, val)}/>
+                    handleEdit={props.handleEdit.bind(props.handleEdit, val)}
+                    handleDelete={props.handleDelete.bind(props.handleDelete, val)}/>
             })
         }
         <tr className={"category-row panel-collapse collapse in"}>
           <td className="panel-body">
-            <input type="button" className="btn btn-success" value="New" onClick={this.props.newCategoryValue}/>
+            <input type="button" className="btn btn-success" value="New Tag" onClick={props.newCategoryValue}/>
           </td>
         </tr>
       </tbody>
 	  </React.Fragment>
-        );
-    }
+    );
 }
 
 const NULL_ROW = <CategoryTypeRow category={{name: "", values: []}} handleEdit={()=>null} handleDelete={()=>null}/>;
@@ -91,6 +83,7 @@ class CategoryType extends React.Component {
         }
     });
 	
+	this.hasUpdates = this.hasUpdates.bind(this);
 	this.handleCategoryTypeEdit = this.handleCategoryTypeEdit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDeleteCategoryType = this.handleDeleteCategoryType.bind(this);
@@ -99,6 +92,23 @@ class CategoryType extends React.Component {
     this.newCategoryValue = this.newCategoryValue.bind(this);
     this.save = this.save.bind(this);
     this.cancelChanges = this.cancelChanges.bind(this);
+    }
+    
+    componentDidMount() {
+        var change = this.hasUpdate;
+        window.addEventListener("beforeunload", this.hasUpdates);
+    }
+    
+    hasUpdates(e){
+        if (this.state.updates.length <= 0) {
+            return undefined;
+        }
+
+        var confirmationMessage = 'You have unsaved changes. '
+                                + 'Are you sure you want to leave?.';
+
+        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
     }
     
     handleCategoryTypeEdit(categoryType, event){
@@ -125,7 +135,6 @@ class CategoryType extends React.Component {
                 value: event.target.value
             }]);
         }
-        console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
             updates: newUpdates
@@ -158,7 +167,6 @@ class CategoryType extends React.Component {
                 value: event.target.value
             }]);
         }
-        console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
             updates: newUpdates
@@ -196,7 +204,6 @@ class CategoryType extends React.Component {
                 categoryTypeId: categoryType.id
             }]);
         }
-        console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
             updates: newUpdates
@@ -237,7 +244,6 @@ class CategoryType extends React.Component {
                 categoryValueId: categoryValue.id
             }]);
         }
-        console.log(newUpdates);
         this.setState({
             categoryTypes: newCategoryTypes,
             updates: newUpdates
@@ -294,7 +300,7 @@ class CategoryType extends React.Component {
     }
     save() {
         console.log("save");
-        console.log(JSON.stringify(this.state.updates));
+        console.log("updating: "+ JSON.stringify(this.state.updates));
         $.post({
             url: config.serverUrl + "/update/categories",
             contentType: "application/json; charset=utf-8",
@@ -306,6 +312,7 @@ class CategoryType extends React.Component {
                     updates: [],    //clear update list
                     restore: this.categoryTypes
                 });
+                alert("Changes Saved");
             },
             error: () => {} //not sure yet how to handle errors 
         });
