@@ -179,7 +179,7 @@ public class InfoController {
     
     @GetMapping("/recentVideos")
     @ResponseBody
-    public List<Video> getRecentlyUploadedVideos(@RequestParam(value="userid", required=false) int userid) {
+    public List<Video> getRecentlyUploadedVideos(@RequestParam(value="userid", required=false) int userID) {
         log.info("get videos one specific user recently uploaded... we need it for UserProfile page");
 
         String query = "Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id WHERE u.id = ? LIMIT 10";
@@ -188,7 +188,7 @@ public class InfoController {
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
-                ps.setInt(1, userid);
+                ps.setInt(1, userID);
                 return ps;
             }
         };
