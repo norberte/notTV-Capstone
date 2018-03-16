@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import spring.view.CategoryType;
 import spring.view.CategoryValue;
 import spring.view.NotTVUser;
+import spring.view.User;
 import spring.view.Playlist;
 import spring.view.Video;
 import spring.view.VideoData;
@@ -149,6 +150,84 @@ public class InfoController {
             return false;
         }
     } 
+    
+    @GetMapping("/subscriptions")
+    @ResponseBody
+    public List<User> getSubscribedUsers(@RequestParam(value="loggedInUserID", required=true) int loggedInUserID) {
+        log.info("get users that you are already subscribed to for the AccountInfo page");
+
+        String query = "Select id, username, profilepictureurl, userprofileurl From nottv_user WHERE id IN (Select authorId From subscribe Where subscriberId = ?)";
+        log.info(query);
+        
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, loggedInUserID);
+                return ps;
+            }
+        };
+        
+        // put the data into a view object.
+        return jdbcTemplate.query(psc, (rs, row) -> new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("userprofileurl"),
+                    rs.getString("profilepictureurl")
+                )
+        ); 
+    }
+    
+    @GetMapping("/recentVideos")
+    @ResponseBody
+    public List<Video> getRecentlyUploadedVideos(@RequestParam(value="userid", required=false) int userID) {
+        log.info("get videos one specific user recently uploaded... we need it for UserProfile page");
+
+        String query = "Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id WHERE u.id = ? LIMIT 10";
+        log.info(query);
+        
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setInt(1, userID);
+                return ps;
+            }
+        };
+        
+        // put the data into a view object.
+        return jdbcTemplate.query(psc, (rs, row) -> new Video(
+                rs.getInt("vid"),
+            rs.getString("title"), 
+                new NotTVUser(
+                    rs.getInt("uid"),
+                    rs.getString("username")
+                )
+        )); 
+    }
+    
+    
+    @GetMapping("/libraryVideos")
+    @ResponseBody
+    public List<Video> getLibraryVideos() {
+        // Video(title, thumbnail_url, download_url)
+        log.info("get videos that are in-library");
+
+        // outer query: return all video info where videoid is in [inner query result]
+        // inner query: return all videoids from category_value_type joint table where categoryvalueid = 10, (AKA category value = IN LIBRARY)
+        
+        String query = "Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id WHERE v.id IN (SELECT videoid from video_category_value_join WHERE categoryvalueid = 10)";
+        log.info(query);
+        
+
+        // put the data into a view object.
+        return jdbcTemplate.query(query, (rs, row) -> new Video(
+                rs.getInt("vid"),
+            rs.getString("title"), 
+                new NotTVUser(
+                    rs.getInt("uid"),
+                    rs.getString("username")
+                )
+        )); 
+    }
 
     @GetMapping("/videos")
     @ResponseBody

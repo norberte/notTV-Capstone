@@ -1,17 +1,27 @@
 package spring.view;
 
 public class User {
+    int userID;
     String username;
     String userProfileURL;
     String thumbnailURL;
     
-    
-    public User(String username, String userProfileURL, String thumbnailURL) {
+    public User(int userID, String username, String userProfileURL, String thumbnailURL) {
         super();
+        this.userID = userID;
         this.username = username;
         this.userProfileURL = userProfileURL;
         this.thumbnailURL = thumbnailURL;
     }
+    
+    public int getUserID() {
+        return userID;
+    }
+    
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+    
     public String getUsername() {
         return username;
     }
