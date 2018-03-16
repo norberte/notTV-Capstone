@@ -120,7 +120,7 @@ class Video extends React.Component{
               <div>
                 <h1>{this.state.title}</h1>
                 <div>
-                  <a href={'#'/*user page ?=video_data.userid*/} ><h2 className="media-heading">{this.state.username}</h2></a>
+                  <a href=/userprofile/{this.state.username} ><h2 className="media-heading">{this.state.username}</h2></a>
                   <SubscribeButton 
                      subState = {this.state.subscribed ? "Unsubscribe" : "Subscribe"} 
                      onClick = {() => this.subscribe()}
