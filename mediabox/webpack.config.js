@@ -13,7 +13,8 @@ module.exports = {
         upload: './src/main/js/upload/Upload.js',
         userProfile: './src/main/js/userProfile/userProfile.js',
         watch:  './src/main/js/video/Video.js',
-        account: './src/main/js/account/Account.js'
+        account: './src/main/js/account/Account.js',
+        login:  './src/main/js/login/Login.js'
     },
     output: {
         path: path.join(__dirname, 'src/main/resources/static/js/bundle'),
@@ -21,7 +22,7 @@ module.exports = {
     },
     resolve: { // resolve utilities file.
         alias: {
-            utils: path.resolve(__dirname, './src/main/js/utils.js')  
+            utils: path.resolve(__dirname, './src/main/js/utils.js')
         }
     },
     plugins: [
