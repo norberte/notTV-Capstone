@@ -23,13 +23,14 @@ public class Application implements CommandLineRunner {
     SeedManager seedManager;
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+        config.id = Integer.parseInt(args[0]);
     }
 
     @Override
     public void run(String... args) {
 	portMap();
     }
-    
+
     public void portMap() {
 	// configure port forwarding.
 	try {

@@ -27,7 +27,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     public TtorrentDownloadProcess(File torrent) {
 	this.torrent = torrent;
     }
-    
+
     @Override
     public Optional<File> download() {
 	try {
@@ -39,11 +39,12 @@ public class TtorrentDownloadProcess implements DownloadProcess {
                 Client client = new com.turn.ttorrent.client.Client(
                     // This is the interface the client will listen on (you might need something
                     // else than localhost here).
-                    InetAddress.getLocalHost(),		
+                    InetAddress.getLocalHost(),
                     st
                 );
-                // client.setMaxDownloadRate(50.0);
-                // client.setMaxUploadRate(50.0);
+                //For Simulations, setting max upload and download to 150 Mbps
+                client.setMaxDownloadRate(150.0);
+                client.setMaxUploadRate(150.0);
 
                 client.download();
                 client.waitForCompletion();
