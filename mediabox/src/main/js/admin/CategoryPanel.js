@@ -55,7 +55,7 @@ function CategoryTypeRow(props) {
           </td>
         </tr>
       </tbody>
-	  </React.Fragment>
+      </React.Fragment>
     );
 }
 
@@ -63,28 +63,28 @@ const NULL_ROW = <CategoryTypeRow category={{name: "", values: []}} handleEdit={
 
 class CategoryType extends React.Component {
     constructor(props) {
-	super(props);
+    super(props);
 
-	this.state = {
-	    categoryTypes: [],
-	    updates: [],
-	    restore: []
-	};
+    this.state = {
+        categoryTypes: [],
+        updates: [],
+        restore: []
+    };
 
-	$.get({
-	    url: config.serverUrl + "/info/categories",
-	    dataType: "json",
+    $.get({
+        url: config.serverUrl + "/info/categories",
+        dataType: "json",
         success: (data) => {
         console.log(data);
-	    this.setState({
-	        categoryTypes: data,
-	        restore: data
-	    });
+        this.setState({
+            categoryTypes: data,
+            restore: data
+        });
         }
     });
-	
-	this.unsavedWarning = this.unsavedWarning.bind(this);
-	this.handleCategoryTypeEdit = this.handleCategoryTypeEdit.bind(this);
+    
+    this.unsavedWarning = this.unsavedWarning.bind(this);
+    this.handleCategoryTypeEdit = this.handleCategoryTypeEdit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDeleteCategoryType = this.handleDeleteCategoryType.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -250,7 +250,7 @@ class CategoryType extends React.Component {
     }
     // Appends a new, empty CategoryType to the list when 'New Category' button is clicked
     newCategoryType() {
-    	$.get({
+        $.get({
             url: config.serverUrl + "/info/category-type-id",
             dataType: "text",
             success: (id) => {
@@ -326,34 +326,34 @@ class CategoryType extends React.Component {
     
     render() {
         return (
-    	    <table className="panel-group" id="category-accordian">
-    	      <thead>
-    		<tr>
-    		  <th>CategoryType</th>
-    		</tr>
-    	      </thead>
-    	      {
-    		  this.state.categoryTypes.length > 0 ?
-    		      this.state.categoryTypes.map((cat, idx) => {
-    			  return <CategoryTypeRow
-    					category={cat}
-    					key={idx}
-    			        handleCategoryTypeEdit={this.handleCategoryTypeEdit.bind(this, cat)}
-    					handleEdit={this.handleEdit.bind(this, cat)}
-    					handleDelete={this.handleDelete.bind(this, cat)}
+            <table className="panel-group" id="category-accordian">
+              <thead>
+            <tr>
+              <th>CategoryType</th>
+            </tr>
+              </thead>
+              {
+              this.state.categoryTypes.length > 0 ?
+                  this.state.categoryTypes.map((cat, idx) => {
+                  return <CategoryTypeRow
+                        category={cat}
+                        key={idx}
+                        handleCategoryTypeEdit={this.handleCategoryTypeEdit.bind(this, cat)}
+                        handleEdit={this.handleEdit.bind(this, cat)}
+                        handleDelete={this.handleDelete.bind(this, cat)}
                         handleDeleteCategoryType={this.handleDeleteCategoryType.bind(this, cat)}
-    			        newCategoryValue={this.newCategoryValue.bind(this, cat)}
-    					/>;
-    		      })
-    		  : NULL_ROW
-    	      }
-    	      <tbody>
-        		<tr>
-        		  <td>
-        		    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategoryType}/>
-        		  </td>
-        		</tr>
-        		<tr>
+                        newCategoryValue={this.newCategoryValue.bind(this, cat)}
+                        />;
+                  })
+              : NULL_ROW
+              }
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="button" className="btn btn-success" value="Add Category" onClick={this.newCategoryType}/>
+                  </td>
+                </tr>
+                <tr>
                 <td>
                   <br/>
                 </td>
@@ -364,18 +364,18 @@ class CategoryType extends React.Component {
                   <input type="button" className="btn btn-warning" value="Cancel Changes" onClick={this.cancelChanges}/>
                 </td>
               </tr>
-    	      </tbody>
-    	    </table>
+              </tbody>
+            </table>
         );
     }
 }
 
 export default class CategoryPanel extends React.Component {
     render() {
-	return (
-	    <div>
-	      <CategoryType/>
-	    </div>
-	);
+    return (
+        <div>
+          <CategoryType/>
+        </div>
+    );
     }
 }
