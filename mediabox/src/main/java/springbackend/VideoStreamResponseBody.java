@@ -1,6 +1,7 @@
 package springbackend;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,6 +18,11 @@ import filesharingsystem.process.DownloadProcess;
 import util.storage.StorageService;
 
 
+/**
+ * https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/UsingHTTPLiveStreaming/UsingHTTPLiveStreaming.html#//apple_ref/doc/uid/TP40008332-CH102-SW1
+ *
+ * @author
+ */
 public class VideoStreamResponseBody implements StreamingResponseBody {
     private static final Logger log = LoggerFactory.getLogger(VideoStreamResponseBody.class);
     private static final int INTERVAL = 100;

@@ -41,9 +41,6 @@ public class TtorrentUploadProcess implements UploadProcess {
     @Qualifier("TorrentStorage")
     private StorageService torrentStorage;
     @Autowired
-    @Qualifier("VideoStorage")
-    private StorageService videoStorage;
-    @Autowired
     private Config config;
     @Autowired
     private PortMapper portMapper;
@@ -91,20 +88,30 @@ public class TtorrentUploadProcess implements UploadProcess {
             // send file to the server.
             // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
 
-            // Create request
-            CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            // This attaches the file to the POST:
-            builder.addBinaryBody("file", torrentFile, ContentType.APPLICATION_OCTET_STREAM, torrentFile.getName());
-
-            uploadFile.setEntity(builder.build());
-            CloseableHttpResponse response = httpClient.execute(uploadFile);
-            int code = response.getStatusLine().getStatusCode();
-            if (code == 200) {
-                log.info("Successfully uploaded torrent to the server, seeding...");
-                // start seeding.
-                Pair clientPair = WANClient.newWANClient(InetAddress.getLocalHost(), config.getPublicIp(), new SharedTorrent(t, videoStorage.getBaseDir(), true));
+	    // Create request
+	    CloseableHttpClient httpClient = HttpClients.createDefault();
+	    HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
+	    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+	    // This attaches the file to the POST:
+	    builder.addBinaryBody(
+		"file",
+		torrentFile, 
+		ContentType.APPLICATION_OCTET_STREAM,
+		torrentFile.getName()
+	    );
+	    
+	    uploadFile.setEntity(builder.build());
+	    CloseableHttpResponse response = httpClient.execute(uploadFile);
+	    int code = response.getStatusLine().getStatusCode();
+	    if(code == 200) {
+		log.info("Successfully uploaded torrent to the server, seeding...");
+		// start seeding.
+                Pair clientPair = WANClient.newWANClient(
+		    InetAddress.getLocalHost(),
+		    config.getPublicIp(),
+		    new SharedTorrent(t, this.file.getParentFile(), true)
+		);
+                
                 // forward ports:
                 portMapper.add(clientPair.address.getPort());
                 client = clientPair.client;

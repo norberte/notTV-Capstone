@@ -5,11 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
@@ -29,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.turn.ttorrent.client.strategy.RequestStrategy;
 import com.turn.ttorrent.client.strategy.RequestStrategyImplSequential;
@@ -39,11 +43,17 @@ import filesharingsystem.process.DownloadProcess;
 import util.SeedManager;
 import util.storage.StorageService;
 
+/**
+ * Handles requests realated to the upload or download process. (including thumbnail).
+ *
+ * @author
+ */
 @Controller
 @RequestMapping("process")
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
     private static final RequestStrategy SEQUENTIAL = new RequestStrategyImplSequential();
+    private static String VIDEO_NAME = "whole-video";
     /*
      * DI attributes.
      */
@@ -67,6 +77,7 @@ public class ProcessController {
     /**
      * Uploads the given video to the network. I.e, creates a .torrent, uploads the .torrent to the server, and starts seeding.
      *
+     * @param id
      * @param video
      * @return
      */
@@ -76,22 +87,33 @@ public class ProcessController {
         log.info(video.getOriginalFilename());
         String name = String.valueOf(id);
         // use video id to name the file.
-        File localVideo = videoStorage.get(name); // , FilenameUtils.getExtension(video.getOriginalFilename())));
-        log.info(localVideo.toString());
-        try {
-            video.transferTo(localVideo);
-        } catch (IllegalStateException | IOException e) {
-            log.error("Error saving uploaded file.", e);
-        }
+	File videoDir = videoStorage.get(name);
+        videoDir.mkdir();
+	log.info(videoDir.toString());
+	try {
+            // write mimetype
+            Files.write(
+                Paths.get(videoDir.getAbsolutePath(), "metadata.txt"),
+                Arrays.asList("video/"+FilenameUtils.getExtension(video.getOriginalFilename())),
+                Charset.forName("UTF-8")
+            );
 
-        try {
-            // Start seeding process.
-            File torrent = seedManager.addProcess(name, localVideo);
-            return torrent.getName();
-        } catch (URISyntaxException e) {
-            log.error("Unable to start upload process. Malformed URI's in config.", e);
-            return null; // hardcoded urls, so should never happen.
-        }
+            // copy uploaded video.
+            File videoFile = new File(videoDir, VIDEO_NAME);
+	    video.transferTo(videoFile);
+
+            try {
+                // Start seeding process.
+                File torrent = seedManager.addProcess(name, videoFile);
+                return torrent.getName();
+            } catch (URISyntaxException e) {
+                log.error("Unable to start upload process. Malformed URI's in config.", e);
+            }
+	} catch (IllegalStateException | IOException e) {
+	    log.error("Error saving uploaded file.", e);
+	}
+
+        return null;
     }
 
     /**
@@ -133,27 +155,30 @@ public class ProcessController {
     }
 
     /**
-     * Streams the specified video.
-     * Starts a sequential download if it doesn't exist already.
+     * Starts the download of the given video with the given strategy (null for default strategy).
+     *
      * @param videoId
+     * @param strategy
      * @return
      */
-    @RequestMapping(path = "video-stream")
-    public StreamingResponseBody stream(@RequestParam("videoId") int videoId){
+    private Optional<DownloadProcess> download(int videoId, RequestStrategy strategy) {
 	// get torrent file.
         String torrent = String.format("%d.torrent", videoId);
         String videoName = String.valueOf(videoId);
         Optional<DownloadProcess> dp = Optional.empty();
-        // only start download if we don't have the video.
-        if(!videoStorage.has(videoName)) {
+        // only start download if we don't have the video. Files should be stored in a folder given by the videoId.
+        if(!videoStorage.has(videoName)) { 
             File torrentFile = torrentStorage.get(torrent); // create empty torrent file.
             try {
+                // download .torrent from server.
                 Request.Get(
                     String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
                 ).execute().saveContent(torrentFile);
-                
-                // download file sequentially so it is in order, and can be streamed immediately.
-                DownloadProcess proc = beanFactory.getBean(DownloadProcess.class, torrentFile, false, SEQUENTIAL);
+
+                File baseDir = videoStorage.get(videoName); // create folder for download.
+                baseDir.mkdir();
+                // download file according to the given strategy (null = default).
+                DownloadProcess proc = beanFactory.getBean(DownloadProcess.class, torrentFile, baseDir, false, strategy);
                 Optional<File> result = proc.download();
                 dp = Optional.of(proc);
                 
@@ -166,8 +191,21 @@ public class ProcessController {
                 log.error("Error getting torrent file from server.", e);
             }
         }
-        // return the stream.
-        return beanFactory.getBean(StreamingResponseBody.class, videoId, dp);
+        return dp;
+    }
+    
+    /**
+     * Streams the specified video.
+     * Starts a sequential download if it doesn't exist already.
+     * @param videoId
+     * @return
+     */
+    @RequestMapping(path = "video-stream")
+    public void stream(@RequestParam("videoId") int videoId){
+        // start sequential download
+        download(videoId, SEQUENTIAL);
+
+        // start process for creating hls.
     }
 
     /**
@@ -178,28 +216,7 @@ public class ProcessController {
      */
     @RequestMapping(path = "download")
     public void download(@RequestParam("videoId") int videoId){
-	// get torrent file.
-        String torrent = String.format("%d.torrent", videoId);
-        String videoName = String.valueOf(videoId);
-        // only start download if we don't have the video.
-        if(!videoStorage.has(videoName)) {
-            File torrentFile = torrentStorage.get(torrent); // create empty torrent file.
-            try {
-                Request.Get(
-                    String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
-                ).execute().saveContent(torrentFile);
-                
-                // download file.
-                Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
-
-                // if download actually gave us a file.
-                if(result.isPresent()) {
-                    File f = result.get();
-                    log.info("Video file: {}", f.getName());
-                }
-            } catch (IOException e) {
-                log.error("Error getting torrent file from server.", e);
-            }
-        }
+        download(videoId);
+        // TODO: convert video to hls VOD when complete.
     }
 }

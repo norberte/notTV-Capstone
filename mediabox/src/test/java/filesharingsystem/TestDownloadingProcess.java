@@ -55,7 +55,7 @@ public class TestDownloadingProcess {
     @Test
     public void testDownload() throws Exception {
         // Test if the download process can download video content using the file sharing system
-        DownloadProcess dp = new TtorrentDownloadProcess(torrFile);
+	DownloadProcess dp = new TtorrentDownloadProcess(torrFile, null);
         Optional<File> result = dp.download();
         assertTrue(result.isPresent());
         assertTrue(result.get().exists());
