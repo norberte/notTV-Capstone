@@ -26,7 +26,7 @@ import util.storage.StorageService;
 
 public class TtorrentDownloadProcess implements DownloadProcess {
     private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
-    private final File torrent;
+    private final File torrent, baseDir;
     private final RequestStrategy strategy;
     private final boolean wait;
     
@@ -38,9 +38,9 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     private Config config;
     @Autowired
     private PortMapper portMapper;
-
-    public TtorrentDownloadProcess(File torrent) {
-        this(torrent, false, null);
+    
+    public TtorrentDownloadProcess(File torrent, File baseDir) {
+        this(torrent, baseDir, false, null);
     }
 
     /**
@@ -48,8 +48,11 @@ public class TtorrentDownloadProcess implements DownloadProcess {
      *
      * @param torrent
      * @param requestStrategy
+     * @param baseDir - directory to store downloaded files.
+     * @param wait - whether or not to wait for the download to complete.
      */
-    public TtorrentDownloadProcess(File torrent, boolean wait, RequestStrategy requestStrategy) {
+    public TtorrentDownloadProcess(File torrent, File baseDir, boolean wait, RequestStrategy requestStrategy) {
+        this.baseDir = baseDir;
 	this.torrent = torrent;
         this.strategy = requestStrategy;
         this.wait = wait;
@@ -61,10 +64,10 @@ public class TtorrentDownloadProcess implements DownloadProcess {
             // load the torrent with the appripriate strategy (sequential vs rarest-first).
             SharedTorrent st;
             if(this.strategy == null) // fromFile() defaults to rarest-first
-                st = SharedTorrent.fromFile(torrent, videoStorage.getBaseDir());
+                st = SharedTorrent.fromFile(torrent, baseDir);
             else {
                 byte[] data = FileUtils.readFileToByteArray(torrent);
-                st = new SharedTorrent(data, videoStorage.getBaseDir(), false, strategy);
+                st = new SharedTorrent(data, baseDir, false, strategy);
             }
             
             // If the client isn't finished downloading, finish downloading.

@@ -4,6 +4,12 @@ import java.io.File;
 
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Interface for a file system.
+ * Note: Some implementations could have files over multiple partitions.
+ *
+ * @author
+ */
 public interface StorageService {
     /**
      * Initializes the service.
@@ -33,11 +39,4 @@ public interface StorageService {
      * @return
      */
     boolean has(String filename);
-
-    /**
-     * Gets the base directory.
-     *
-     * @return
-     */
-    File getBaseDir();
 }
