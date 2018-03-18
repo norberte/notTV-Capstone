@@ -23,7 +23,7 @@ public class Application implements CommandLineRunner {
     SeedManager seedManager;
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        config.id = Integer.parseInt(args[0]);
+        //config.id = Integer.parseInt(args[0]);
     }
 
     @Override
