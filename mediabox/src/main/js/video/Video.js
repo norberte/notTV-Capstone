@@ -10,7 +10,7 @@ class VideoPlayer extends React.Component{
             hls.loadSource(this.props.source);
             hls.attachMedia(this.video);
             hls.on(Hls.Events.MANIFEST_PARSED,() => {
-                video.play();
+                this.video.play();
             });
         }
         
