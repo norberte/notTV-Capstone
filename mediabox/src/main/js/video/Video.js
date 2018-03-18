@@ -1,20 +1,31 @@
-
 const React = require("react");
 const ReactDOM = require("react-dom");
+const Hls = require("hls.js");
 
-
-
-class VideoPlayer extends React.Component{    
+class VideoPlayer extends React.Component{
+    componentDidMount() {
+        // Use hls library to access the video stream.
+        if(Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(this.props.source);
+            hls.attachMedia(this.video);
+            hls.on(Hls.Events.MANIFEST_PARSED,() => {
+                video.play();
+            });
+        }
+        
+    }
     render(){
         return (
-            <video id="video-player" width="960" height="540" controls="true">
-              <source src={this.props.source} type="video/mp4" />
-              <source src={this.props.source} type="video/webm" />
+            <video ref={(input) => { this.video = input; }} id="video-player" width="960" height="540" controls="true" src={null}>
+              <source type="video/mp4" src={null}/>
+              <source type="video/webm" src={null}/>
               Your browser does not support the video tag.
             </video>     
         );
     }
 }
+
 class SubscribeButton extends React.Component{
     constructor(props) {
         super(props);
@@ -76,23 +87,8 @@ class Video extends React.Component{
         super(props);
         this.state = {
             videoId: props.videoId,
-            video_data: "",
-            video_file: ""
+            video_data: ""
         };
-
-        $.ajax({
-            type: 'post',
-            url: "/process/video-stream?videoId=" + props.videoId,
-            data: {},
-            dataType: 'json',
-            processData: false,
-            xhrFields: {
-                // Getting on progress streaming response
-                onprogress: function(e) {
-                    console.log(e);
-                }
-            }
-        });
 
         //get video metadata from server
         $.get({
@@ -130,7 +126,7 @@ class Video extends React.Component{
     render(){
         return (
             <div className="container">
-              <VideoPlayer source={this.state.video_file}/>    
+              <VideoPlayer source={"/process/video-stream?videoId=" + this.props.videoId}/>    
               <div>
                 <h1>{this.state.title}</h1>
                 <div>

@@ -161,7 +161,6 @@ public class ProcessController {
                 if(result.isPresent()) {
                     File f = result.get();
                     log.info(f.getName());
-                    videoName = f.getName();
                 }
             } catch (IOException e) {
                 log.error("Error getting torrent file from server.", e);
@@ -196,8 +195,7 @@ public class ProcessController {
                 // if download actually gave us a file.
                 if(result.isPresent()) {
                     File f = result.get();
-                    log.info(f.getName());
-                    videoName = f.getName();
+                    log.info("Video file: {}", f.getName());
                 }
             } catch (IOException e) {
                 log.error("Error getting torrent file from server.", e);
