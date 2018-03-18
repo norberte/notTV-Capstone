@@ -43,19 +43,22 @@ public class VideoStreamResponseBody implements StreamingResponseBody {
     
     @Override
     public void writeTo(OutputStream out) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(videoStorage.get(String.valueOf(id))));
-        try {
+        File vid = videoStorage.get(String.valueOf(id));
+        try(BufferedReader br = new BufferedReader(new FileReader(vid))) {
+            int b;
             do {
-                while(true) {
-                    int b = br.read();
-                    log.info("FILE BYTE: {}", b);
-                    if(b != -1)
-                        out.write(b);
-                    else // end of file, wait for more to be written.
-                        Thread.sleep(INTERVAL);
+                b = br.read();
+                Thread.sleep(100); // temp for testing.
+                if(b != -1) 
+                    out.write(b);
+                else { // end of file, wait for more to be written.
+                    // out.flush(); // flush now because we read as much as possible.
+                    Thread.sleep(INTERVAL);
                 }
-            } while((dp.isPresent() && !dp.get().isFinished()));
-        }catch(InterruptedException e) {
+                out.flush(); // temp
+                // while download not finished or not at end of File.
+            } while(dp.isPresent() && !dp.get().isFinished() || b != -1);
+        } catch(InterruptedException e) {
             log.error("Thread interrupted: ", e);
         }
     }
