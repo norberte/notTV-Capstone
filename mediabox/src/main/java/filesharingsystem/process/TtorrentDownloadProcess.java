@@ -1,7 +1,6 @@
 package filesharingsystem.process;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -42,12 +41,38 @@ public class TtorrentDownloadProcess implements DownloadProcess {
                     InetAddress.getLocalHost(),
                     st
                 );
-                //For Simulations, setting max upload and download to 150 Mbps
-                client.setMaxDownloadRate(150.0);
-                client.setMaxUploadRate(150.0);
 
+                client.setMaxDownloadRate(50.0);
+                client.setMaxUploadRate(50.0);
+
+                //Start recording time to download time to download here
+                long startTime = System.currentTimeMillis();
+
+                //DOWNLOAD SOME JUNK
                 client.download();
                 client.waitForCompletion();
+                //DONE DOWNLOADING
+
+                //End recording of downlaod time
+                long endTime = System.currentTimeMillis();
+
+                //Calculate time spent downloading in seconds
+                double downloadTime = (endTime - startTime)/1000;
+
+                //Calculate Bandwidth usage using File Size and time to download.
+                //Test File Size = 26,415,093 bytes
+                int fileSize = 26415093;
+                //1000 bits per second = 125 Bytes per second
+                double bytesPerSecond = fileSize/downloadTime;
+                double bandwidthUsage = 1000*(bytesPerSecond)/125;
+
+                //calculate CPU Usage during download
+                int cpuUsage = -1;
+
+                //Output to File or log with bandwidth usage of download
+                PrintWriter out = new PrintWriter(new FileWriter("~/latestDownloadData.txt"));
+                out.print("Download Speed Data\n\nBytes Per Second: "+bytesPerSecond+"\nBandwidth Usage:"+bandwidthUsage+"\n\nCPU Usage: "+cpuUsage);
+                out.close();
             }
             // run callback.
             List<String> names = st.getFilenames();

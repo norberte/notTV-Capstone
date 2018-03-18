@@ -3,7 +3,7 @@ package springbackend;
 public class Config {
     public String serverUrl;
     public String trackerUrl;
-    public int id;
+    //public int id;
 
     /**
      * @return the serverUrl
@@ -33,17 +33,15 @@ public class Config {
 	this.trackerUrl = trackerUrl;
     }
 
-    /**
-     * @return the id
-     */
-    public String getId()) {
-    return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-    this.id = id;
-    }
+    ///**
+    // * @return the id
+    // */
+    ////return id;
+    //}
+    ///**
+    // * @param id the id to set
+    // */
+    //public void setId(int id) {
+    //this.id = id;
+    //}
 }
