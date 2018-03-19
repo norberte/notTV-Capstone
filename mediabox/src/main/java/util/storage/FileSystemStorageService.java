@@ -43,8 +43,8 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public File get(String filename) {
-        return new File(rootDir, filename);
+    public File get(Path parents) {
+	return Paths.get(rootDir.getAbsolutePath(), parents.toString()).toFile();
     }
 
     @Override

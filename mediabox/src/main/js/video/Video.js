@@ -7,9 +7,9 @@ class VideoPlayer extends React.Component{
         // Use hls library to access the video stream.
         if(Hls.isSupported()) {
             const hls = new Hls();
-            hls.loadSource(this.props.source);
+            hls.loadSource(this.props.source + "/index");
             hls.attachMedia(this.video);
-            hls.on(Hls.Events.MANIFEST_PARSED,() => {
+            hls.on(Hls.Events.CAN_PLAY,() => {
                 this.video.play();
             });
         }
@@ -86,14 +86,13 @@ class Video extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            videoId: props.videoId,
             video_data: ""
         };
 
         //get video metadata from server
         $.get({
             url: config.serverUrl + "/info/video-data",
-            data: {videoId: this.state.videoId},
+            data: {videoId: this.props.videoId},
             dataType: "json",
             success: (data) => {
                 this.setState({
@@ -126,7 +125,7 @@ class Video extends React.Component{
     render(){
         return (
             <div className="container">
-              <VideoPlayer source={"/process/video-stream?videoId=" + this.props.videoId}/>    
+              <VideoPlayer source={"/process/video-stream/" + this.props.videoId}/>    
               <div>
                 <h1>{this.state.title}</h1>
                 <div>
@@ -138,13 +137,14 @@ class Video extends React.Component{
                 </div>
                 <p></p>
                 <p>{this.state.description}</p>
-                <ReportDialog videoId={this.state.videoId}/>
+                <ReportDialog videoId={this.props.videoId}/>
               </div>
             </div>
         );
     }
 }
 
+// videoId from parameters automatically passed in default_page
 ReactDOM.render(
     <Video videoId={videoId}/>,
     document.getElementById('root')
