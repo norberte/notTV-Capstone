@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -30,13 +32,14 @@ import filesharingsystem.process.WANClient.Pair;
 
 import springbackend.Config;
 
+import util.hls.Constants;
 import util.storage.StorageService;
 
 public class TtorrentUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
     private Client client;
     private String name;
-    private File file, torrentFile;
+    private File dir, torrentFile;
     @Autowired
     @Qualifier("TorrentStorage")
     private StorageService torrentStorage;
@@ -51,12 +54,12 @@ public class TtorrentUploadProcess implements UploadProcess {
      * @param announce - http://tracker.url:port/announce
      * @param uploadURI - http://server.url:port/uploat-torrent
      * @param name - name of the torrent
-     * @param file - video file.
+     * @param dir - video directory.
      */
-    public TtorrentUploadProcess(String name, File file) {
-        this.name = FilenameUtils.getBaseName(name);
-        this.file = file;
-        client = null;
+    public TtorrentUploadProcess(String name, File dir) {
+	this.name = FilenameUtils.getBaseName(name);
+	this.dir = dir;
+	client = null;
     }
 
     @Override
@@ -76,13 +79,15 @@ public class TtorrentUploadProcess implements UploadProcess {
      */
     @Override
     public void run() {
-        // Get public ip.
-        try {
-            torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
-            // Create torrent from announce/files.
-            // http://tracker.url:port/announce
-            URI trackerURI = new URI(String.format("%s:%d/%s", config.getTrackerUrl(), config.getTrackerPort(), "announce"));
-            Torrent t = Torrent.create(this.file, trackerURI, "notTV");
+	// Get public ip.
+                try {
+	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
+	    // Create torrent from announce/files.
+            List<File> segments = Arrays.asList(new File(this.dir, Constants.INDEX_NAME)); // add index files
+            // collect segments.
+            segments.addAll(Arrays.asList(dir.listFiles((d, n) -> n.startsWith(Constants.SEGMENT_NAME))));
+            URI trackerURI = new URI(String.format("%s:%d/%s", config.getTrackerUrl(), config.getTrackerPort(), "announce"));  
+	    Torrent t = Torrent.create(this.dir, segments,  trackerURI, "notTV");
 
             t.save(new FileOutputStream(torrentFile));
             // send file to the server.
@@ -109,7 +114,7 @@ public class TtorrentUploadProcess implements UploadProcess {
                 Pair clientPair = WANClient.newWANClient(
 		    InetAddress.getLocalHost(),
 		    config.getPublicIp(),
-		    new SharedTorrent(t, this.file.getParentFile(), true)
+		    new SharedTorrent(t, this.dir, true)
 		);
                 
                 // forward ports:

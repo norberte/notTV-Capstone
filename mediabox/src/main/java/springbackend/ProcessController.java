@@ -41,6 +41,8 @@ import com.turn.ttorrent.client.strategy.RequestStrategyImplSequential;
 import filesharingsystem.process.DownloadProcess;
 
 import util.SeedManager;
+import util.hls.Constants;
+import util.hls.Segmenter;
 import util.storage.StorageService;
 
 /**
@@ -53,9 +55,7 @@ import util.storage.StorageService;
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
     private static final RequestStrategy SEQUENTIAL = new RequestStrategyImplSequential();
-    private static String VIDEO_NAME = "whole-video";
-    private static String INDEX_NAME = "index.m3u8";
-    private static String SEGMENT_EXT = "ts";
+
     /*
      * DI attributes.
      */
@@ -74,8 +74,10 @@ public class ProcessController {
     @Autowired
     private SeedManager seedManager;
     @Autowired
-    private BeanFactory beanFactory;
-
+    private Segmenter segmenter;
+    @Autowired
+    private BeanFactory beanFactory; 
+    
     /**
      * Uploads the given video to the network. I.e, creates a .torrent, uploads the .torrent to the server, and starts seeding.
      *
@@ -101,12 +103,13 @@ public class ProcessController {
             );
 
             // copy uploaded video.
-            File videoFile = new File(videoDir, VIDEO_NAME);
+            File videoFile = new File(videoDir, Constants.VIDEO_NAME);
 	    video.transferTo(videoFile);
+            segmenter.segment(videoFile);
 
             try {
                 // Start seeding process.
-                File torrent = seedManager.addProcess(name, videoFile);
+                File torrent = seedManager.addProcess(name, videoDir);
                 return torrent.getName();
             } catch (URISyntaxException e) {
                 log.error("Unable to start upload process. Malformed URI's in config.", e);
@@ -203,7 +206,7 @@ public class ProcessController {
     @RequestMapping("video-stream/{id}/{segment}")
     @ResponseBody
     public FileSystemResource segment(@PathVariable int id, @PathVariable String segment){
-        return new FileSystemResource(videoStorage.get(String.valueOf(id), String.format("%s.%s", segment, SEGMENT_EXT)));
+        return new FileSystemResource(videoStorage.get(String.valueOf(id), String.format("%s.%s", segment, Constants.SEGMENT_EXT)));
     }    
 
     /**
@@ -211,15 +214,18 @@ public class ProcessController {
      * Starts a sequential download if it doesn't exist already.
      * @param videoId
      * @return
+     * @throws InterruptedException
      */
     @RequestMapping("video-stream/{id}/index")
     @ResponseBody
-    public FileSystemResource stream(@PathVariable int id){
+    public FileSystemResource stream(@PathVariable int id) throws InterruptedException {
         // start sequential download
         download(id, SEQUENTIAL);
-
-        // start process for creating hls.
-        return new FileSystemResource(videoStorage.get(String.valueOf(id), INDEX_NAME));
+        File index = videoStorage.get(String.valueOf(id), Constants.INDEX_NAME);
+        
+        while(!index.exists()) // wait for index file to be generated.
+            Thread.sleep(100);
+        return new FileSystemResource(index);
     }
 
     /**
