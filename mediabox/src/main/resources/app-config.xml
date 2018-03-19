@@ -53,7 +53,7 @@
   <bean id="DownloadProcess" class="filesharingsystem.process.TtorrentDownloadProcess" scope="prototype" lazy-init="true"/>
   <bean id="SeedManager" class="util.SeedManager"/>
 
-  <bean id="StreamingResponseBody" class="springbackend.VideoStreamResponseBody" scope="prototype"/>
+  <bean id="HlsStreamSegmenter" class="util.HlsStreamSegmenter" scope="prototype"/>
   
   <mvc:interceptors>
     <bean class="springbackend.ConfigHandlerInterceptor"/>

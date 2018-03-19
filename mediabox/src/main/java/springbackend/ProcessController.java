@@ -54,6 +54,8 @@ public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
     private static final RequestStrategy SEQUENTIAL = new RequestStrategyImplSequential();
     private static String VIDEO_NAME = "whole-video";
+    private static String INDEX_NAME = "index.m3u8";
+    private static String SEGMENT_EXT = "ts";
     /*
      * DI attributes.
      */
@@ -193,19 +195,31 @@ public class ProcessController {
         }
         return dp;
     }
-    
+
+    /**
+     * Serves the given segment.
+     * @return
+     */
+    @RequestMapping("video-stream/{id}/{segment}")
+    @ResponseBody
+    public FileSystemResource segment(@PathVariable int id, @PathVariable String segment){
+        return new FileSystemResource(videoStorage.get(String.valueOf(id), String.format("%s.%s", segment, SEGMENT_EXT)));
+    }    
+
     /**
      * Streams the specified video.
      * Starts a sequential download if it doesn't exist already.
      * @param videoId
      * @return
      */
-    @RequestMapping(path = "video-stream")
-    public void stream(@RequestParam("videoId") int videoId){
+    @RequestMapping("video-stream/{id}/index")
+    @ResponseBody
+    public FileSystemResource stream(@PathVariable int id){
         // start sequential download
-        download(videoId, SEQUENTIAL);
+        download(id, SEQUENTIAL);
 
         // start process for creating hls.
+        return new FileSystemResource(videoStorage.get(String.valueOf(id), INDEX_NAME));
     }
 
     /**
