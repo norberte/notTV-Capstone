@@ -61,7 +61,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 
                 //Calculate Bandwidth usage using File Size and time to download.
                 //Test File Size = 26,415,093 bytes
-                int fileSize = 26415093;
+                int fileSize = 26415093; //It would be better to get the size of the file programatically.
                 //1000 bits per second = 125 Bytes per second
                 double bytesPerSecond = fileSize/downloadTime;
                 double bandwidthUsage = 1000*(bytesPerSecond)/125;
