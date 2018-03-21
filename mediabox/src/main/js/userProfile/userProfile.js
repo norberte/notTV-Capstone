@@ -58,7 +58,7 @@ export default class Profile extends React.Component {
                     });
                     
                     // Get recent videos that belong to the user
-                    this.update_videos = this.update_videos(this.state.userid);
+                    this.update_videos = this.update_videos(data);
                     
                     // Get playlists owned by the user
                     this.update_playlists = this.update_playlists(this.state.userid);
@@ -76,11 +76,12 @@ export default class Profile extends React.Component {
 
     // ajax call for getting the videos
     update_videos(id) {
+        console.log("get request input = " + id[0]);
         $.get({
             url: config.serverUrl + "/info/recentVideos/",
             data: {
-                userid: id
-            },
+                userid: id[0]
+            }, // trust me, leave this as it is... there is something weird with id, and it only accepts id[0]
             dataType: "json",
             success: (data) => {
                 this.setState({
