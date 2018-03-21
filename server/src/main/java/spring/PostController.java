@@ -15,9 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +47,8 @@ public class PostController {
     @Autowired
     @Qualifier("ImageStorage")
     private StorageService thumbnailStorage;
+    
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @PostMapping(value="/add-video", consumes={"multipart/form-data"})
     @ResponseStatus(value = HttpStatus.OK)
@@ -161,10 +166,12 @@ public class PostController {
         
         // change password, if the 2 passwords match
         if(newPass.equals(confirmedNewPass)) {
+            // encrypt password
+            String encryptedPassword = encoder.encode(newPass);
             PreparedStatementCreator psc = new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(passwordUpdate_query);
-                    ps.setString(1, newPass);
+                    ps.setString(1, encryptedPassword);
                     ps.setInt(2, user_id);
                     return ps;
                 }
@@ -174,17 +181,20 @@ public class PostController {
         
         // change e-mail address
         String newEmail = accountInfo.getNewEmail();
-        PreparedStatementCreator psc2 = new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(emailUpdate_query);
-                ps.setString(1, newEmail);
-                ps.setInt(2, user_id);
-                return ps;
-            }
-        };
-        this.jdbc.update(psc2);
+        if(newEmail.length() > 0 && newEmail.contains("@")) {
+            PreparedStatementCreator psc2 = new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(emailUpdate_query);
+                    ps.setString(1, newEmail);
+                    ps.setInt(2, user_id);
+                    return ps;
+                }
+            };
+            this.jdbc.update(psc2);
+        }
         
         // change auto-download 
+        /*
         boolean autoDownloading;
         String autoDownload = accountInfo.getAutoDownload(); // take care of this
         if(autoDownload.equals("T")){
@@ -216,5 +226,6 @@ public class PostController {
             };
             this.jdbc.update(psc);
         }
+        */
     }
 }
