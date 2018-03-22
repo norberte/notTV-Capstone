@@ -40,14 +40,14 @@ import spring.view.VideoForm;
 @RequestMapping("/upload")
 public class PostController {
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
-    
+
     @Autowired
     private JdbcTemplate jdbc;
-    
+
     @Autowired
     @Qualifier("ImageStorage")
     private StorageService thumbnailStorage;
-    
+
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @PostMapping(value="/add-video", consumes={"multipart/form-data"})
@@ -64,7 +64,7 @@ public class PostController {
         try (
             Connection connection = jdbc.getDataSource().getConnection();
             PreparedStatement ps = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement catPs = connection.prepareStatement(CAT_SQL);    
+            PreparedStatement catPs = connection.prepareStatement(CAT_SQL);
         ) {
             ps.setString(1, videoForm.getTitle());
             ps.setString(2, videoForm.getDescription());
@@ -80,13 +80,13 @@ public class PostController {
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     id = generatedKeys.getInt(1);
-                else 
+                else
                     throw new SQLException("Failed to create video, no ID obtained.");
             }
 
             // Store thumbnail
             thumbnailStorage.store(String.valueOf(id), thumbnail);
-            
+
             // add categories
             catPs.setInt(1, id);
             for(int cat : videoForm.getTags()) {
@@ -100,12 +100,12 @@ public class PostController {
         }
         return -1; // no video.
     }
-    
+
     private int getUserID(String username) {
         // Make the query.
         StringBuilder queryBuilder = new StringBuilder("Select id From nottv_user Where username = ?;");
         String query = queryBuilder.toString();
-        
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -113,7 +113,7 @@ public class PostController {
                 return ps;
             }
         };
-    
+
         List<Integer> id = this.jdbc.query(psc, (rs, row) -> new Integer(rs.getInt("id")));
         if(id.size() > 0) {
             return id.get(0);
@@ -121,12 +121,12 @@ public class PostController {
             return -10;
         }
     }
-    
+
     private int getUserSettingsPK(int user_id) {
         // Make the query.
         StringBuilder queryBuilder = new StringBuilder("Select id From settings Where userId = ?;");
         String query = queryBuilder.toString();
-        
+
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(query);
@@ -134,7 +134,7 @@ public class PostController {
                 return ps;
             }
         };
-    
+
         List<Integer> id = this.jdbc.query(psc, (rs, row) -> new Integer(rs.getInt("id")));
         if(id.size() > 0) {
             return id.get(0);
@@ -142,7 +142,7 @@ public class PostController {
             return -1;
         }
     }
-    
+
     @PostMapping("/accountSubmit")
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
@@ -151,19 +151,19 @@ public class PostController {
         final String emailUpdate_query = "UPDATE nottv_user SET email = ? WHERE id = ?;";
         final String passwordUpdate_query = "UPDATE nottv_user SET password = ? WHERE id = ?;";
         final String autoDownload_update = "UPDATE settings SET autodownload = ? WHERE id = ?;";
-        
+
         // insert statement
         final String autoDownload_insert = "INSERT INTO settings(userId, alwaysDownload) VALUES(?,?);";
-   
+
         String username = accountInfo.getCurrentUsername();
         int user_id = getUserID(username);
         if(user_id == -10) {    // username does not belong to a userid... non-existent account
             return;
         }
-        
+
         String newPass = accountInfo.getNewPass();
         String confirmedNewPass = accountInfo.getConfirmNewPass();
-        
+
         // change password, if the 2 passwords match
         if(newPass.equals(confirmedNewPass)) {
             // encrypt password
@@ -178,23 +178,20 @@ public class PostController {
             };
             this.jdbc.update(psc);
         }
-        
+
         // change e-mail address
         String newEmail = accountInfo.getNewEmail();
-        if(newEmail.length() > 0 && newEmail.contains("@")) {
-            PreparedStatementCreator psc2 = new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(emailUpdate_query);
-                    ps.setString(1, newEmail);
-                    ps.setInt(2, user_id);
-                    return ps;
-                }
-            };
-            this.jdbc.update(psc2);
-        }
-        
-        // change auto-download 
-        /*
+        PreparedStatementCreator psc2 = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(emailUpdate_query);
+                ps.setString(1, newEmail);
+                ps.setInt(2, user_id);
+                return ps;
+            }
+        };
+        this.jdbc.update(psc2);
+
+        // change auto-download
         boolean autoDownloading;
         String autoDownload = accountInfo.getAutoDownload(); // take care of this
         if(autoDownload.equals("T")){
@@ -202,7 +199,7 @@ public class PostController {
         } else {
             autoDownloading =  false;
         }
-        
+
         int settings_id = getUserSettingsPK(user_id);
         if(settings_id == -1) { // if user does not have settings yet, insert into settings table
             PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -228,4 +225,41 @@ public class PostController {
         }
         */
     }
+
+
+
+
+    //Receive POST from login and check hashed password matches hashed password in DB.
+    //If the passHashes match, then a global login state needs to be initalized for the account.
+    //@PostMapping("loginProcess")
+    @PostMapping("login")
+    public String loginProcess(@RequestParam("username") String usernamePOST, @RequestParam("pass") String passPOST){
+        String username = usernamePOST;
+        String password = passPOST;
+
+        //Hash pass here
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+
+        //Query DB for password
+        final String passHash_query = "SELECT password FROM nottv_user WHERE password = ?";
+
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(passwordUpdate_query);
+                ps.setString(1, hashedPassword);
+                ps.setInt(2, user_id);
+                return ps;
+            }
+        };
+
+        //Get Result Set and find match with hashed pass and matching username.
+        //if both match, make active user the username provided.
+        this.jdbc.query(psc);
+
+    }
+
+
+
+
 }

@@ -29,7 +29,7 @@ import spring.view.CategoryUpdateList;
 @RequestMapping("/update")
 public class UpdateController {
     private static final Logger log = LoggerFactory.getLogger(InfoController.class);
-    
+
     private static final int NEW_CATEGORY_TYPE = 1;
     private static final int NEW_CATEGORY_VALUE = 2;
     private static final int EDIT_CATEGORY_VALUE = 3;
@@ -45,11 +45,11 @@ public class UpdateController {
     public boolean unsubscribe(@RequestParam(value="author", required=true) int author,
     @RequestParam(value="subscriber", required=true) int subscriber) {
         log.info("unsubscribe {} from {}", subscriber, author);
-        
+
         // Make the query.
         String query = "Delete From subscribe Where subscriberId = ? AND authorId = ?;";
         log.info(query);
-        
+
         int numberOfRowAffected = jdbc.update(query, subscriber, author);
         if(numberOfRowAffected > 0) {
             return true; // successfully unsubscribe
@@ -57,7 +57,7 @@ public class UpdateController {
             //TODO: does returning false return an error Response to the client?
             // Do we want an error to be thrown if they weren't even subscribed?
             return false; // did not unsubscribe, or could not even unsubscribe, since it was not subscribed before
-        }        
+        }
     }
 
     @PostMapping("/subscribe")
@@ -76,7 +76,7 @@ public class UpdateController {
             return false; // did not subscribe, since some error happened or it was already subscribed in the beginning
         }
     }
-    
+
     /**
      * Update the flag table with an new notTV standards violation report
      * @param videoId - id of reported video
@@ -86,8 +86,8 @@ public class UpdateController {
     @PostMapping("/report")
     @ResponseBody
     public boolean report(@RequestParam("videoId") int videoId, @RequestParam("reportText") String reportText) {
-        log.info("flag a video");
-        String query = "Insert Into flag (userid, videoid, message) Values (?,?,?);"; 
+        log.info("update subscriptions table");
+        String query = "Insert Into flag (userid, videoid, message) Values (?,?,?);";
         log.info(query);
         jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
         return true;
@@ -106,10 +106,10 @@ public class UpdateController {
     @PostMapping("/categories")
     @ResponseBody
     public void updateCategories(@RequestBody CategoryUpdateList jsonString) {
-        
+
         List<CategoryUpdate> updateList = jsonString.getUpdateList();
         //updateList.sort((a, b) -> a.action - b.action); // sort update list by action: delete first, then insert, then update
-        
+
         String sql = null;
 
         for(CategoryUpdate update: updateList){
@@ -143,6 +143,9 @@ public class UpdateController {
                     break;
             }
             log.info(sql);
-        }     
+        }
     }
+
+
+    
 }
