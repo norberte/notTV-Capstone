@@ -5,7 +5,7 @@ import CarouselLayout from '../CarouselLayout.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-class VideoThumbnail extends React.Component {
+export default class VideoThumbnail extends React.Component {
     constructor(props) {
         super(props);
 
@@ -106,6 +106,9 @@ class Browse extends React.Component {
         return (
             <div className="row display-flex categories-row">
               <div className="col-md-2 categories-column">
+              <div className="filteringHeader">
+                  <h2>Filtering</h2>
+              </div>
                 <CategoryFilter
                    categories={this.state.categories}
                    selected={this.state.filters}

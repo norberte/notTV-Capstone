@@ -6,6 +6,15 @@
     margin: 0px;
 }
 
+.filteringHeader{
+	align: center;
+	background-color:#ffffff;
+}
+
+.filteringHeader h2{
+	text-align: center;
+}
+
 .categories-row {
     height:100%;
     margin:0px;

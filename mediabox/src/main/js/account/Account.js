@@ -3,42 +3,55 @@ import NavBar from '../NavBar.js';
 //There is crossover into the browse folder with the use of CarouselLayout.
 //Perhaps, if we are to use it in this page, it should be moved up a folder.
 import CarouselLayout from '../CarouselLayout.js';
+import VideoThumbnail from '../browse/Browse.js';
 
 const React = require("react");
 const ReactDOM = require("react-dom");
 
 let default_loggedIn_userID = -1;
-let default_loggedIn_username = 'dummy';
-
+let default_loggedIn_username = 'default_user';
+let thumbnailURL;
 class UserThumbnail extends React.Component {
-    render() {
-        return (
-            <div className="col-md-2 no-padding">
-              <a href={this.props.entry.userProfileURL}>
-                <div className="thumbnail no-margin">
-                  <img className="video-thumbnail" src={this.props.entry.thumbnailURL} />
-                  <div className="caption">
-                    <h3 className="no-margin">{this.props.entry.username} </h3>
-                  </div>
-                </div>
-              </a>
-            </div>
-        );
-    }
-}
+    constructor(props) {
+        super(props);
 
-class VideoThumbnail extends React.Component {
+        //this.getThumbnail = this.getThumbnail.bind(this);
+        //this.getThumbnail();
+    }
+
+    /*
+     * User Profile Picture download is not implemented yet
+     * 
+    getThumbnail() {
+        // get thumbnail if it isn't loaded already.
+        if(!this.props.entry.thumbnailURL)
+            utils.getThumbnail(this.props.entry.id, (file) => {
+                this.props.entry.thumbnailURL = file;
+                this.forceUpdate();
+            });
+    }
+    */
+
     render() {
+        // need to call here because the constructor isn't always called for entries.
+        // I think React may be reusing existing ones, so it doesn't create new VideoThumbnails?
+        // We need to do it in the constructor also, because the component needs
+        // to be mounted first to forceUpdate().
+        //this.getThumbnail();
+        const thumbnail = this.props.entry.thumbnailURL ? this.props.entry.thumbnailURL : "/img/default-placeholder-300x300.png";
+        thumbnailURL = thumbnail;
         return (
             <div className="col-md-2 no-padding">
-              <a href={this.props.entry.url}>
-                <div className="thumbnail no-margin">
-                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
-                  <div className="caption">
-                    <h3 className="no-margin">{this.props.entry.title} </h3>
-                  </div>
+            <a href={this.props.entry.userProfileURL}>
+                 <div className="thumbnail no-margin">
+                     <div className="video-thumbnail">
+                         <img className="video-thumbnail-content" src={thumbnail}/>
+                     </div>
+                     <div className="caption">
+                         <h4 className="no-margin">{this.props.entry.username} </h4>
+                     </div>
                 </div>
-              </a>
+            </a>
             </div>
         );
     }
@@ -80,7 +93,7 @@ export default class Account extends React.Component {
     $.get({
         url: config.serverUrl + "/info/subscriptions",
         data: {
-        	userID: this.state.userLogin
+            loggedInUserID: this.state.userLogin
         },
         dataType: "json",
         success: (data) => {
@@ -95,13 +108,10 @@ export default class Account extends React.Component {
     }
 
     
-    //Get a list of videos this user has saved.
+    //Get a list of in-library videos
     update_videos() {
 	$.get({
 	    url: config.serverUrl + "/info/libraryVideos",
-	    data: {
-        	userID: this.state.userLogin
-        },
 	    dataType: "json",
 	    success: (data) => {
 		this.setState({
@@ -133,19 +143,18 @@ export default class Account extends React.Component {
                autoDownload: this.state.formData['autoDownload']
    		};
 
-           // Use Ajax to send new account details
-           $.ajax({
-               type: "POST",
+           //send new account details
+           $.post({
                url: config.serverUrl + "/upload/accountSubmit",
                contentType: 'application/json',
                processData: false,
                data: JSON.stringify(formData),
                success: (response) => {
-               console.log(response);
-               alert("Successfully uploaded!");
+                   console.log(response);
+                   alert("Successfully uploaded!");
                },
                error: (response) => {
-               console.log(response);
+                   console.log(response);
                }
            });
     }
@@ -153,38 +162,43 @@ export default class Account extends React.Component {
 
     render() {
     return (
-        <div id = 'accountInfo'>
-            <h1>Account Info</h1>
-
-            <div id = 'accountDetails'>
-
-                <figure>
-                    <img src = "img/default-placeholder-300x300.png" alt = "Profile Picture"/>
-                    <figcaption>{default_loggedIn_username}</figcaption>
-                </figure>
-
-                <form id="accountInfoForm" method="post" onSubmit={this.handleSubmit} commandname="accountForm">
-                    <input type = "text" name="newUsername" value={this.state.formData.username}  onChange={this.handleChange} placeholder="Enter a New Username" disabled/><br />
-                    <input type = "text" name="newEmail" value={this.state.formData.email}  onChange={this.handleChange} placeholder="Enter a New Email" /><br />
-                    <input type = "password" name="newPass" value={this.state.formData.newPass}  onChange={this.handleChange} placeholder="Enter a New Password" /><br />
-                    <input type = "password" name="confirmNewPass" value={this.state.formData.confirmNewPass}  onChange={this.handleChange} placeholder="Confirm New Password" />
-
-                    <input type="submit" value="Submit"/>
-                </form>
-                <form id = "hide">
-                    <input type="submit" value="Submit"/>
-                </form>
-            </div>
-
-            <div className = "lowerDiv">
-            	<div className = "row browse-body">
-                	<CarouselLayout thumbnailClass={UserThumbnail} title="Subscribed" entries={this.state.subscriptions}/>
+            <div id ="myContainer">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-10 col-md-offset-1">
+                    <div id = 'accountInfo'>
+                        <h1>Account Info</h1>
+                        <div id = 'accountDetails'>
+                            <div id = 'NewContainer'>
+                                <figure>
+                                    <img src = {thumbnailURL} alt = "Profile Picture"/>
+                                    <figcaption>{default_loggedIn_username}</figcaption>
+                                </figure>
+                            </div>
+            
+                            <form id="accountInfoForm" method="post" onSubmit={this.handleSubmit} commandname="accountForm">
+                                <input type = "text" name="newUsername" value={this.state.formData.username}  onChange={this.handleChange} placeholder="Enter a New Username" disabled/><br />
+                                <input type = "text" name="newEmail" value={this.state.formData.email}  onChange={this.handleChange} placeholder="Enter a New Email" /><br />
+                                <input type = "password" name="newPass" value={this.state.formData.newPass}  onChange={this.handleChange} placeholder="Enter a New Password" /><br />
+                                <input type = "password" name="confirmNewPass" value={this.state.formData.confirmNewPass}  onChange={this.handleChange} placeholder="Confirm New Password" />
+            
+                                <input type="submit" value="Submit"/>
+                            </form>
+                            <form id = "hide">
+                                <input type="submit" value="Submit"/>
+                            </form>
+                        </div>
+                        <div className = "row browse-body">
+                            <CarouselLayout thumbnailClass={UserThumbnail} title="Users Subscribed To" entries={this.state.subscriptions}/>
+                        </div>
+            	        <div className = "row browse-body">
+            	            <CarouselLayout thumbnailClass={VideoThumbnail} title="In-Library Videos" entries={this.state.videos}/>
+            	        </div>
+                    </div>
+                    </div>
                 </div>
-	            <div className = "row browse-body">
-	                <CarouselLayout thumbnailClass={VideoThumbnail} title="Saved Videos" entries={this.state.videos}/>
-	            </div>
-            </div>
-        </div>
+          </div>
+     </div>
     );
     }
 }

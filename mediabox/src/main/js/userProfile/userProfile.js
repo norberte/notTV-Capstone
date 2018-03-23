@@ -1,6 +1,7 @@
 import NavBar from '../NavBar.js';
 import CarouselLayout from '../CarouselLayout.js';
 import PlaylistThumbnail from './playlists.js';
+import VideoThumbnail from '../browse/Browse.js';
 import AuthorHeader from './authorHeader.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
@@ -8,33 +9,10 @@ const ReactDOM = require("react-dom");
 // logged in user's id and username
 // these 2 values should be stored in the cookies of the site
 let default_loggedIn_userID = -1;
-let default_loggedIn_username = "dummy"; // real username from DB that we consider logged in
+let default_loggedIn_username = "default_user"; // real username from DB that we consider logged in
 
 // userName and id of the user who's profile is being checked out
 let username_fromURLParameter = "";
-
-class VideoThumbnail extends React.Component {
-    render() {
-        return (
-            <div className="col-md-2 no-padding">
-                <div className="thumbnail no-margin">
-	                <a href={this.props.entry.url}>
-	                  <img className="video-thumbnail" src={this.props.entry.thumbnail}/>
-	                  <div className="caption">
-	                    <h3 className="no-margin">{this.props.entry.title} </h3>
-	                  </div>
-	               </a>
-	               <a href={this.props.entry.authorUrl}>
-		               <div className="caption">
-		           			<h3 className="no-margin">{this.props.entry.author} </h3>
-		           		</div>	
-	               </a>
-	           </div>
-            </div>
-        );
-    }
-}
-
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -52,6 +30,9 @@ export default class Profile extends React.Component {
         };
         
         this.checkUsernameValidity = this.checkUsernameValidity.bind(this);
+        
+        this.update_video = this.update_videos.bind(this);
+        this.update_playlists = this.update_playlists.bind(this);
         
         // check validity of the username provided in the url
         this.checkUsernameValidity = this.checkUsernameValidity(this.state.username);
@@ -77,7 +58,7 @@ export default class Profile extends React.Component {
                     });
                     
                     // Get recent videos that belong to the user
-                    this.update_videos = this.update_videos(this.state.userid);
+                    this.update_videos = this.update_videos(data);
                     
                     // Get playlists owned by the user
                     this.update_playlists = this.update_playlists(this.state.userid);
@@ -94,12 +75,13 @@ export default class Profile extends React.Component {
     }
 
     // ajax call for getting the videos
-    update_videos(userID) {
+    update_videos(id) {
+        console.log("get request input = " + id[0]);
         $.get({
             url: config.serverUrl + "/info/recentVideos/",
             data: {
-                userid: userID
-            },
+                userid: id[0]
+            }, // trust me, leave this as it is... there is something weird with id, and it only accepts id[0]
             dataType: "json",
             success: (data) => {
                 this.setState({
@@ -141,7 +123,7 @@ export default class Profile extends React.Component {
                                 <AuthorHeader description= "NotTV Test Account" username = {this.state.username} userID = {this.state.userid} loggedIn_userID = {default_loggedIn_userID} />
                             </div>
                             <div className="row browse-body">
-                <CarouselLayout title="Recently Uploaded Videos" thumbnailClass={VideoThumbnail} entries={this.state.videos}/>
+                                <CarouselLayout title="Recently Uploaded Videos" thumbnailClass={VideoThumbnail} entries={this.state.videos}/>
                             </div>
                             <div className="row browse-body">
                                 <CarouselLayout title="Playlists" thumbnailClass={PlaylistThumbnail} entries={this.state.playlists}/>
