@@ -56,6 +56,7 @@ class Browse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchTarget: "title",
             searchText: "",
             filters: [],
             categories: [],
@@ -77,6 +78,7 @@ class Browse extends React.Component {
         // get videos
         this.update_videos([]);
         this.update_videos = this.update_videos.bind(this);
+        this.handleDropdown = this.handleDropdown.bind(this);
     }
 
     /**
@@ -87,6 +89,7 @@ class Browse extends React.Component {
         $.get({
             url: config.serverUrl + "/info/videos",
             data: {
+                searchTarget: this.state.searchTarget,
                 searchText: this.state.searchText,
                 categories: this.state.filters
             },
@@ -100,6 +103,9 @@ class Browse extends React.Component {
                 console.log(response);
             }
         });
+    }
+    handleDropdown(e, target){
+        this.setState({searchTarget: target});
     }
     
     render() {
@@ -119,6 +125,7 @@ class Browse extends React.Component {
               </div>
               <div className="col-md-10 results-container">
                 <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
+                  handleDropdown={this.handleDropdown}
                   updateVideos={this.update_videos}
                   searchText={this.state.searchText}/>
                 <div className="row browse-body">

@@ -231,18 +231,20 @@ public class InfoController {
 
     @GetMapping("/videos")
     @ResponseBody
-    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories, @RequestParam(value="searchText", required=false) String searchText) {
+    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories,
+                                 @RequestParam(value="searchTarget", required=false) String searchTarget, 
+                                 @RequestParam(value="searchText", required=false) String searchText) {
 	// Video(title, thumbnail_url, download_url)
 	log.info("videos");
 
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
+    StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
         
-        // filter video id to exist in the intersection of the categories specified.
+    // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
-            queryBuilder.append("Where v.id in (");
+        queryBuilder.append("Where v.id in (");
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
@@ -253,12 +255,14 @@ public class InfoController {
 	    }
 	    queryBuilder.append(')');
 	}
-
-        //TODO: improved searching.
-        if(searchText != null && searchText.length() > 0)
-            queryBuilder.append(" And title LIKE '")
-                .append(searchText)
-                .append("%'");
+    //TODO: improved searching.
+    if(searchText != null && searchText.length() > 0){
+        queryBuilder.append(" And ")
+                    .append(searchTarget)
+                    .append(" LIKE '%")
+                    .append(searchText)
+                    .append("%'");
+    }
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();
 	log.info(query);
