@@ -8,9 +8,9 @@ class SearchTagDropdown extends React.Component {
                 <span className="caret"></span>
               </button>
               <ul role="menu" className="dropdown-menu">
-                <li role="presentation"><a href="#">Title </a></li>
-                <li role="presentation"><a href="#">Uploader </a></li>
-                <li role="presentation"><a href="#">Length </a></li>
+                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'title')}}>Title </a></li>
+                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'username')}}>Uploader </a></li>
+                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'length')}}>Length </a></li>
               </ul>
             </div>
         );
@@ -86,7 +86,7 @@ export default class TopBar extends React.Component {
         return (
             <div className="row">
               <div className="col-md-1 search-tag-dropdown-parent">
-                <SearchTagDropdown/>
+                <SearchTagDropdown handleDropdown={this.props.handleDropdown}/>
               </div>
               <div className="col-md-8">
                 <SearchBar handleChange={this.props.handleChange}
