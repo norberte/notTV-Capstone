@@ -2,6 +2,15 @@
     min-height: 400px;
 }
 
+.next{
+	position: absolute;
+	right: 450px;
+}
+
+.nextSubmit{
+	position: absolute;
+	right: 450px;
+}
 /* BreadCrumb */
 
 /*custom font*/
@@ -111,7 +120,11 @@ if diagonal required = 1; length = 1/1.414 = 0.707*/
 }
 
 .cat-selected {
-    background-color: #edecec;
+    background-color: #4cdb17;
+}
+
+a.list-group-item {
+	color: #181111;
 }
 
 .cat-nav {

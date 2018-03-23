@@ -106,6 +106,9 @@ class Browse extends React.Component {
         return (
             <div className="row display-flex categories-row">
               <div className="col-md-2 categories-column">
+              <div className="filteringHeader">
+                  <h2>Filtering</h2>
+              </div>
                 <CategoryFilter
                    categories={this.state.categories}
                    selected={this.state.filters}

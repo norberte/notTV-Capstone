@@ -30,6 +30,11 @@ export default class CarouselLayout extends React.Component {
         this.prev = this.prev.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        // fixes bug where start isn't set to 0 when entries changes.
+        this.setState({start: 0});
+    }
+
     next() {
         // check if there is a video to the right not shown.
         if(this.state.start + 6 < this.props.entries.length)

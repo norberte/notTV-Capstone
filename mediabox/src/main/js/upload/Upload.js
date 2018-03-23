@@ -142,7 +142,7 @@ class NextButton extends React.Component {
     render() {
         if(this.props.curr === this.props.length - 1) {
             return (
-                <li className="next submit">
+                <li className="nextSubmit">
                   <a onClick={this.props.submit}>
                     Submit
                   </a>
@@ -279,7 +279,25 @@ class UploadForm extends React.Component {
 	            processData: false,  // tell jQuery not to process the data (because of the file)
 	            contentType: false,  // tell jQuery not to set contentType
 	            success: (torrentFile) => {
-	                alert("Successfully Uploaded!");
+	                /*
+	                setTimeout(function () { 
+	                    swal({
+	                      title: "Wow!",
+	                      text: "Video Successfully Uploaded!",
+	                      type: "success",
+	                      confirmButtonText: "OK"
+	                    },
+	                    function(isConfirm){
+	                      if (isConfirm) {
+	                        window.location.href = "/";
+	                      }
+	                    }); 
+	                }, 1000);
+	                */
+	                
+	                if(confirm("Video Successfully Uploaded!")){
+	                    window.location.href = "/";
+	                }
 	            },
 	            error: (response) => {
 		        console.log(response);
