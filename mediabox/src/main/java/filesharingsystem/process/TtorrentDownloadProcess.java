@@ -53,7 +53,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
                 client.waitForCompletion();
                 //DONE DOWNLOADING
 
-                //End recording of downlaod time
+                //End recording of download time
                 long endTime = System.currentTimeMillis();
 
                 //Calculate time spent downloading in seconds
@@ -61,13 +61,12 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 
                 //Calculate Bandwidth usage using File Size and time to download.
                 //Test File Size = 26,415,093 bytes
-                int fileSize = 26415093; //It would be better to get the size of the file programatically.
+                long fileSize = 23725150 //panasonic vid is 26415093; //It would be better to get the size of the file programatically.
                 //1000 bits per second = 125 Bytes per second
                 double bytesPerSecond = fileSize/downloadTime;
                 double bandwidthUsage = 1000*(bytesPerSecond)/125;
 
-                //calculate CPU Usage during download
-                int cpuUsage = -1;
+                //CPU Usage during mediabox runtime is handled by a python program
 
                 //Output to File or log with bandwidth usage of download
                 PrintWriter out = new PrintWriter(new FileWriter("~/latestDownloadData.txt"));
