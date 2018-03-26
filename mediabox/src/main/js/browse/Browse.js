@@ -58,6 +58,7 @@ class Browse extends React.Component {
         this.state = {
             searchTarget: "title",
             searchText: "",
+            searchOrder: "date asc",
             filters: [],
             categories: [],
             videos: []
@@ -78,7 +79,7 @@ class Browse extends React.Component {
         // get videos
         this.update_videos([]);
         this.update_videos = this.update_videos.bind(this);
-        this.handleDropdown = this.handleDropdown.bind(this);
+        this.changeSearchTarget = this.changeSearchTarget.bind(this);
     }
 
     /**
@@ -91,6 +92,7 @@ class Browse extends React.Component {
             data: {
                 searchTarget: this.state.searchTarget,
                 searchText: this.state.searchText,
+                searchOrder:this.state.searchOrder,
                 categories: this.state.filters
             },
             dataType: "json",
@@ -104,10 +106,12 @@ class Browse extends React.Component {
             }
         });
     }
-    handleDropdown(e, target){
+    changeSearchTarget(e, target){
         this.setState({searchTarget: target});
     }
-    
+    changeOrder(e, order){
+        this.setState({searchOrder: order});
+    }
     render() {
         return (
             <div className="row display-flex categories-row">
@@ -125,7 +129,8 @@ class Browse extends React.Component {
               </div>
               <div className="col-md-10 results-container">
                 <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
-                  handleDropdown={this.handleDropdown}
+                  changeSearchTarget={this.changeSearchTarget}
+                  changeOrder={this.changeOrder}
                   updateVideos={this.update_videos}
                   searchText={this.state.searchText}/>
                 <div className="row browse-body">
