@@ -8,9 +8,8 @@ class SearchTagDropdown extends React.Component {
                 <span className="caret"></span>
               </button>
               <ul role="menu" className="dropdown-menu">
-                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'title')}}>Title </a></li>
-                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'username')}}>Uploader </a></li>
-                <li role="presentation"><a href="#" onClick={(e) => {this.props.handleDropdown(e,'length')}}>Length </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget(e,'title')}}>Title </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget(e,'uploader')}}>Uploader </a></li>
               </ul>
             </div>
         );
@@ -47,9 +46,10 @@ class ResultOrder extends React.Component {
                   Popular <span className="caret"></span>
                 </button>
                 <ul role="menu" className="dropdown-menu">
-                  <li role="presentation"><a href="#">Popular </a></li>
-                  <li role="presentation"><a href="#">Newest </a></li>
-                  <li role="presentation"><a href="#">View Count</a></li>
+                  <li role="presentation"><a onClick={(e) => {this.props.changeOrder(e,'time asc')}}>Newest </a></li>
+                  <li role="presentation"><a onClick={(e) => {this.props.changeOrder(e,'time desc')}}>Oldest </a></li>
+                  <li role="presentation"><a href="#"><s>Popular </s></a></li>
+                  <li role="presentation"><a href="#"><s>View Count</s></a></li>
                 </ul>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default class TopBar extends React.Component {
         return (
             <div className="row">
               <div className="col-md-1 search-tag-dropdown-parent">
-                <SearchTagDropdown handleDropdown={this.props.handleDropdown}/>
+                <SearchTagDropdown changeSearchTarget={this.props.changeSearchTarget}/>
               </div>
               <div className="col-md-8">
                 <SearchBar handleChange={this.props.handleChange}
@@ -96,7 +96,7 @@ export default class TopBar extends React.Component {
               <div className="col-md-3">
                 <div className="row">
                   <div className="col-md-5">
-                    <ResultOrder />
+                    <ResultOrder changeOrder={this.props.changeOrder}/>
                   </div>
                   <div className="col-md-7">
                     <LayoutSelector />
