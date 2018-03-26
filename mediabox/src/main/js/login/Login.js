@@ -28,7 +28,7 @@ class Login extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const loginForm = new FormData();
-        serverForm.append(JSON.stringify({username: this.state.username, pass: this.state.pass}));
+        loginForm.append(JSON.stringify({username: this.state.username, pass: this.state.pass}));
         console.log(loginForm);
         //Begin post
         $.post({
