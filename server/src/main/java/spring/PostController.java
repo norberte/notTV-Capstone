@@ -248,15 +248,15 @@ public class PostController {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(passwordUpdate_query);
                 ps.setString(1, hashedPassword);
-                ps.setInt(2, user_id);
                 return ps;
             }
         };
 
         //Get Result Set and find match with hashed pass and matching username.
         //if both match, make active user the username provided.
-        this.jdbc.query(psc);
 
+        List<String> dbResults = this.jdbc.query(psc, (rs, row) -> new String(rs.getString("password")));
+        return dbResults.get(0);
     }
 
 
