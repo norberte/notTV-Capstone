@@ -223,7 +223,6 @@ public class PostController {
             };
             this.jdbc.update(psc);
         }
-        */
     }
 
 
@@ -231,9 +230,10 @@ public class PostController {
 
     //Receive POST from login and check hashed password matches hashed password in DB.
     //If the passHashes match, then a global login state needs to be initalized for the account.
+    //returns 1 if login is authorized. 0 if unnauthorized.
     //@PostMapping("loginProcess")
     @PostMapping("login")
-    public String loginProcess(@RequestParam("username") String usernamePOST, @RequestParam("pass") String passPOST){
+    public int loginProcess(@RequestParam("username") String usernamePOST, @RequestParam("pass") String passPOST){
         String username = usernamePOST;
         String password = passPOST;
 
@@ -256,7 +256,14 @@ public class PostController {
         //if both match, make active user the username provided.
 
         List<String> dbResults = this.jdbc.query(psc, (rs, row) -> new String(rs.getString("password")));
-        return dbResults.get(0);
+        String passHashFromDB = dbResults.get(0);
+        if (hashedPassword.equals(passHashFromDB)) {
+            //Passwords are the same! set global state to have user with username as logged in.
+            return 1;
+        } else {
+            //Passwords do not match. Do not log in.
+            return 0;
+        }
     }
 
 
