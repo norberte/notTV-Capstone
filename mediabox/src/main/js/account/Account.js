@@ -21,7 +21,7 @@ class UserThumbnail extends React.Component {
 
     /*
      * User Profile Picture download is not implemented yet
-     * 
+     *
     getThumbnail() {
         // get thumbnail if it isn't loaded already.
         if(!this.props.entry.thumbnailURL)
@@ -73,11 +73,11 @@ export default class Account extends React.Component {
         	confirmNewPass: ''
         }
     }
-   
+
 	//this.update_videos = this.update_videos.bind(this);
     this.update_subscriptions = this.update_subscriptions.bind(this);
     this.update_videos = this.update_videos.bind(this);
-    
+
     // get subscriptions
     this.update_subscriptions();
 
@@ -91,7 +91,7 @@ export default class Account extends React.Component {
     //Get a list of subscriptions
     update_subscriptions() {
     $.get({
-        url: config.serverUrl + "/info/subscriptions",
+        url: config.secureServerUrl + "/info/subscriptions",
         data: {
             loggedInUserID: this.state.userLogin
         },
@@ -107,7 +107,7 @@ export default class Account extends React.Component {
     });
     }
 
-    
+
     //Get a list of in-library videos
     update_videos() {
 	$.get({
@@ -123,7 +123,7 @@ export default class Account extends React.Component {
 	    }
 	});
     }
-    
+
     //handles a change in an input in the settings form and gives that new change to the state.
     handleChange(e){
         const state = this.state;
@@ -145,7 +145,7 @@ export default class Account extends React.Component {
 
            //send new account details
            $.post({
-               url: config.serverUrl + "/upload/accountSubmit",
+               url: config.secure_serverUrl + "/upload/accountSubmit",
                contentType: 'application/json',
                processData: false,
                data: JSON.stringify(formData),
@@ -175,13 +175,13 @@ export default class Account extends React.Component {
                                     <figcaption>{default_loggedIn_username}</figcaption>
                                 </figure>
                             </div>
-            
+
                             <form id="accountInfoForm" method="post" onSubmit={this.handleSubmit} commandname="accountForm">
                                 <input type = "text" name="newUsername" value={this.state.formData.username}  onChange={this.handleChange} placeholder="Enter a New Username" disabled/><br />
                                 <input type = "text" name="newEmail" value={this.state.formData.email}  onChange={this.handleChange} placeholder="Enter a New Email" /><br />
                                 <input type = "password" name="newPass" value={this.state.formData.newPass}  onChange={this.handleChange} placeholder="Enter a New Password" /><br />
                                 <input type = "password" name="confirmNewPass" value={this.state.formData.confirmNewPass}  onChange={this.handleChange} placeholder="Confirm New Password" />
-            
+
                                 <input type="submit" value="Submit"/>
                             </form>
                             <form id = "hide">
@@ -203,6 +203,6 @@ export default class Account extends React.Component {
     }
 }
 
-ReactDOM.render(<Account />, 
-		document.getElementById('root') 
+ReactDOM.render(<Account />,
+		document.getElementById('root')
 	);
