@@ -10,13 +10,16 @@
   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
   <context:annotation-config />
-  
-  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper" />
-  
+
+  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper">
+    <constructor-arg index="0" value="49152"/>
+  </bean>
+
   <bean id="Config" class="springbackend.Config">
     <!-- <property name="serverUrl" value="http://nottv.levimiller.ca"/> -->
     <!-- <property name="serverUrl" value="http://localhost:8080"/> -->
     <property name="serverUrl" value="http://35.160.102.229:1248"/>
+    <property name="secureServerUrl" value="https://35.160.102.229:1248"/>
     <property name="trackerUrl" value="http://35.160.102.229:6969"/>
   </bean>
 
@@ -28,7 +31,7 @@
       </bean>
     </constructor-arg>
   </bean>
-  
+
   <!-- Thumbnail Storage -->
   <bean id="ImageStorage" class="util.storage.FileSystemStorageService">
     <constructor-arg>
@@ -52,7 +55,7 @@
   <bean id="UploadProcess" class="filesharingsystem.process.TtorrentUploadProcess" scope="prototype" lazy-init="true"/>
   <bean id="DownloadProcess" class="filesharingsystem.process.TtorrentDownloadProcess" scope="prototype" lazy-init="true"/>
   <bean id="SeedManager" class="util.SeedManager"/>
-  
+
   <mvc:interceptors>
     <bean class="springbackend.ConfigHandlerInterceptor"/>
   </mvc:interceptors>

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -228,41 +229,34 @@ public class PostController {
 
 
 
-    //Receive POST from login and check hashed password matches hashed password in DB.
-    //If the passHashes match, then a global login state needs to be initalized for the account.
-    //returns 1 if login is authorized. 0 if unnauthorized.
-    //@PostMapping("loginProcess")
-    @PostMapping("login")
-    public int loginProcess(@RequestParam("username") String usernamePOST, @RequestParam("pass") String passPOST){
-        String username = usernamePOST;
-        String password = passPOST;
-
+    //Receive POST from login.js and check hashed password matches hashed password in DB.
+    //returns id of user if login is authorized. NULL if unnauthorized.
+    @PostMapping("authenticateLogin")
+    public Integer authenticateLogin(@RequestParam(value="username", required=false) String usernamePOST, @RequestParam(value="pass", required=false) String passPOST){
         //Hash pass here
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
+        String hashedPassword = encoder.encode(passPOST);
 
         //Query DB for password
-        final String passHash_query = "SELECT password FROM nottv_user WHERE password = ?";
+        final String passHash_query = "SELECT id FROM nottv_user WHERE password = ? AND username = ?";
 
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(passwordUpdate_query);
+                PreparedStatement ps = connection.prepareStatement(passHash_query);
                 ps.setString(1, hashedPassword);
+                ps.setString(2, usernamePOST);
                 return ps;
             }
         };
 
         //Get Result Set and find match with hashed pass and matching username.
         //if both match, make active user the username provided.
-
-        List<String> dbResults = this.jdbc.query(psc, (rs, row) -> new String(rs.getString("password")));
-        String passHashFromDB = dbResults.get(0);
-        if (hashedPassword.equals(passHashFromDB)) {
+        List<Integer> dbResults = this.jdbc.query(psc, (rs, row) -> new Integer(rs.getInt("id")));
+        if (dbResults.size() > 0) {
             //Passwords are the same! set global state to have user with username as logged in.
-            return 1;
+            return dbResults.get(0);
         } else {
             //Passwords do not match. Do not log in.
-            return 0;
+            return null;
         }
     }
 
