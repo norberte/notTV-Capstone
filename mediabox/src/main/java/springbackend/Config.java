@@ -1,8 +1,12 @@
 package springbackend;
 
+import java.io.File;
+
 public class Config {
     public String serverUrl;
     public String trackerUrl;
+    public File outDir;
+    public int bandwidth;
     //public int id;
 
     /**

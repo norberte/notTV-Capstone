@@ -110,10 +110,9 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    int code = response.getStatusLine().getStatusCode();
 	    if(code == 200) {
 		log.info("Successfully uploaded torrent to the server, seeding...");
-        //Begin timing seed for overall bandwidth usage during seed
-        long startTime = System.currentTimeMillis();
-        // start seeding.
-            Pair clientPair = WANClient.newWANClient(
+                //Begin timing seed for overall bandwidth usage during seed
+                // start seeding.
+                Pair clientPair = WANClient.newWANClient(
 		    InetAddress.getLocalHost(),
 		    InetAddress.getByName(ip),
 		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
@@ -135,24 +134,6 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    log.info("Stopping seeding of {}...", this.name);
 	    if(client != null) {
 		client.stop();
-        //End recording of seed up-time
-        long endTime = System.currentTimeMillis();
-
-        //Calculate time spent dseeding in seconds
-        double seedTime = (endTime - startTime)/1000;
-
-        //Calculate Bandwidth usage using File Size and time spent seeding.
-        //Old Test File Size = 26,415,093 bytes
-        long fileSize = 23725150; //panasonic vid is 26415093; //It would be better to get the size of the file programatically.
-        //1000 bits per second = 125 Bytes per second
-        double bytesPerSecond = fileSize/seedTime;
-        double bandwidthUsage = 1000*(bytesPerSecond)/125;
-
-        //Output to File or log with bandwidth usage of download
-        PrintWriter out = new PrintWriter(new FileWriter("~/latestUploadData.txt"));
-        out.print("Upload Speed Data\n\nBytes Per Second: "+bytesPerSecond+"\nBandwidth Usage:"+bandwidthUsage);
-        out.close();
-
 		client = null;
 	    }
 	}

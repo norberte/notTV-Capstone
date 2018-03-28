@@ -9,4 +9,6 @@ public interface DownloadProcess {
      * @return the file if it was successfully downloaded.
      */
     Optional<File> download();
+
+    boolean isFinished();
 }
