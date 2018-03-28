@@ -10,15 +10,15 @@ public class StorageProperties {
     private String location;
 
     public StorageProperties(String dirName) {
-	this.location = Paths.get(System.getProperty("user.home"), dirName).toAbsolutePath().toString();
+        this.location = Paths.get(System.getProperty("user.home"), dirName).toAbsolutePath().toString();
     }
-    
+
     public String getLocation() {
-	return location;
+        return location;
     }
 
     public void setLocation(String location) {
-	this.location = location;
+        this.location = location;
     }
 
 }

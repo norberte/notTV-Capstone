@@ -36,20 +36,20 @@ import util.storage.StorageService;
 
 public class TtorrentUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
-    private Client client;
-    private String name;
-    private File file, torrentFile;
+    private Client              client;
+    private String              name;
+    private File                file, torrentFile;
     @Autowired
     @Qualifier("TorrentStorage")
-    private StorageService torrentStorage;
+    private StorageService      torrentStorage;
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService videoStorage;
+    private StorageService      videoStorage;
     @Autowired
-    private Config config;
+    private Config              config;
     @Autowired
-    private PortMapper portMapper;
-    
+    private PortMapper          portMapper;
+
     /**
      * Creates a new UploadProcess
      *
@@ -59,82 +59,73 @@ public class TtorrentUploadProcess implements UploadProcess {
      * @param file - video file.
      */
     public TtorrentUploadProcess(String name, File file) {
-	this.name = FilenameUtils.getBaseName(name);
-	this.file = file;
-	client = null;
+        this.name = FilenameUtils.getBaseName(name);
+        this.file = file;
+        client = null;
     }
 
     @Override
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     @Override
     public File getTorrent() {
-	return torrentFile;
+        return torrentFile;
     }
-    
+
     /**
-     * @param name - name of the torrent. Can't be a path. 
+     * @param name - name of the torrent. Can't be a path.
      * @param parent
      * @param files
      */
     @Override
     public void run() {
-	// Get public ip.
-	try(Scanner s = new Scanner(new URL(config.getServerUrl() + "/info/public-ip").openStream(), "UTF-8")) {
-	    String ip = s.next();
-	    log.info(ip);
-	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
-	    // Create torrent from announce/files.
-	    Torrent t = Torrent.create(this.file, new URI(config.getTrackerUrl() + "/announce"), "notTV");
+        // Get public ip.
+        try (Scanner s = new Scanner(new URL(config.getServerUrl() + "/info/public-ip").openStream(), "UTF-8")) {
+            String ip = s.next();
+            log.info(ip);
+            torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
+            // Create torrent from announce/files.
+            Torrent t = Torrent.create(this.file, new URI(config.getTrackerUrl() + "/announce"), "notTV");
 
-	    t.save(new FileOutputStream(torrentFile));
-	    // send file to the server.
-	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
+            t.save(new FileOutputStream(torrentFile));
+            // send file to the server.
+            // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
 
-	    // Create request
-	    CloseableHttpClient httpClient = HttpClients.createDefault();
-	    HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
-	    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-	    // This attaches the file to the POST:
-	    builder.addBinaryBody(
-		"file",
-		torrentFile, 
-		ContentType.APPLICATION_OCTET_STREAM,
-		torrentFile.getName()
-	    );
-	    
-	    uploadFile.setEntity(builder.build());
-	    CloseableHttpResponse response = httpClient.execute(uploadFile);
-	    int code = response.getStatusLine().getStatusCode();
-	    if(code == 200) {
-		log.info("Successfully uploaded torrent to the server, seeding...");
-		// start seeding.
-                Pair clientPair = WANClient.newWANClient(
-		    InetAddress.getLocalHost(),
-		    InetAddress.getByName(ip),
-		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
-		);
+            // Create request
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            // This attaches the file to the POST:
+            builder.addBinaryBody("file", torrentFile, ContentType.APPLICATION_OCTET_STREAM, torrentFile.getName());
+
+            uploadFile.setEntity(builder.build());
+            CloseableHttpResponse response = httpClient.execute(uploadFile);
+            int code = response.getStatusLine().getStatusCode();
+            if (code == 200) {
+                log.info("Successfully uploaded torrent to the server, seeding...");
+                // start seeding.
+                Pair clientPair = WANClient.newWANClient(InetAddress.getLocalHost(), InetAddress.getByName(ip), new SharedTorrent(t, videoStorage.getBaseDir(), true));
                 // forward ports:
                 portMapper.add(clientPair.address.getPort());
                 client = clientPair.client;
-		// Should block
-		client.share();
-	    } else {
-		throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
-	    }
-	} catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
-	    log.error("Error creating Torrent file.", e);
-	} catch (ClientInitializationException e) {
-	    log.error("Error creating the client, couldn't start upload process.", e);
-	} catch (InterruptedException e) {
-	    // shutdown
-	    log.info("Stopping seeding of {}...", this.name);
-	    if(client != null) {
-		client.stop();
-		client = null;
-	    }
-	} 
+                // Should block
+                client.share();
+            } else {
+                throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
+            }
+        } catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
+            log.error("Error creating Torrent file.", e);
+        } catch (ClientInitializationException e) {
+            log.error("Error creating the client, couldn't start upload process.", e);
+        } catch (InterruptedException e) {
+            // shutdown
+            log.info("Stopping seeding of {}...", this.name);
+            if (client != null) {
+                client.stop();
+                client = null;
+            }
+        }
     }
 }

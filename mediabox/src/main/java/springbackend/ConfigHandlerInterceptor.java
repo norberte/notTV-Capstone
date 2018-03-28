@@ -15,12 +15,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class ConfigHandlerInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private Config config;
-    
+
     @Override
-    public void postHandle(final HttpServletRequest request,
-    final HttpServletResponse response, final Object handler,
-    final ModelAndView modelAndView) throws Exception {
-	if (modelAndView != null)
-	    modelAndView.getModelMap().addAttribute("config", config);
-    }    
+    public void postHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final ModelAndView modelAndView) throws Exception {
+        if (modelAndView != null)
+            modelAndView.getModelMap().addAttribute("config", config);
+    }
 }

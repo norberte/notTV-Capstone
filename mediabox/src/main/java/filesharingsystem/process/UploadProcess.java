@@ -8,7 +8,7 @@ public interface UploadProcess extends Runnable {
      * Returns the id of the process
      *
      * @return
-     */    
+     */
     String getName();
 
     /**

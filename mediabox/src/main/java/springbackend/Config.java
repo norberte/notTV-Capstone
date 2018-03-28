@@ -8,27 +8,27 @@ public class Config {
      * @return the serverUrl
      */
     public String getServerUrl() {
-	return serverUrl;
+        return serverUrl;
     }
 
     /**
      * @param serverUrl the serverUrl to set
      */
     public void setServerUrl(String serverUrl) {
-	this.serverUrl = serverUrl;
+        this.serverUrl = serverUrl;
     }
 
     /**
      * @return the trackerUrl
      */
     public String getTrackerUrl() {
-	return trackerUrl;
+        return trackerUrl;
     }
 
     /**
      * @param trackerUrl the trackerUrl to set
      */
     public void setTrackerUrl(String trackerUrl) {
-	this.trackerUrl = trackerUrl;
+        this.trackerUrl = trackerUrl;
     }
 }

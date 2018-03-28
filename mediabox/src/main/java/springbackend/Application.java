@@ -18,27 +18,28 @@ import util.SeedManager;
 public class Application implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
     @Autowired
-    PortMapper portMapper;
+    PortMapper                  portMapper;
     @Autowired
-    SeedManager seedManager;
+    SeedManager                 seedManager;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Override
     public void run(String... args) {
-	portMap();
+        portMap();
     }
-    
+
     public void portMap() {
-	// configure port forwarding.
-	try {
-	    portMapper.setup();
-	} catch (PortMapException e) {
-	    log.warn("Unable to setup the port forwarding.", e);
-	    // TODO: send notification to UI to inform user
-	    // that they need to enable upnp.
-	    // Bonus: check portforwarding somehow to allow manual port forwarding.
-	}
+        // configure port forwarding.
+        try {
+            portMapper.setup();
+        } catch (PortMapException e) {
+            log.warn("Unable to setup the port forwarding.", e);
+            // TODO: send notification to UI to inform user
+            // that they need to enable upnp.
+            // Bonus: check portforwarding somehow to allow manual port forwarding.
+        }
     }
 }
