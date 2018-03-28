@@ -3,6 +3,8 @@ package filesharingsystem;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import javax.annotation.PreDestroy;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceImpl;
 import org.fourthline.cling.registry.RegistryListener;
@@ -44,6 +46,7 @@ public class ClingPortMapper implements PortMapper {
         this.add(defaultPort);
     }
 
+    @PreDestroy
     @Override
     public void shutdown() {
 	upnpService.shutdown();
