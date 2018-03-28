@@ -19,13 +19,8 @@ public class ClingPortMapper implements PortMapper {
     private UpnpService         upnpService;
     private int                 defaultPort;
 
-    public ClingPortMapper(int port) throws UnknownHostException {
-        log.info("Initializing port mapper on port {}...", port);
+    public ClingPortMapper() throws UnknownHostException {
         host = InetAddress.getLocalHost().getHostAddress();
-        log.info("Host Address: {}", host);
-        // Create TCP and UDP port mappings.
-        this.defaultPort = port;
-
         // customize for use with tomcat.
         // http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#section.BasicAPI.UpnpService.Configuration
         // http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#section.ConfiguringTransports

@@ -12,7 +12,7 @@ public class PortMapperTest {
     @Before
     public void setup() {
 	try {
-	    mapper = new ClingPortMapper(1234);
+	    mapper = new ClingPortMapper();
 	} catch (UnknownHostException e) {
 	    e.printStackTrace();
 	}
