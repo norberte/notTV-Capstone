@@ -110,7 +110,6 @@ public class TtorrentUploadProcess implements UploadProcess {
 	    int code = response.getStatusLine().getStatusCode();
 	    if(code == 200) {
 		log.info("Successfully uploaded torrent to the server, seeding...");
-                //Begin timing seed for overall bandwidth usage during seed
                 // start seeding.
                 Pair clientPair = WANClient.newWANClient(
 		    InetAddress.getLocalHost(),
