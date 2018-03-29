@@ -8,8 +8,8 @@ class SearchTagDropdown extends React.Component {
                 <span className="caret"></span>
               </button>
               <ul role="menu" className="dropdown-menu">
-                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget(e,'title')}}>Title </a></li>
-                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget(e,'uploader')}}>Uploader </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget('title')}}>Title </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget('uploader')}}>Uploader </a></li>
               </ul>
             </div>
         );
@@ -37,17 +37,23 @@ class SearchBar extends React.Component {
 }
 
 class ResultOrder extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            order: "Newest"
+        }
+    }
     render() {
         return (
             <div className="result-order-container">
               <span className="result-order-text">Order: </span>
               <div className="dropdown result-order-button">
                 <button className="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
-                  Popular <span className="caret"></span>
+                 {this.state.order} <span className="caret"></span>
                 </button>
                 <ul role="menu" className="dropdown-menu">
-                  <li role="presentation"><a onClick={(e) => {this.props.changeOrder(e,'time asc')}}>Newest </a></li>
-                  <li role="presentation"><a onClick={(e) => {this.props.changeOrder(e,'time desc')}}>Oldest </a></li>
+                  <li role="presentation"><a onClick={(e) => {this.setState({order: "Newest"}); this.props.changeOrder('time asc')}}>Newest </a></li>
+                  <li role="presentation"><a onClick={(e) => {this.setState({order: "Oldest"});this.props.changeOrder('time desc')}}>Oldest </a></li>
                   <li role="presentation"><a href="#"><s>Popular </s></a></li>
                   <li role="presentation"><a href="#"><s>View Count</s></a></li>
                 </ul>
