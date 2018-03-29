@@ -71,7 +71,7 @@ public class InfoControllersTest {
         int childJSON2 = Request2JSON.getInt(url);
         assertNotSame(childJSON1,childJSON2);
     }
-    
+    /*
     @Test
     public void testGettingPlaylists() throws IOException {
         // check to see if Genre is could be returned as a Category
@@ -97,5 +97,6 @@ public class InfoControllersTest {
 
         assertTrue(playlistName.equals("Genre"));
     }
+    */
 }
 
