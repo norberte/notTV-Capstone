@@ -257,13 +257,13 @@ public class InfoController {
 	    }
 	    queryBuilder.append(')');
 	}
-    if(searchText != null && searchText.length() > 0){
+    if(searchText != null && searchText.length() > 0){  //If search text is present, add appropriate 'LIKE' condition to the query
         switch(searchTarget){
         case "title":
-            queryBuilder.append(" And title LIKE ?");
+            queryBuilder.append(" And title ILIKE ?");
             break;
         case "uploader":
-            queryBuilder.append(" And username LIKE ?");
+            queryBuilder.append(" And username ILIKE ?");
             break;
         default:
             log.error("Invalid searchTarget parameter: "+searchTarget);
@@ -271,7 +271,7 @@ public class InfoController {
         }
         queryParams.add("%"+searchText+"%");
     }
-    switch(searchOrder){
+    switch(searchOrder){    // sort according to searchOrder
     case "time asc":
         queryBuilder.append(" ORDER BY vid ASC");
         break;
