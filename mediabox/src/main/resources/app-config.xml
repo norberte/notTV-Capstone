@@ -11,9 +11,7 @@
 
   <context:annotation-config />
 
-  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper">
-    <constructor-arg index="0" value="49152"/>
-  </bean>
+  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper" />
 
   <bean id="Config" class="springbackend.Config">
     <!-- <property name="serverUrl" value="http://localhost:8080"/> -->

@@ -14,6 +14,7 @@ class Login extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangePass = this.handleChangePass.bind(this);
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.setGlobalUserState = this.setGlobalUserState.bind(this);
     }
 
     handleChangePass(event){
@@ -53,9 +54,10 @@ class Login extends React.Component {
     }
 
     //Handles setting the global state to the newly logged in user.
-    setGlobalUserState(id){
-        CurrentUser.setId(id);
-        CurrentUser.setUsername(this.state.username);
+    setGlobalUserState(ID){
+        CurrentUser.setState({id: ID, username: this.state.username});
+        //CurrentUser.setId(id);
+        //CurrentUser.setUsername(this.state.username);
     }
 
     render() {
