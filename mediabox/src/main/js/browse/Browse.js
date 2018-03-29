@@ -79,7 +79,6 @@ class Browse extends React.Component {
         // get videos
         this.update_videos([]);
         this.update_videos = this.update_videos.bind(this);
-        this.changeSearchTarget = this.changeSearchTarget.bind(this);
     }
 
     /**
@@ -106,12 +105,7 @@ class Browse extends React.Component {
             }
         });
     }
-    changeSearchTarget(e, target){
-        this.setState({searchTarget: target});
-    }
-    changeOrder(e, order){
-        this.setState({searchOrder: order});
-    }
+    
     render() {
         return (
             <div className="row display-flex categories-row">
@@ -129,8 +123,12 @@ class Browse extends React.Component {
               </div>
               <div className="col-md-10 results-container">
                 <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
-                  changeSearchTarget={this.changeSearchTarget}
-                  changeOrder={this.changeOrder}
+                  changeSearchTarget={(target)=> {
+                      this.setState({searchTarget: target}, this.update_videos);
+                  }}
+                  changeOrder={(order)=>{
+                      this.setState({searchOrder: order}, this.update_videos);
+                  }}
                   updateVideos={this.update_videos}
                   searchText={this.state.searchText}/>
                 <div className="row browse-body">
