@@ -1,4 +1,5 @@
 import NavBar from '../NavBar.js';
+import CurrentUser from '../CurrentUser.js'
 //import ajaxSubmit from '../ajaxSubmit.js';
 //There is crossover into the browse folder with the use of CarouselLayout.
 //Perhaps, if we are to use it in this page, it should be moved up a folder.
@@ -8,8 +9,8 @@ import VideoThumbnail from '../browse/Browse.js';
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-let default_loggedIn_userID = -1;
-let default_loggedIn_username = 'default_user';
+let default_loggedIn_userID = CurrentUser.getId();
+let default_loggedIn_username = CurrentUser.getUsername();
 let thumbnailURL;
 class UserThumbnail extends React.Component {
     constructor(props) {
