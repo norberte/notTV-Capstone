@@ -54,8 +54,8 @@ class Login extends React.Component {
 
     //Handles setting the global state to the newly logged in user.
     setGlobalUserState(id){
-        CurrentUser.state.id = id;
-        CurrentUser.state.username = this.state.username;
+        CurrentUser.setId(id);
+        CurrentUser.setUsername(this.state.username);
     }
 
     render() {
