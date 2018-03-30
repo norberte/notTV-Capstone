@@ -1,6 +1,7 @@
 package filesharingsystem.process;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -11,59 +12,65 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
+
+import filesharingsystem.PortMapper;
+import filesharingsystem.process.WANClient.ClientInitializationException;
+import filesharingsystem.process.WANClient.Pair;
 
 import springbackend.Config;
 
 import util.storage.StorageService;
-
 
 public class TtorrentDownloadProcess implements DownloadProcess {
     private static final Logger log = LoggerFactory.getLogger(DownloadProcess.class);
     private final File torrent;
     @Qualifier("VideoStorage")
     @Autowired
+
     private  StorageService videoStorage;
     private boolean finished;
 
     @Autowired
-    Config config;
+    private Config config;
+    @Autowired
+    private PortMapper portMapper;
+    
     public TtorrentDownloadProcess(File torrent) {
-	this.torrent = torrent;
-        finished = false;
+        this.torrent = torrent;
     }
 
     @Override
     public Optional<File> download() {
-	try {
+        try {
             SharedTorrent st = SharedTorrent.fromFile(torrent, videoStorage.getBaseDir());
             // If the client isn't finished downloading, finish downloading.
             log.info("Download complete: {}", st.isComplete());
             log.info("{}", st.isInitialized());
-            if(!st.isComplete()) {
-                Client client = new com.turn.ttorrent.client.Client(
-                    // This is the interface the client will listen on (you might need something
-                    // else than localhost here).
+            if (!st.isComplete()) {
+                Pair clientPair = WANClient.newWANClient(
                     InetAddress.getLocalHost(),
+                    config.getPublicIp(),
                     st
                 );
 
-                client.setMaxDownloadRate(config.bandwidth);
-                client.setMaxUploadRate(config.bandwidth);
-                //DOWNLOAD SOME JUNK
-                client.download();
-                client.waitForCompletion();
-                //DONE DOWNLOADING
-                finished = true;
+                clientPair.client.setMaxDownloadRate(config.bandwidth);
+                clientPair.client.setMaxUploadRate(config.bandwidth);
+
+                // add port for peers to respond to.
+                portMapper.add(clientPair.address.getPort());
+                clientPair.client.download();
+                clientPair.client.waitForCompletion();
             }
             // run callback.
             List<String> names = st.getFilenames();
-            if(names.size() > 0) // callback if there is a file.
+            if (names.size() > 0) // callback if there is a file.
                 return Optional.of(videoStorage.get(names.get(0)));
-	} catch (NoSuchAlgorithmException | IOException e) {
-	    log.error("Error downloading torrent.", e);
-	}
+        } catch (NoSuchAlgorithmException | IOException e) {
+            log.error("Error downloading torrent.", e);
+        } catch (ClientInitializationException e) {
+            log.error("Error creating WAN client,", e);
+        }
         return Optional.empty();
     }
 

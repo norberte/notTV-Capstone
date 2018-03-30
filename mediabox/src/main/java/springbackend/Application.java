@@ -15,7 +15,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
-import filesharingsystem.PortMapException;
 import filesharingsystem.PortMapper;
 import filesharingsystem.process.DownloadProcess;
 
@@ -56,7 +55,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
-	portMap();
         config.outDir = Paths.get(
             System.getProperty("user.home"),
             "simulation_data",
@@ -86,15 +84,4 @@ public class Application implements CommandLineRunner {
         }
     }
 
-    public void portMap() {
-	// configure port forwarding.
-	try {
-	    portMapper.setup();
-	} catch (PortMapException e) {
-	    log.warn("Unable to setup the port forwarding.", e);
-	    // TODO: send notification to UI to inform user
-	    // that they need to enable upnp.
-	    // Bonus: check portforwarding somehow to allow manual port forwarding.
-	}
-    }
 }

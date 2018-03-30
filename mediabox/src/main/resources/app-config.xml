@@ -11,15 +11,13 @@
 
   <context:annotation-config />
   
-  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper">
-    <constructor-arg index="0" value="49152"/>
-  </bean>
+  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper" />
   
   <bean id="Config" class="springbackend.Config">
-    <!-- <property name="serverUrl" value="http://nottv.levimiller.ca"/> -->
     <!-- <property name="serverUrl" value="http://localhost:8080"/> -->
-    <property name="serverUrl" value="http://35.160.102.229:1248"/>
-    <property name="trackerUrl" value="http://35.160.102.229:6969"/>
+    <constructor-arg value="http://35.160.102.229:1248"/> <!--serverUrl-->
+    <constructor-arg value="http://35.160.102.229"/>      <!--trackerUrl-->
+    <constructor-arg value="6969"/>                       <!--tracker port-->
   </bean>
 
   <!-- Storage setup  -->

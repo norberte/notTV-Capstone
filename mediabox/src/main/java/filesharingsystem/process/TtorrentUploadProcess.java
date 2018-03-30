@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -59,19 +57,19 @@ public class TtorrentUploadProcess implements UploadProcess {
      * @param file - video file.
      */
     public TtorrentUploadProcess(String name, File file) {
-	this.name = FilenameUtils.getBaseName(name);
-	this.file = file;
-	client = null;
+        this.name = FilenameUtils.getBaseName(name);
+        this.file = file;
+        client = null;
     }
 
     @Override
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     @Override
     public File getTorrent() {
-	return torrentFile;
+        return torrentFile;
     }
 
     /**
@@ -81,60 +79,55 @@ public class TtorrentUploadProcess implements UploadProcess {
      */
     @Override
     public void run() {
-	// Get public ip.
-	try(Scanner s = new Scanner(new URL(config.getServerUrl() + "/info/public-ip").openStream(), "UTF-8")) {
-	    String ip = s.next();
-	    log.info(ip);
-	    torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
-	    // Create torrent from announce/files.
-	    Torrent t = Torrent.create(this.file, new URI(config.getTrackerUrl() + "/announce"), "notTV");
+        // Get public ip.
+        try {
+            torrentFile = torrentStorage.get(String.format("%s.torrent", this.name));
+            // Create torrent from announce/files.
+            // http://tracker.url:port/announce
+            URI trackerURI = new URI(String.format("%s:%d/%s", config.getTrackerUrl(), config.getTrackerPort(), "announce"));
+            Torrent t = Torrent.create(this.file, trackerURI, "notTV");
 
-	    t.save(new FileOutputStream(torrentFile));
-	    // send file to the server.
-	    // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
+            t.save(new FileOutputStream(torrentFile));
+            // send file to the server.
+            // PipedOutputStream filePipe = new PipedOutputStream(); // avoids writing it to a file.
 
-	    // Create request
-	    CloseableHttpClient httpClient = HttpClients.createDefault();
-	    HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
-	    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-	    // This attaches the file to the POST:
-	    builder.addBinaryBody(
-		"file",
-		torrentFile,
-		ContentType.APPLICATION_OCTET_STREAM,
-		torrentFile.getName()
-	    );
+            // Create request
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpPost uploadFile = new HttpPost(new URI(config.getServerUrl() + "/upload/torrent"));
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            // This attaches the file to the POST:
+            builder.addBinaryBody("file", torrentFile, ContentType.APPLICATION_OCTET_STREAM, torrentFile.getName());
 
-	    uploadFile.setEntity(builder.build());
-	    CloseableHttpResponse response = httpClient.execute(uploadFile);
-	    int code = response.getStatusLine().getStatusCode();
-	    if(code == 200) {
-		log.info("Successfully uploaded torrent to the server, seeding...");
+            uploadFile.setEntity(builder.build());
+            CloseableHttpResponse response = httpClient.execute(uploadFile);
+            int code = response.getStatusLine().getStatusCode();
+            if (code == 200) {
+                log.info("Successfully uploaded torrent to the server, seeding...");
                 // start seeding.
                 Pair clientPair = WANClient.newWANClient(
-		    InetAddress.getLocalHost(),
-		    InetAddress.getByName(ip),
-		    new SharedTorrent(t, videoStorage.getBaseDir(), true)
-		);
+                    InetAddress.getLocalHost(),
+                    config.getPublicIp(),
+                    new SharedTorrent(t, videoStorage.getBaseDir(), true)
+                );
                 // forward ports:
                 portMapper.add(clientPair.address.getPort());
                 client = clientPair.client;
-		// Should block
-		client.share();
-	    } else {
-		throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
-	    }
-	} catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
-	    log.error("Error creating Torrent file.", e);
-	} catch (ClientInitializationException e) {
-	    log.error("Error creating the client, couldn't start upload process.", e);
-	} catch (InterruptedException e) {
-	    // shutdown
-	    log.info("Stopping seeding of {}...", this.name);
-	    if(client != null) {
-		client.stop();
-		client = null;
-	    }
-	}
+                // Should block
+                client.share();
+            } else {
+                throw new UploadException("Unable to upload torrent to server. Got status code: " + code);
+            }
+        } catch (NoSuchAlgorithmException | IOException | URISyntaxException e) {
+            log.error("Error creating Torrent file.", e);
+        } catch (ClientInitializationException e) {
+            log.error("Error creating the client, couldn't start upload process.", e);
+        } catch (InterruptedException e) {
+            // shutdown
+            log.info("Stopping seeding of {}...", this.name);
+            if (client != null) {
+                client.stop();
+                client = null;
+            }
+        }
     }
 }

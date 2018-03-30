@@ -40,31 +40,29 @@ import util.storage.StorageService;
 @RequestMapping("process")
 public class ProcessController {
     private static final Logger log = LoggerFactory.getLogger(ProcessController.class);
-    
+
     /*
      * DI attributes.
      */
     @Autowired
-    private Config config;
+    private Config              config;
     @Autowired
     @Qualifier("TorrentStorage")
-    private StorageService torrentStorage;
+    private StorageService      torrentStorage;
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService videoStorage;
+    private StorageService      videoStorage;
     @Autowired
     @Qualifier("ImageStorage")
-    private StorageService thumbnailStorage;
-    
+    private StorageService      thumbnailStorage;
+
     @Autowired
-    private SeedManager seedManager;
+    private SeedManager         seedManager;
     @Autowired
-    private BeanFactory beanFactory; 
-    
+    private BeanFactory         beanFactory;
+
     /**
-     * Uploads the given video to the network.
-     * I.e, creates a .torrent, uploads the .torrent to the server, 
-     * and starts seeding.
+     * Uploads the given video to the network. I.e, creates a .torrent, uploads the .torrent to the server, and starts seeding.
      *
      * @param video
      * @return
@@ -72,27 +70,27 @@ public class ProcessController {
     @PostMapping("upload")
     @ResponseBody
     public String upload(int id, @NotNull MultipartFile video) {
-	log.info(video.getOriginalFilename());
-	String name = String.valueOf(id);
+        log.info(video.getOriginalFilename());
+        String name = String.valueOf(id);
         // use video id to name the file.
-	File localVideo = videoStorage.get(name); //, FilenameUtils.getExtension(video.getOriginalFilename())));
-	log.info(localVideo.toString());
-	try {
-	    video.transferTo(localVideo);
-	} catch (IllegalStateException | IOException e) {
-	    log.error("Error saving uploaded file.", e);
-	}
+        File localVideo = videoStorage.get(name); // , FilenameUtils.getExtension(video.getOriginalFilename())));
+        log.info(localVideo.toString());
+        try {
+            video.transferTo(localVideo);
+        } catch (IllegalStateException | IOException e) {
+            log.error("Error saving uploaded file.", e);
+        }
 
-	try {
-	    // Start seeding process.
-	    File torrent = seedManager.addProcess(name, localVideo);
-	    return torrent.getName();
-	} catch (URISyntaxException e) {
-	    log.error("Unable to start upload process. Malformed URI's in config.", e);
-	    return null; // hardcoded urls, so should never happen.
-	}
+        try {
+            // Start seeding process.
+            File torrent = seedManager.addProcess(name, localVideo);
+            return torrent.getName();
+        } catch (URISyntaxException e) {
+            log.error("Unable to start upload process. Malformed URI's in config.", e);
+            return null; // hardcoded urls, so should never happen.
+        }
     }
-    
+
     /**
      * Gets the thumbnail for a particular video.
      *
@@ -101,31 +99,26 @@ public class ProcessController {
      */
     @GetMapping("get-thumbnail/{id}")
     @ResponseBody
-    public ResponseEntity<FileSystemResource> getThumbnail(@PathVariable int id, HttpServletResponse response){
+    public ResponseEntity<FileSystemResource> getThumbnail(@PathVariable int id, HttpServletResponse response) {
         String thumbnailName = String.valueOf(id);
         File thumbnail = thumbnailStorage.get(thumbnailName);
         log.debug("{}", thumbnail);
         // if it exists, just return it
-        if(thumbnailStorage.has(thumbnailName)) // Maybe implement an ImageStorage class that uses a StorageService and can accept id as an int.
+        if (thumbnailStorage.has(thumbnailName)) // Maybe implement an ImageStorage class that uses a StorageService and can accept id as an int.
             return ResponseEntity.ok().body(new FileSystemResource(thumbnail));
 
         // else download then return it.
         try {
-            Response r = Request.Get(
-                String.format("%s/get/thumbnail/%d", config.getServerUrl(), id)
-            ).execute();
+            Response r = Request.Get(String.format("%s/get/thumbnail/%d", config.getServerUrl(), id)).execute();
             HttpResponse httpResponse = r.returnResponse();
             log.debug("{} - {}", id, httpResponse.getStatusLine().getStatusCode());
             // return placeholder if not successful.
-            if(httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+            if (httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
                 return ResponseEntity.notFound().build();
             // save and return.
-            try(
-                FileOutputStream out = new FileOutputStream(thumbnail);
-                InputStream is = httpResponse.getEntity().getContent();
-            ) {
+            try (FileOutputStream out = new FileOutputStream(thumbnail); InputStream is = httpResponse.getEntity().getContent();) {
                 int inByte;
-                while((inByte = is.read()) != -1)
+                while ((inByte = is.read()) != -1)
                     out.write(inByte);
             }
             response.setContentType("application/pdf");
@@ -134,32 +127,30 @@ public class ProcessController {
             log.error("Error getting thumbnail file: " + thumbnailName + " from server.", e);
             return ResponseEntity.notFound().build(); // tell client not found.
         }
-    }  
+    }
 
     @RequestMapping(path = "download")
-    public String download(@RequestParam("videoId") int videoId, RedirectAttributes redir){
-	// get torrent file.
+    public String download(@RequestParam("videoId") int videoId, RedirectAttributes redir) {
+        // get torrent file.
         String torrent = String.format("%d.torrent", videoId);
-	File torrentFile = torrentStorage.get(torrent);
-	try {
-	    Request.Get(
-		String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)
-	    ).execute().saveContent(torrentFile);
+        File torrentFile = torrentStorage.get(torrent);
+        try {
+            Request.Get(String.format("%s/get/torrent/%s", this.config.getServerUrl(), torrent)).execute().saveContent(torrentFile);
 
-	    // download file.
-	    Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
+            // download file.
+            Optional<File> result = beanFactory.getBean(DownloadProcess.class, torrentFile).download();
 
-            if(result.isPresent()) {
+            if (result.isPresent()) {
                 File f = result.get();
                 log.info(f.getName());
                 redir.addFlashAttribute("videoId", videoId);
                 redir.addFlashAttribute("videoName", f.getName());
                 return "redirect:/watch"; // because I can't figure out the bloody forward:
             }
-	} catch (IOException e) {
-	    log.error("Error getting torrent file from server.", e);
-	}
+        } catch (IOException e) {
+            log.error("Error getting torrent file from server.", e);
+        }
 
-	return "redirect:/";
+        return "redirect:/";
     }
 }

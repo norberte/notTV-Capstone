@@ -20,8 +20,7 @@ public interface StorageService {
     void store(MultipartFile file);
 
     /**
-     * Gets the file with the given id.
-     * Creates a new file if it doesn't exist.
+     * Gets the file with the given id. Creates a new file if it doesn't exist.
      * @param filename
      * @return
      */
@@ -34,7 +33,7 @@ public interface StorageService {
      * @return
      */
     boolean has(String filename);
-    
+
     /**
      * Gets the base directory.
      *

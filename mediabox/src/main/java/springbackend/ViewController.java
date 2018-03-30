@@ -32,7 +32,7 @@ public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService videoStorage;
+    private StorageService      videoStorage;
 
     private void defaultSetup(String page, Model model) {
         // Copy model values from any redirects.
@@ -45,13 +45,13 @@ public class ViewController {
         });
         model.addAttribute("modelKeys", keys);
         model.addAttribute("modelValues", values);
-	model.addAttribute("title", StringUtils.capitalize(page));
-	model.addAttribute("page_name", page);
+        model.addAttribute("title", StringUtils.capitalize(page));
+        model.addAttribute("page_name", page);
         log.info("Sanity check: {}", model.asMap());
     }
 
-    @RequestMapping({"/","/home"})
-    public String home(Model model){
+    @RequestMapping({ "/", "/home" })
+    public String home(Model model) {
         defaultSetup("browse", model);
         return "default_page";
     }
@@ -59,17 +59,17 @@ public class ViewController {
     @RequestMapping("{page}")
     public String defaultPage(@PathVariable String page, Model model) {
         defaultSetup(page, model);
-	return "default_page";
+        return "default_page";
     }
-    
+
     @RequestMapping("account")
     public String account() {
-    return "account";
+        return "account";
     }
 
     @RequestMapping("userProfile/{username}")
     public String userProfile(@PathVariable("username") String username, Model model) {
-    //public String userProfile() {
+        // public String userProfile() {
         model.addAttribute("username", username);
         model.addAttribute("title", "User Profile");
         model.addAttribute("page_name", "userProfile");
@@ -78,29 +78,29 @@ public class ViewController {
 
     @RequestMapping("video/{videoFile:.+}")
     @ResponseBody
-    public void video(@PathVariable(value="videoFile") String source,
-    // @RequestParam(value="type", required=false, defaultValue="video/mp4") String type,
-    Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-	// Maybe later?
-	// http://shazsterblog.blogspot.ca/2016/02/asynchronous-streaming-request.html
-	// String type = "video/mp4";
+    public void video(@PathVariable(value = "videoFile") String source,
+            // @RequestParam(value="type", required=false, defaultValue="video/mp4") String type,
+            Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Maybe later?
+        // http://shazsterblog.blogspot.ca/2016/02/asynchronous-streaming-request.html
+        // String type = "video/mp4";
         // model.addAttribute("source", source);
         // model.addAttribute("type", type);
-	log.info("********** video *********");
-	File videoFile = videoStorage.get(source);
-	log.info("Exists: " + videoFile.isFile());
-	log.info("Path: " + videoFile);
+        log.info("********** video *********");
+        File videoFile = videoStorage.get(source);
+        log.info("Exists: " + videoFile.isFile());
+        log.info("Path: " + videoFile);
 
-	try {
-	    response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-	    response.setHeader("Content-Disposition", "attachment; filename="+source);
-	    InputStream iStream = new FileInputStream(videoFile);
-	    IOUtils.copy(iStream, response.getOutputStream());
-	    response.flushBuffer();
-	} catch (java.nio.file.NoSuchFileException e) {
-	    response.setStatus(HttpStatus.NOT_FOUND.value());
-	} catch (Exception e) {
-	    response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-	}
+        try {
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            response.setHeader("Content-Disposition", "attachment; filename=" + source);
+            InputStream iStream = new FileInputStream(videoFile);
+            IOUtils.copy(iStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (java.nio.file.NoSuchFileException e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 }
