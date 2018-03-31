@@ -86,10 +86,20 @@ public class UpdateController {
     @PostMapping("/report")
     @ResponseBody
     public boolean report(@RequestParam("videoId") int videoId, @RequestParam("reportText") String reportText) {
-        log.info("update subscriptions table");
+        log.info("flag a video");
         String query = "Insert Into flag (userid, videoid, message) Values (?,?,?);"; 
         log.info(query);
         jdbc.update(query, 1, videoId, reportText); //userid is hard-coded as 1 for now
+        return true;
+    }
+    
+    @PostMapping("/deleteReport")
+    @ResponseBody
+    public boolean deleteReport(@RequestParam("videoId") int videoId, @RequestParam("userId") int userId) {
+        log.info("unflag a video");
+        String query = "Delete From Flag WHERE userid = ? AND videoid = ?;"; 
+        log.info(query);
+        jdbc.update(query, userId, videoId);
         return true;
     }
 

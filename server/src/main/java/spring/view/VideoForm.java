@@ -1,7 +1,8 @@
 package spring.view;
 
+import java.io.Serializable;
 
-public class VideoForm {
+public class VideoForm implements Serializable{
     String title;
     String description;
     int version;
