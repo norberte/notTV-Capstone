@@ -19,6 +19,8 @@ public interface StorageService {
      */
     void store(MultipartFile file);
 
+    void setRoot(String s);
+
     /**
      * Gets the file with the given id. Creates a new file if it doesn't exist.
      * @param filename

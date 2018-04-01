@@ -38,6 +38,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     
     public TtorrentDownloadProcess(File torrent) {
         this.torrent = torrent;
+        finished = false;
     }
 
     @Override
@@ -54,13 +55,17 @@ public class TtorrentDownloadProcess implements DownloadProcess {
                     st
                 );
 
-                clientPair.client.setMaxDownloadRate(config.bandwidth);
-                clientPair.client.setMaxUploadRate(config.bandwidth);
+                // -ve bandwitdh = no limit
+                if(config.bandwidth > 0) {
+                    clientPair.client.setMaxDownloadRate(config.bandwidth);
+                    clientPair.client.setMaxUploadRate(config.bandwidth);
+                }
 
                 // add port for peers to respond to.
                 portMapper.add(clientPair.address.getPort());
                 clientPair.client.download();
                 clientPair.client.waitForCompletion();
+                finished = true;
             }
             // run callback.
             List<String> names = st.getFilenames();

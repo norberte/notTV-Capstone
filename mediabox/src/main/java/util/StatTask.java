@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -11,25 +12,28 @@ import org.slf4j.LoggerFactory;
 
 import filesharingsystem.process.DownloadProcess;
 
+import springbackend.Application;
+
 public class StatTask implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(StatTask.class);
     private static final String[] CMD = {
         "/bin/bash",
         "-c",
-        "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk '{print 100 - $1}'"
+        "mpstat 1 1 | grep Average | grep -Eo '([0-9]|\\.)+$'"
     };
-    private static int INTERVAL = 100;
+    // private static final String[] CMD = {
+    //     "/bin/bash",
+    //     "-c",
+    //     "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk '{print 100 - $1}'"
+    // };
+    private static int INTERVAL = 1000;
     private PrintWriter pw;
     private File f;
     private long startTime = -1l;
-    private long oldSize = -1l;
-    private DownloadProcess dp;
+    private double oldSize = -1;
+    private Optional<DownloadProcess> dp;
 
-    public StatTask(File f) throws FileNotFoundException {
-        this(f, null);
-    }
-    
-    public StatTask(File f, DownloadProcess dp) throws FileNotFoundException {
+    public StatTask(File f, Optional<DownloadProcess> dp) throws FileNotFoundException {
         // this.si = new SystemInfo();
         this.f = f;
         this.dp = dp;
@@ -53,10 +57,10 @@ public class StatTask implements Runnable {
             startTime = System.currentTimeMillis();
             oldSize = f.length();
             Thread.sleep(INTERVAL);
-            while(dp == null || dp.isFinished()) {
+            while(!(dp.isPresent() && dp.get().isFinished())) {
                 // collect updated data.
                 long endTime = System.currentTimeMillis();
-                long currSize = f.length();
+                double currSize = f.length();
 
                 // print as csv/
                 StringBuilder out = new StringBuilder();
@@ -67,7 +71,8 @@ public class StatTask implements Runnable {
                     .append((currSize - oldSize) / (endTime - startTime))
                     .append(',')
                     .append(getCPU())
-                    .append(',');
+                    .append(',')
+                    .append('\n');
                 pw.append(out);
                 pw.flush();
                 // update data.
@@ -76,12 +81,11 @@ public class StatTask implements Runnable {
                 Thread.sleep(INTERVAL);
             }
         } catch (InterruptedException e) {
+        } finally {
             pw.flush();
             pw.close();
-            return;
+            Application.exit();
         }
-        pw.flush();
-        pw.close();
     }
 
     private double getCPU() {
@@ -93,12 +97,13 @@ public class StatTask implements Runnable {
         try {
             Process p = builder.start();
             s = new Scanner(p.getInputStream()).useDelimiter("\\A");
-            return Double.parseDouble(s.next().trim());
+            // https://superuser.com/questions/455005/how-do-i-see-the-cpu-load-of-a-server
+            return 100.0 - Double.parseDouble(s.next().trim()); // gets idle%
         } catch (IOException e) {
             log.error("Error getting CPU.", e);
         } finally {
             if(s != null)
-                s.close();
+                s.close(); // called before return.
         }
         return Double.NaN;
     }

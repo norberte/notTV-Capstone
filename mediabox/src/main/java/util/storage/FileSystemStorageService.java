@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileSystemStorageService implements StorageService {
-    private final Path rootLocation;
-    private final File rootDir;
+    private Path rootLocation;
+    private File rootDir;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -24,6 +24,13 @@ public class FileSystemStorageService implements StorageService {
         this.init();
     }
 
+    public void setRoot(String name) {
+        StorageProperties p = new StorageProperties(name);
+        this.rootLocation = Paths.get(p.getLocation());
+        this.rootDir = rootLocation.toFile();
+        this.init();
+    }
+    
     @Override
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
