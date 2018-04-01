@@ -134,6 +134,8 @@ class Browse extends React.Component {
                 <div className="row browse-body">
                   <div className="col-md-12">
                     <CarouselLayout thumbnailClass={VideoThumbnail} title="Subscribed" entries={this.state.videos}/>
+                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Popular" entries={this.state.videos}/>
+                    <CarouselLayout thumbnailClass={VideoThumbnail} title="Recommended" entries={this.state.videos}/>
                   </div>
                 </div>
               </div>
