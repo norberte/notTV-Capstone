@@ -32,7 +32,7 @@ import sun.misc.Unsafe;
  */
 public class WANClient {
     static class Pair {
-        public final Client            client;
+        public final Client client;
         public final InetSocketAddress address;
 
         public Pair(Client client, InetSocketAddress address) {

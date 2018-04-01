@@ -45,21 +45,21 @@ public class ProcessController {
      * DI attributes.
      */
     @Autowired
-    private Config              config;
+    private Config config;
     @Autowired
     @Qualifier("TorrentStorage")
-    private StorageService      torrentStorage;
+    private StorageService torrentStorage;
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService      videoStorage;
+    private StorageService videoStorage;
     @Autowired
     @Qualifier("ImageStorage")
-    private StorageService      thumbnailStorage;
+    private StorageService thumbnailStorage;
 
     @Autowired
-    private SeedManager         seedManager;
+    private SeedManager seedManager;
     @Autowired
-    private BeanFactory         beanFactory;
+    private BeanFactory beanFactory;
 
     /**
      * Uploads the given video to the network. I.e, creates a .torrent, uploads the .torrent to the server, and starts seeding.

@@ -33,7 +33,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     private Config config;
     @Autowired
     private PortMapper portMapper;
-    
+
     public TtorrentDownloadProcess(File torrent) {
         this.torrent = torrent;
     }
@@ -46,11 +46,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
             log.info("Download complete: {}", st.isComplete());
             log.info("{}", st.isInitialized());
             if (!st.isComplete()) {
-                Pair clientPair = WANClient.newWANClient(
-                    InetAddress.getLocalHost(),
-                    config.getPublicIp(),
-                    st
-                );
+                Pair clientPair = WANClient.newWANClient(InetAddress.getLocalHost(), config.getPublicIp(), st);
                 // client.setMaxDownloadRate(50.0);
                 // client.setMaxUploadRate(50.0);
 

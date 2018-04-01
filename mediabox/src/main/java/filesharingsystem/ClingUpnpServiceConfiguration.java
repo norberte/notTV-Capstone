@@ -20,11 +20,20 @@ public class ClingUpnpServiceConfiguration extends DefaultUpnpServiceConfigurati
 
     @Override
     public StreamClient<?> createStreamClient() {
-        return new org.fourthline.cling.transport.impl.jetty.StreamClientImpl(new org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl(this.getSyncProtocolExecutorService()));
+        return new org.fourthline.cling.transport.impl.jetty.StreamClientImpl(
+            new org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl(
+                this.getSyncProtocolExecutorService()
+            )
+        );
     }
 
     @Override
     public StreamServer<?> createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl(new org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl(org.fourthline.cling.transport.impl.jetty.JettyServletContainer.INSTANCE, networkAddressFactory.getStreamListenPort()));
+        return new org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl(
+            new org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl(
+                org.fourthline.cling.transport.impl.jetty.JettyServletContainer.INSTANCE, 
+                networkAddressFactory.getStreamListenPort()
+            )
+        );
     }
 }

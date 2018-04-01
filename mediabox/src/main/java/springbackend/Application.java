@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 import filesharingsystem.PortMapper;
-
 import util.SeedManager;
 
 @SpringBootApplication
@@ -23,11 +22,12 @@ public class Application implements CommandLineRunner {
     @Autowired
     Config config;
 
-    public static void main(String[] args) {        
+    public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Override
     public void run(String... args) throws URISyntaxException {
+        portMapper.add(config.getTrackerPort());
     }
 }
