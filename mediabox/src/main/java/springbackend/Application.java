@@ -97,8 +97,8 @@ public class Application implements CommandLineRunner {
         }
     }
 
-	private void collectStats(boolean collectStats, Optional<DownloadProcess> dp)
-			throws FileNotFoundException, InterruptedException {
+    private void collectStats(boolean collectStats, Optional<DownloadProcess> dp)
+        throws FileNotFoundException, InterruptedException {
         if(collectStats)
             new Thread(new StatTask(config.outDir, dp)).start();
         else {

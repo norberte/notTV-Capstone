@@ -108,6 +108,11 @@ public class TtorrentUploadProcess implements UploadProcess {
                 // forward ports:
                 portMapper.add(clientPair.address.getPort());
                 client = clientPair.client;
+                // -ve bandwitdh = no limit
+                if(config.bandwidth > 0) {
+                    client.setMaxDownloadRate(config.bandwidth);
+                    client.setMaxUploadRate(config.bandwidth);
+                }
                 // Should block
                 client.share();
             } else {
