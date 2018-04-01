@@ -1,6 +1,8 @@
 package spring.view;
 
-public class AccountForm {
+import java.io.Serializable;
+
+public class AccountForm implements Serializable {
     String currentUsername;
     String newEmail;
     String autoDownload;
