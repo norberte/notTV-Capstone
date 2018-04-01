@@ -8,9 +8,8 @@ class SearchTagDropdown extends React.Component {
                 <span className="caret"></span>
               </button>
               <ul role="menu" className="dropdown-menu">
-                <li role="presentation"><a href="#">Title </a></li>
-                <li role="presentation"><a href="#">Uploader </a></li>
-                <li role="presentation"><a href="#">Length </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget('title')}}>Title </a></li>
+                <li role="presentation"><a onClick={(e) => {this.props.changeSearchTarget('uploader')}}>Uploader </a></li>
               </ul>
             </div>
         );
@@ -38,18 +37,25 @@ class SearchBar extends React.Component {
 }
 
 class ResultOrder extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            order: "Newest"
+        }
+    }
     render() {
         return (
             <div className="result-order-container">
               <span className="result-order-text">Order: </span>
               <div className="dropdown result-order-button">
                 <button className="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">
-                  Popular <span className="caret"></span>
+                 {this.state.order} <span className="caret"></span>
                 </button>
                 <ul role="menu" className="dropdown-menu">
-                  <li role="presentation"><a href="#">Popular </a></li>
-                  <li role="presentation"><a href="#">Newest </a></li>
-                  <li role="presentation"><a href="#">View Count</a></li>
+                  <li role="presentation"><a onClick={(e) => {this.setState({order: "Newest"}); this.props.changeOrder('time asc')}}>Newest </a></li>
+                  <li role="presentation"><a onClick={(e) => {this.setState({order: "Oldest"});this.props.changeOrder('time desc')}}>Oldest </a></li>
+                  <li role="presentation"><a href="#"><s>Popular </s></a></li>
+                  <li role="presentation"><a href="#"><s>View Count</s></a></li>
                 </ul>
               </div>
             </div>
@@ -86,7 +92,7 @@ export default class TopBar extends React.Component {
         return (
             <div className="row">
               <div className="col-md-1 search-tag-dropdown-parent">
-                <SearchTagDropdown/>
+                <SearchTagDropdown changeSearchTarget={this.props.changeSearchTarget}/>
               </div>
               <div className="col-md-8">
                 <SearchBar handleChange={this.props.handleChange}
@@ -96,7 +102,7 @@ export default class TopBar extends React.Component {
               <div className="col-md-3">
                 <div className="row">
                   <div className="col-md-5">
-                    <ResultOrder />
+                    <ResultOrder changeOrder={this.props.changeOrder}/>
                   </div>
                   <div className="col-md-7">
                     <LayoutSelector />

@@ -3,6 +3,7 @@ package spring;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -231,47 +232,73 @@ public class InfoController {
 
     @GetMapping("/videos")
     @ResponseBody
-    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories, @RequestParam(value="searchText", required=false) String searchText) {
+    public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories,
+                                 @RequestParam(value="searchTarget", required=false) String searchTarget, 
+                                 @RequestParam(value="searchText", required=false) String searchText,
+                                 @RequestParam(value="searchOrder", required=true) String searchOrder) {
 	// Video(title, thumbnail_url, download_url)
 	log.info("videos");
 
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
-        
-        // filter video id to exist in the intersection of the categories specified.
+    StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
+    ArrayList<Object> queryParams = new ArrayList<>();
+    // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
-            queryBuilder.append("Where v.id in (");
+        queryBuilder.append("Where v.id in (");
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
-		queryBuilder.append("Select videoid ");
-		queryBuilder.append("From video_category_value_join As vcvj Join category_value As cv On cv.id=vcvj.categoryvalueid ");
-		queryBuilder.append("Where cv.id = ");
-		queryBuilder.append(categories[i]);
+    		queryBuilder.append("Select videoid ");
+    		queryBuilder.append("From video_category_value_join As vcvj Join category_value As cv On cv.id=vcvj.categoryvalueid ");
+    		queryBuilder.append("Where cv.id = ?");
+    		queryParams.add(categories[i]);
 	    }
 	    queryBuilder.append(')');
 	}
-
-        //TODO: improved searching.
-        if(searchText != null && searchText.length() > 0)
-            queryBuilder.append(" And title LIKE '")
-                .append(searchText)
-                .append("%'");
+    if(searchText != null && searchText.length() > 0){  //If search text is present, add appropriate 'LIKE' condition to the query
+        switch(searchTarget){
+        case "title":
+            queryBuilder.append(" And title ILIKE ?");
+            break;
+        case "uploader":
+            queryBuilder.append(" And username ILIKE ?");
+            break;
+        default:
+            log.error("Invalid searchTarget parameter: "+searchTarget);
+            break;
+        }
+        queryParams.add("%"+searchText+"%");
+    }
+    switch(searchOrder){    // sort according to searchOrder
+    case "time asc":
+        queryBuilder.append(" ORDER BY vid ASC");
+        break;
+    case "time desc":
+        queryBuilder.append(" ORDER BY vid DESC");
+        break;
+    default:
+        log.error("Invalid searchOrder parameter: "+searchOrder);
+        break;
+    }
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();
 	log.info(query);
+	for(Object param: queryParams.toArray())
+	    log.info(param.toString());
 
         // put the data into a view object.
-	return jdbcTemplate.query(query, (rs, row) -> new Video(
-            rs.getInt("vid"),
-	    rs.getString("title"), 
-            new NotTVUser(
-                rs.getInt("uid"),
-                rs.getString("username")
-            )
-	)); 
+	return jdbcTemplate.query(query, 
+	                         (rs, row) -> new Video(
+                                            rs.getInt("vid"),
+                                            rs.getString("title"), 
+                                            new NotTVUser(
+                                                rs.getInt("uid"),
+                                                rs.getString("username")
+                                            )
+	                         ),
+	                         queryParams.toArray()); 
     }
 
     @GetMapping("/video-data")

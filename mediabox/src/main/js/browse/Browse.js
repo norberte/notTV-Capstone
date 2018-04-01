@@ -56,7 +56,9 @@ class Browse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchTarget: "title",
             searchText: "",
+            searchOrder: "date asc",
             filters: [],
             categories: [],
             videos: []
@@ -87,7 +89,9 @@ class Browse extends React.Component {
         $.get({
             url: config.serverUrl + "/info/videos",
             data: {
+                searchTarget: this.state.searchTarget,
                 searchText: this.state.searchText,
+                searchOrder:this.state.searchOrder,
                 categories: this.state.filters
             },
             dataType: "json",
@@ -119,6 +123,12 @@ class Browse extends React.Component {
               </div>
               <div className="col-md-10 results-container">
                 <TopBar handleChange={(e)=>this.setState({searchText: e.target.value})}
+                  changeSearchTarget={(target)=> {
+                      this.setState({searchTarget: target}, this.update_videos);
+                  }}
+                  changeOrder={(order)=>{
+                      this.setState({searchOrder: order}, this.update_videos);
+                  }}
                   updateVideos={this.update_videos}
                   searchText={this.state.searchText}/>
                 <div className="row browse-body">
