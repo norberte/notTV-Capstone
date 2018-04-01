@@ -19,8 +19,8 @@ import com.turn.ttorrent.common.Torrent;
  */
 public class TtorrentResumeUploadProcess implements UploadProcess {
     private static final Logger log = LoggerFactory.getLogger(TtorrentUploadProcess.class);
-    private String              name;
-    private File                torrentFile;
+    private String name;
+    private File torrentFile;
 
     public TtorrentResumeUploadProcess(String name, File torrentFile) {
         this.name = name;

@@ -26,7 +26,6 @@ public class ConfigHandlerInterceptor extends HandlerInterceptorAdapter {
             modelAndView.getModelMap().addAttribute("config", configView);
     }
 
-
     /**
      * All the config variables we actually want to send to the UI.
      */

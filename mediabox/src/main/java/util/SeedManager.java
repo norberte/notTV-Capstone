@@ -30,8 +30,8 @@ import util.storage.StorageService;
 public class SeedManager {
     private static class Pair<T, S> implements Serializable {
         private static final long serialVersionUID = -3540758862913946498L;
-        private T                 t;
-        private S                 s;
+        private T t;
+        private S s;
 
         Pair(T t, S s) {
             this.t = t;
@@ -39,10 +39,10 @@ public class SeedManager {
         }
     }
 
-    private static final Logger                            log    = LoggerFactory.getLogger(SeedManager.class);
-    private static final String                            MEMORY = "SeedManager-Memory";
-    private final StorageService                           torrentStorage;
-    private final BeanFactory                              beanFactory;
+    private static final Logger log = LoggerFactory.getLogger(SeedManager.class);
+    private static final String MEMORY = "SeedManager-Memory";
+    private final StorageService torrentStorage;
+    private final BeanFactory beanFactory;
     private final Map<String, Pair<Thread, UploadProcess>> currentSeeds;
 
     @SuppressWarnings("unchecked") // can't check generic type.

@@ -32,7 +32,7 @@ public class ViewController {
     private static final Logger log = LoggerFactory.getLogger(ViewController.class);
     @Autowired
     @Qualifier("VideoStorage")
-    private StorageService      videoStorage;
+    private StorageService videoStorage;
 
     private void defaultSetup(String page, Model model) {
         // Copy model values from any redirects.

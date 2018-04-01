@@ -104,11 +104,7 @@ public class TtorrentUploadProcess implements UploadProcess {
             if (code == 200) {
                 log.info("Successfully uploaded torrent to the server, seeding...");
                 // start seeding.
-                Pair clientPair = WANClient.newWANClient(
-                    InetAddress.getLocalHost(),
-                    config.getPublicIp(),
-                    new SharedTorrent(t, videoStorage.getBaseDir(), true)
-                );
+                Pair clientPair = WANClient.newWANClient(InetAddress.getLocalHost(), config.getPublicIp(), new SharedTorrent(t, videoStorage.getBaseDir(), true));
                 // forward ports:
                 portMapper.add(clientPair.address.getPort());
                 client = clientPair.client;

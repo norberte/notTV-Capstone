@@ -28,40 +28,37 @@ public class TestDownloadingProcess {
     @Autowired
     @Qualifier("VideoStorage")
     private StorageService videoStorage;
-    
+
     @Before
     public void setup() {
-	torrFile = new File(System.getProperty("user.home"), "cat.torrent");  
-	contentFile = new File(System.getProperty("user.home"), "cat.txt");
-	try(PrintWriter out = new PrintWriter( contentFile )){
-	    out.println("  )\\._.,--....,'``.");
-	    out.println(" /,   _.. \\   _\\  (`._ ,.");
-	    out.println("`._.-(,_..'--(,_..'`-.;.'");
-	    out.flush();
+        torrFile = new File(System.getProperty("user.home"), "cat.torrent");
+        contentFile = new File(System.getProperty("user.home"), "cat.txt");
+        try (PrintWriter out = new PrintWriter(contentFile)) {
+            out.println("  )\\._.,--....,'``.");
+            out.println(" /,   _.. \\   _\\  (`._ ,.");
+            out.println("`._.-(,_..'--(,_..'`-.;.'");
+            out.flush();
 
-	    //Test if a .torrent file can be created during the upload process
-	    up = new TtorrentUploadProcess(
-		"cat",
-		contentFile
-	    );
-	    up.run();
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	}
+            // Test if a .torrent file can be created during the upload process
+            up = new TtorrentUploadProcess("cat", contentFile);
+            up.run();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @After
     public void tearDown() {
-	torrFile.delete();
+        torrFile.delete();
     }
 
     @Test
     public void testDownload() throws Exception {
         // Test if the download process can download video content using the file sharing system
-	DownloadProcess dp = new TtorrentDownloadProcess(torrFile);
+        DownloadProcess dp = new TtorrentDownloadProcess(torrFile);
         Optional<File> result = dp.download();
         assertTrue(result.isPresent());
         assertTrue(result.get().exists());
-	assertTrue(new File(System.getProperty("user.home"), "cat.txt").exists());
+        assertTrue(new File(System.getProperty("user.home"), "cat.txt").exists());
     }
 }

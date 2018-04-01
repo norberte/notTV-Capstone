@@ -35,7 +35,7 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     private Config config;
     @Autowired
     private PortMapper portMapper;
-    
+
     public TtorrentDownloadProcess(File torrent) {
         this.torrent = torrent;
         finished = false;

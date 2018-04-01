@@ -19,11 +19,11 @@ public class Config {
     public int bandwidth;
     public File outDir;
     
-	public Config(String serverUrl, String trackerUrl, int trackerPort) throws MalformedURLException {
+    public Config(String serverUrl, String trackerUrl, int trackerPort) throws MalformedURLException {
         try (Scanner s = new Scanner(new URL(serverUrl + "/info/public-ip").openStream(), "UTF-8")) {
             publicIp = InetAddress.getByName(s.next());
             log.info("{}", publicIp);
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Error getting public ip", e);
         }
         this.serverUrl = serverUrl;
