@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.turn.ttorrent.client.Client;
 import com.turn.ttorrent.client.SharedTorrent;
 
 import filesharingsystem.PortMapper;
@@ -28,8 +29,9 @@ public class TtorrentDownloadProcess implements DownloadProcess {
     @Qualifier("VideoStorage")
     @Autowired
 
-    private  StorageService videoStorage;
+    private StorageService videoStorage;
     private boolean finished;
+    private Client client;
 
     @Autowired
     private Config config;
@@ -63,8 +65,9 @@ public class TtorrentDownloadProcess implements DownloadProcess {
 
                 // add port for peers to respond to.
                 portMapper.add(clientPair.address.getPort());
-                clientPair.client.download();
-                clientPair.client.waitForCompletion();
+                client = clientPair.client;
+                client.download();
+                client.waitForCompletion();
                 finished = true;
             }
             // run callback.
@@ -77,6 +80,10 @@ public class TtorrentDownloadProcess implements DownloadProcess {
             log.error("Error creating WAN client,", e);
         }
         return Optional.empty();
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public boolean isFinished() {

@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.turn.ttorrent.client.Client;
+import com.turn.ttorrent.client.peer.SharingPeer;
 
 import filesharingsystem.process.DownloadProcess;
 
@@ -30,7 +35,6 @@ public class StatTask implements Runnable {
     private PrintWriter pw;
     private File f;
     private long startTime = -1l;
-    private double oldSize = -1;
     private Optional<DownloadProcess> dp;
 
     public StatTask(File f, Optional<DownloadProcess> dp) throws FileNotFoundException {
@@ -55,12 +59,10 @@ public class StatTask implements Runnable {
         try {
             // init data.
             startTime = System.currentTimeMillis();
-            oldSize = f.length();
             Thread.sleep(INTERVAL);
             while(!(dp.isPresent() && dp.get().isFinished())) {
                 // collect updated data.
                 long endTime = System.currentTimeMillis();
-                double currSize = f.length();
 
                 // print as csv/
                 StringBuilder out = new StringBuilder();
@@ -68,7 +70,7 @@ public class StatTask implements Runnable {
                     .append(',')
                     .append(endTime)
                     .append(',')
-                    .append((currSize - oldSize) / (endTime - startTime))
+                    .append(getDownloadSpeed())
                     .append(',')
                     .append(getCPU())
                     .append(',')
@@ -77,7 +79,6 @@ public class StatTask implements Runnable {
                 pw.flush();
                 // update data.
                 startTime = endTime;
-                oldSize = currSize;
                 Thread.sleep(INTERVAL);
             }
         } catch (InterruptedException e) {
@@ -86,6 +87,32 @@ public class StatTask implements Runnable {
             pw.close();
             Application.exit();
         }
+    }
+
+    /**
+     * Gets the download speed.
+     * https://github.com/mpetazzoni/ttorrent/blob/master/core/src/main/java/com/turn/ttorrent/client/Client.java
+     * Line ~443
+     * @param client
+     * @return
+     */
+    public double getDownloadSpeed() {
+        float dl = 0;
+        if(dp.isPresent()) {
+            try {
+                Field conn = Client.class.getDeclaredField("connected");
+                conn.setAccessible(true);
+                @SuppressWarnings("unchecked")
+                ConcurrentMap<String, SharingPeer> connected = (ConcurrentMap<String, SharingPeer>) conn.get(dp.get().getClient());
+                for (SharingPeer peer : connected.values()) {
+                    dl += peer.getDLRate().get();
+                }
+                
+            } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+                log.error("Error getting dl speed", e);
+            }
+        }
+        return dl/1024.0;
     }
 
     private double getCPU() {

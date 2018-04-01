@@ -3,6 +3,8 @@ package filesharingsystem.process;
 import java.io.File;
 import java.util.Optional;
 
+import com.turn.ttorrent.client.Client;
+
 public interface DownloadProcess {
 
     /**
@@ -12,4 +14,6 @@ public interface DownloadProcess {
     Optional<File> download();
 
     boolean isFinished();
+
+    Client getClient();
 }
