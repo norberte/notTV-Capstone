@@ -1,17 +1,18 @@
 package filesharingsystem;
 
+import javax.annotation.PreDestroy;
+
 public interface PortMapper {
     /**
-     * Sets up the port mapping to map
-     * from WAN to LAN with the given port.
-     * @param port - port to listen to.
-     * @throws PortMapException - if an error occurs during setup.
+     * Adds a new port mapping to the given port
+     *
+     * @param port
      */
-    void setup() throws PortMapException;
+    void add(int port);
 
     /**
-     * Shuts down the port mapping,
-     * deleting all port forwarding done.
+     * Shuts down the port mapping, deleting all port forwarding done.
      */
+    @PreDestroy
     void shutdown();
 }

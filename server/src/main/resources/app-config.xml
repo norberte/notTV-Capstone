@@ -36,6 +36,8 @@
     <property name="password" value="root"/>
   </bean>
   
+  <!-- For ResponseBody MultipartFiles -->
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
   <mvc:cors>
     <mvc:mapping
 	path="/**"/>

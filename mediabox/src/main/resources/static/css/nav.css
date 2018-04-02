@@ -1,4 +1,4 @@
-.container{
+container{
     background-color: black;
 }
 
@@ -57,7 +57,7 @@
     width:  15%;
 }
 
-ul{
+.nav-ul{
   list-style-type: none;
   border: 1px solid #494949
   margin: 0;
@@ -66,11 +66,11 @@ ul{
   background-color: #232323;
 }
 
-li{
+.nav-ul li{
   float: left
 }
 
-li a{
+.nav-ul li a{
   display: block;
   color: white;
   text-align: center;
@@ -78,35 +78,23 @@ li a{
   text-decoration: none !important;
 }
 
-li a:visited{
+.nav-ul li a:visited{
   color: white;
 }
 
-li a:focus{
+.nav-ul li a:focus{
   color: white;
 }
 
-li a:hover{
+.nav-ul li a:hover{
   color: white;
   background-color: #3e473d;
 }
 
-li a{
+.nav-ul li a{
   color: white;
 }
 
 .active {
   background-color: #727a71;
-}
-
-#rootLeft{
-
-}
-
-#rootRight{
-  float: right;
-  margin-right: 2em;
-  margin-left: 34em;
-  padding-left: 1em;
-  border-left: 2px solid black;
 }

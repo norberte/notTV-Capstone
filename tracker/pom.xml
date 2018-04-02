@@ -12,9 +12,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>tv.not</groupId>
   <artifactId>tracker</artifactId>
-  <version>1.0</version>
   <packaging>jar</packaging>
 
   <!-- Descriptions -->

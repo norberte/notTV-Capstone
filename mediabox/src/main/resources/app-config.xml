@@ -11,15 +11,13 @@
 
   <context:annotation-config />
   
-  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper">
-    <constructor-arg index="0" value="49152"/>
-  </bean>
+  <bean id="PortMapper" class="filesharingsystem.ClingPortMapper" />
   
   <bean id="Config" class="springbackend.Config">
-    <!-- <property name="serverUrl" value="http://nottv.levimiller.ca"/> -->
-    <!-- <property name="serverUrl" value="localhost:1248"/> -->
-    <property name="serverUrl" value="http://35.160.102.229:1248"/>
-    <property name="trackerUrl" value="http://levimiller.ca:6969"/>
+    <!-- <property name="serverUrl" value="http://localhost:8080"/> -->
+    <constructor-arg value="http://35.160.102.229:1248"/> <!--serverUrl-->
+    <constructor-arg value="http://35.160.102.229"/>      <!--trackerUrl-->
+    <constructor-arg value="6969"/>                       <!--tracker port-->
   </bean>
 
   <!-- Storage setup  -->
@@ -27,6 +25,15 @@
     <constructor-arg>
       <bean class="util.storage.StorageProperties">
   	<constructor-arg  value="torrents"/>
+      </bean>
+    </constructor-arg>
+  </bean>
+  
+  <!-- Thumbnail Storage -->
+  <bean id="ImageStorage" class="util.storage.FileSystemStorageService">
+    <constructor-arg>
+      <bean class="util.storage.StorageProperties">
+  	<constructor-arg value="img"/>
       </bean>
     </constructor-arg>
   </bean>
@@ -39,6 +46,12 @@
       </bean>
     </constructor-arg>
   </bean>
+
+  <!-- UploadProcess -->
+
+  <bean id="UploadProcess" class="filesharingsystem.process.TtorrentUploadProcess" scope="prototype" lazy-init="true"/>
+  <bean id="DownloadProcess" class="filesharingsystem.process.TtorrentDownloadProcess" scope="prototype" lazy-init="true"/>
+  <bean id="SeedManager" class="util.SeedManager"/>
   
   <mvc:interceptors>
     <bean class="springbackend.ConfigHandlerInterceptor"/>

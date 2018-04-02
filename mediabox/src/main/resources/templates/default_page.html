@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head lang="en">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"/>
+    <link rel="stylesheet" th:href="@{/css/{file}.css(file=${page_name})}" />
+  </head>
+  <body>
+    <div id="rootNav"></div>
+    <div id="root"></div>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    const config = /*[[${config}]]*/ {};
+    const keys = /*[[${modelKeys}]]*/ [];
+    const values = /*[[${modelValues}]]*/ [];
+    for(var i = 0; i<keys.length; i++) {
+        window[keys[i]] = values[i];
+    }
+    /*]]>*/
+    </script>
+    <script src="/js/bundle/common.js"/>
+    <script src="/js/bundle/global-bundle.js"/>
+    <script th:src="@{/js/bundle/{file}(file=${page_name} + '-bundle.js')}"/>
+  </body>
+</html>
