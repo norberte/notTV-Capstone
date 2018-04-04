@@ -3,6 +3,10 @@ package spring.view;
 import java.io.Serializable;
 
 public class AccountForm implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 140487473277089503L;
     String currentUsername;
     String newEmail;
     String autoDownload;

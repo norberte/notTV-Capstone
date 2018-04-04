@@ -2,23 +2,10 @@ package controller;
 
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import spring.InfoController;
-import spring.view.CategoryType;
-
-import org.apache.http.message.BasicNameValuePair;
-import org.codehaus.jackson.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,15 +13,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import controller.Request2JSON;
-
 public class InfoControllersTest {
     private static final Logger log = LoggerFactory.getLogger(InfoControllersTest.class);
 
     @Test
     public void testGettingCategories() throws IOException {
         // check to see if Genre is could be returned as a Category
-        
+        log.info("testing get categories.");
         URL url = new URL("http://localhost:1248/info/categories");
         JSONArray json = Request2JSON.getJSON(url);
         

@@ -170,11 +170,11 @@ public class InfoController {
         
         // put the data into a view object.
         return jdbcTemplate.query(psc, (rs, row) -> new User(
-                    rs.getInt("id"),
-                    rs.getString("username"),
-                    rs.getString("userprofileurl"),
-                    rs.getString("profilepictureurl")
-                )
+            rs.getInt("id"),
+            rs.getString("username"),
+            rs.getString("userprofileurl"),
+            rs.getString("profilepictureurl")
+        )
         ); 
     }
     
@@ -196,12 +196,12 @@ public class InfoController {
         
         // put the data into a view object.
         return jdbcTemplate.query(psc, (rs, row) -> new Video(
-                rs.getInt("vid"),
+            rs.getInt("vid"),
             rs.getString("title"), 
-                new NotTVUser(
-                    rs.getInt("uid"),
-                    rs.getString("username")
-                )
+            new NotTVUser(
+                rs.getInt("uid"),
+                rs.getString("username")
+            )
         )); 
     }
     
@@ -221,32 +221,32 @@ public class InfoController {
 
         // put the data into a view object.
         return jdbcTemplate.query(query, (rs, row) -> new Video(
-                rs.getInt("vid"),
+            rs.getInt("vid"),
             rs.getString("title"), 
-                new NotTVUser(
-                    rs.getInt("uid"),
-                    rs.getString("username")
-                )
+            new NotTVUser(
+                rs.getInt("uid"),
+                rs.getString("username")
+            )
         )); 
     }
 
     @GetMapping("/videos")
     @ResponseBody
     public List<Video> getVideos(@RequestParam(value="categories[]", required=false) int[] categories,
-                                 @RequestParam(value="searchTarget", required=false) String searchTarget, 
-                                 @RequestParam(value="searchText", required=false) String searchText,
-                                 @RequestParam(value="searchOrder", required=true) String searchOrder) {
+    @RequestParam(value="searchTarget", required=false) String searchTarget, 
+    @RequestParam(value="searchText", required=false) String searchText,
+    @RequestParam(value="searchOrder", required=true) String searchOrder) {
 	// Video(title, thumbnail_url, download_url)
 	log.info("videos");
 
 	// Make the query. It looks terrible, but it should be pretty efficient since
 	// the Intersect tables will be small, and the filters on the id can be pushed up before the joins.
 	// Also, the intersects can be used to filter subsequent results
-    StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
-    ArrayList<Object> queryParams = new ArrayList<>();
-    // filter video id to exist in the intersection of the categories specified.
+        StringBuilder queryBuilder = new StringBuilder("Select v.id As vid, title, downloadurl, u.id As uid, username From video v INNER JOIN nottv_user u ON v.userid = u.id ");
+        ArrayList<Object> queryParams = new ArrayList<>();
+        // filter video id to exist in the intersection of the categories specified.
 	if(categories != null && categories.length > 0) { // Only filter results if categories are specified.
-        queryBuilder.append("Where v.id in (");
+            queryBuilder.append("Where v.id in (");
 	    for(int i=0; i<categories.length;i++) {
 		if(i != 0) // No intersect on first one.
 		    queryBuilder.append("Intersect ");
@@ -257,31 +257,31 @@ public class InfoController {
 	    }
 	    queryBuilder.append(')');
 	}
-    if(searchText != null && searchText.length() > 0){  //If search text is present, add appropriate 'LIKE' condition to the query
-        switch(searchTarget){
-        case "title":
-            queryBuilder.append(" And title ILIKE ?");
+        if(searchText != null && searchText.length() > 0){  //If search text is present, add appropriate 'LIKE' condition to the query
+            switch(searchTarget){
+            case "title":
+                queryBuilder.append(" And title ILIKE ?");
+                break;
+            case "uploader":
+                queryBuilder.append(" And username ILIKE ?");
+                break;
+            default:
+                log.error("Invalid searchTarget parameter: "+searchTarget);
+                break;
+            }
+            queryParams.add("%"+searchText+"%");
+        }
+        switch(searchOrder){    // sort according to searchOrder
+        case "time asc":
+            queryBuilder.append(" ORDER BY vid ASC");
             break;
-        case "uploader":
-            queryBuilder.append(" And username ILIKE ?");
+        case "time desc":
+            queryBuilder.append(" ORDER BY vid DESC");
             break;
         default:
-            log.error("Invalid searchTarget parameter: "+searchTarget);
+            log.error("Invalid searchOrder parameter: "+searchOrder);
             break;
         }
-        queryParams.add("%"+searchText+"%");
-    }
-    switch(searchOrder){    // sort according to searchOrder
-    case "time asc":
-        queryBuilder.append(" ORDER BY vid ASC");
-        break;
-    case "time desc":
-        queryBuilder.append(" ORDER BY vid DESC");
-        break;
-    default:
-        log.error("Invalid searchOrder parameter: "+searchOrder);
-        break;
-    }
 	queryBuilder.append(';');
 	String query = queryBuilder.toString();
 	log.info(query);
@@ -289,41 +289,38 @@ public class InfoController {
 	    log.info(param.toString());
 
         // put the data into a view object.
-	return jdbcTemplate.query(query, 
-	                         (rs, row) -> new Video(
-                                            rs.getInt("vid"),
-                                            rs.getString("title"), 
-                                            new NotTVUser(
-                                                rs.getInt("uid"),
-                                                rs.getString("username")
-                                            )
-	                         ),
-	                         queryParams.toArray()); 
+	return jdbcTemplate.query(query, (rs, row) -> new Video(
+            rs.getInt("vid"),
+            rs.getString("title"), 
+            new NotTVUser(
+                rs.getInt("uid"),
+                rs.getString("username")
+            )
+        ),queryParams.toArray()); 
     }
 
     @GetMapping("/video-data")
     @ResponseBody
     public VideoData getVideoData(@RequestParam(value="videoId", required=true) int videoId) {
-    log.info("video data");
-    StringBuilder queryBuilder = new StringBuilder("Select video.id, title, description, userid, username ");
-    queryBuilder.append("From video Inner Join nottv_user On nottv_user.id = Video.userid ");
-    queryBuilder.append("Where video.id = ?;");
-    String query = queryBuilder.toString();
-    log.info(query +" ,"+videoId);
+        log.info("video data");
+        StringBuilder queryBuilder = new StringBuilder("Select video.id, title, description, userid, username ");
+        queryBuilder.append("From video Inner Join nottv_user On nottv_user.id = Video.userid ");
+        queryBuilder.append("Where video.id = ?;");
+        String query = queryBuilder.toString();
+        log.info(query +" ,"+videoId);
 
-    return jdbcTemplate.query(query, new Object[] {videoId}, (rs) ->
-        {
-        rs.next();
-        int id = rs.getInt("id");
-        String title = rs.getString("title");
-        String desc = rs.getString("description");
-        int userId = rs.getInt("userid");
-        String userName = rs.getString("username");
+        return jdbcTemplate.query(query, new Object[] {videoId}, (rs) -> {
+            rs.next();
+            int id = rs.getInt("id");
+            String title = rs.getString("title");
+            String desc = rs.getString("description");
+            int userId = rs.getInt("userid");
+            String userName = rs.getString("username");
 
-        boolean subbed = jdbcTemplate.query("Select 1 From subscribe Where authorid = ? And subscriberid = ?;",
-                                                new Object[] {userId, 1} , (rs2) -> {return rs2.next();});
+            boolean subbed = jdbcTemplate.query("Select 1 From subscribe Where authorid = ? And subscriberid = ?;",
+            new Object[] {userId, 1} , (rs2) -> {return rs2.next();});
 
-        return new VideoData(id, title, desc, userId, userName, subbed);
+            return new VideoData(id, title, desc, userId, userName, subbed);
         });
     }
 
@@ -337,16 +334,16 @@ public class InfoController {
     @ResponseBody
     public List<String> getCriteria() {
         return Arrays.asList(
-            	"All Videos submitted must be original content, remixed content is permitted if it does not infringe any copyrights.",
-		"Traditional music videos and live performance videos will be accepted.",
-		"Videos may be submitted by any member of the team that created them.",
-		"Content contributors must be able to demonstrate the ownership and right to distribute the video on the internet to a worldwide audience.",
-		"There is no minimum or maxiumum length for the videos.",
-		"videos must be in high definition (minimum 720p, preferred 1080p).",
-		"Multiple submissions are allowed.",
-		"For each video you submit, you grant notTV a non-exclusive, worldwide electronic distribution license to stream the video on www.not.tv or any of the websites owned by notTV, anywhere in the world, electronically, in perpituity.",
-		"All money after expenses, generated by the operations of notTV, is distributed to the member-owners of notTV.",
-		"You must be a notTV member for your content to be eligible for commercial revenue generation."
+            "All Videos submitted must be original content, remixed content is permitted if it does not infringe any copyrights.",
+            "Traditional music videos and live performance videos will be accepted.",
+            "Videos may be submitted by any member of the team that created them.",
+            "Content contributors must be able to demonstrate the ownership and right to distribute the video on the internet to a worldwide audience.",
+            "There is no minimum or maxiumum length for the videos.",
+            "videos must be in high definition (minimum 720p, preferred 1080p).",
+            "Multiple submissions are allowed.",
+            "For each video you submit, you grant notTV a non-exclusive, worldwide electronic distribution license to stream the video on www.not.tv or any of the websites owned by notTV, anywhere in the world, electronically, in perpituity.",
+            "All money after expenses, generated by the operations of notTV, is distributed to the member-owners of notTV.",
+            "You must be a notTV member for your content to be eligible for commercial revenue generation."
         );
     }
 }

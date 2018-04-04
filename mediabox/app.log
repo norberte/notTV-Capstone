@@ -1,0 +1,682 @@
+2018-04-04 12:33:28.327  INFO 10647 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10647 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:33:28.329  INFO 10647 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:33:28.695  INFO 10647 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@457e5dee: startup date [Wed Apr 04 12:33:28 PDT 2018]; root of context hierarchy
+2018-04-04 12:33:29.228  INFO 10647 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:33:30.423  INFO 10647 --- [restartedMain] e.j.JettyEmbeddedServletContainerFactory : Server initialized with port: 1248
+2018-04-04 12:33:30.428  INFO 10647 --- [restartedMain] org.eclipse.jetty.server.Server          : jetty-8.1.15.v20140411
+2018-04-04 12:33:30.462  INFO 10647 --- [restartedMain] application                              : Initializing Spring embedded WebApplicationContext
+2018-04-04 12:33:30.463  INFO 10647 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1775 ms
+2018-04-04 12:33:30.716  INFO 10647 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-04-04 12:33:30.719  INFO 10647 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-04-04 12:33:30.720  INFO 10647 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-04-04 12:33:30.721  INFO 10647 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-04-04 12:33:30.724  INFO 10647 --- [restartedMain] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2018-04-04 12:33:30.724  INFO 10647 --- [restartedMain] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2018-04-04 12:33:30.771  INFO 10647 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : >>> Starting UPnP service...
+2018-04-04 12:33:30.772  INFO 10647 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : Using configuration: filesharingsystem.ClingUpnpServiceConfiguration
+2018-04-04 12:33:30.796  INFO 10647 --- [restartedMain] org.fourthline.cling.transport.Router    : Creating Router: org.fourthline.cling.transport.RouterImpl
+2018-04-04 12:33:30.809  INFO 10647 --- [restartedMain] o.f.c.transport.spi.MulticastReceiver    : Creating wildcard socket (for receiving multicast datagrams) on port: 1900
+2018-04-04 12:33:30.817  INFO 10647 --- [restartedMain] o.f.c.transport.spi.MulticastReceiver    : Joining multicast group: /239.255.255.250:1900 on network interface: en0
+2018-04-04 12:33:30.832  INFO 10647 --- [restartedMain] o.f.c.t.i.jetty.JettyServletContainer    : Registering UPnP servlet under context path: /upnp
+2018-04-04 12:33:30.835  INFO 10647 --- [restartedMain] o.f.cling.transport.spi.DatagramIO       : Creating bound socket (for datagram input/output) on: /206.87.19.74
+2018-04-04 12:33:30.836  INFO 10647 --- [cling-3] o.f.c.t.i.jetty.JettyServletContainer    : Starting Jetty server... 
+2018-04-04 12:33:30.837  INFO 10647 --- [cling-3] org.eclipse.jetty.server.Server          : jetty-8.1.15.v20140411
+2018-04-04 12:33:30.839  INFO 10647 --- [restartedMain] o.f.cling.transport.spi.StreamClient     : Starting Jetty HttpClient...
+2018-04-04 12:33:30.840  INFO 10647 --- [cling-3] o.e.jetty.server.AbstractConnector       : Started SocketConnector@206.87.19.74:59353
+2018-04-04 12:33:30.914  INFO 10647 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : <<< UPnP service started successfully
+2018-04-04 12:33:31.276 ERROR 10647 --- [restartedMain] springbackend.Config                     : Error getting public ip
+
+javax.net.ssl.SSLException: Unrecognized SSL message, plaintext connection?
+	at sun.security.ssl.InputRecord.handleUnknownRecord(InputRecord.java:710) ~[na:1.8.0_91]
+	at sun.security.ssl.InputRecord.read(InputRecord.java:527) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:973) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1375) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1403) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1387) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:559) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:185) ~[na:1.8.0_91]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1513) ~[na:1.8.0_91]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:254) ~[na:1.8.0_91]
+	at java.net.URL.openStream(URL.java:1045) ~[na:1.8.0_91]
+	at springbackend.Config.<init>(Config.java:20) ~[classes/:na]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) [na:1.8.0_91]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) [na:1.8.0_91]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) [na:1.8.0_91]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) [na:1.8.0_91]
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:142) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:122) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:271) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1193) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1095) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:33:31.744  INFO 10647 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@444f8e69, org.springframework.security.web.context.SecurityContextPersistenceFilter@38cc7f69, org.springframework.security.web.header.HeaderWriterFilter@5d535fca, org.springframework.security.web.csrf.CsrfFilter@45b9da2c, org.springframework.security.web.authentication.logout.LogoutFilter@31b1e5b8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@13f29eb3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@36dcc78d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@b7eca7c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3f5b61e2, org.springframework.security.web.session.SessionManagementFilter@74817d29, org.springframework.security.web.access.ExceptionTranslationFilter@484f2ae3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@54f0aca2]
+2018-04-04 12:33:32.022  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@457e5dee: startup date [Wed Apr 04 12:33:28 PDT 2018]; root of context hierarchy
+2018-04-04 12:33:32.103  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/download]}" onto public java.lang.String springbackend.ProcessController.download(int,org.springframework.web.servlet.mvc.support.RedirectAttributes)
+2018-04-04 12:33:32.104  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/upload],methods=[POST]}" onto public java.lang.String springbackend.ProcessController.upload(int,org.springframework.web.multipart.MultipartFile)
+2018-04-04 12:33:32.105  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/get-thumbnail/{id}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource> springbackend.ProcessController.getThumbnail(int,javax.servlet.http.HttpServletResponse)
+2018-04-04 12:33:32.106  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/video/{videoFile:.+}]}" onto public void springbackend.ViewController.video(java.lang.String,org.springframework.ui.Model,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException
+2018-04-04 12:33:32.107  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/ || /home]}" onto public java.lang.String springbackend.ViewController.home(org.springframework.ui.Model)
+2018-04-04 12:33:32.107  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/{page}]}" onto public java.lang.String springbackend.ViewController.defaultPage(java.lang.String,org.springframework.ui.Model)
+2018-04-04 12:33:32.107  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/account]}" onto public java.lang.String springbackend.ViewController.account()
+2018-04-04 12:33:32.107  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/userProfile/{username}]}" onto public java.lang.String springbackend.ViewController.userProfile(java.lang.String,org.springframework.ui.Model)
+2018-04-04 12:33:32.112  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2018-04-04 12:33:32.113  INFO 10647 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2018-04-04 12:33:32.150  INFO 10647 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:33:32.150  INFO 10647 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:33:32.294  INFO 10647 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:33:32.808  INFO 10647 --- [restartedMain] b.a.s.AuthenticationManagerConfiguration : 
+
+Using default security password: 63ffdab8-0ef8-4ca9-86c6-c75d8e0ad4f0
+
+2018-04-04 12:33:32.888  INFO 10647 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2018-04-04 12:33:32.963  INFO 10647 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-04-04 12:33:32.985  INFO 10647 --- [restartedMain] application                              : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2018-04-04 12:33:32.985  INFO 10647 --- [restartedMain] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2018-04-04 12:33:32.997  INFO 10647 --- [restartedMain] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 12 ms
+2018-04-04 12:33:33.019  INFO 10647 --- [restartedMain] o.e.jetty.server.AbstractConnector       : Started SelectChannelConnector@0.0.0.0:1248
+2018-04-04 12:33:33.020  INFO 10647 --- [restartedMain] .s.b.c.e.j.JettyEmbeddedServletContainer : Jetty started on port(s) 1248
+2018-04-04 12:33:33.047  INFO 10647 --- [restartedMain] springbackend.Application                : Started Application in 5.063 seconds (JVM running for 5.861)
+2018-04-04 12:36:05.266  INFO 10647 --- [Thread-20] ationConfigEmbeddedWebApplicationContext : Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@457e5dee: startup date [Wed Apr 04 12:33:28 PDT 2018]; root of context hierarchy
+2018-04-04 12:36:05.293  INFO 10647 --- [Thread-20] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-04-04 12:36:05.297  INFO 10647 --- [Thread-20] util.SeedManager                         : Saving seeds...
+2018-04-04 12:36:05.337  INFO 10647 --- [Thread-20] filesharingsystem.ClingPortMapper        : Removing port mappings...
+2018-04-04 12:36:05.358  INFO 10647 --- [Thread-20] org.eclipse.jetty.server.Server          : Graceful shutdown o.e.j.s.ServletContextHandler{/upnp,null}
+2018-04-04 12:36:06.363  INFO 10647 --- [Thread-20] o.e.jetty.server.handler.ContextHandler  : stopped o.e.j.s.ServletContextHandler{/upnp,null}
+2018-04-04 12:36:06.395  INFO 10647 --- [Thread-20] application                              : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2018-04-04 12:36:06.396  INFO 10647 --- [Thread-20] o.e.jetty.server.handler.ContextHandler  : stopped o.s.b.c.e.j.JettyEmbeddedWebAppContext{/,[file:/private/var/folders/rz/xt8mjnbs0f93c9d_mbwjw16m0000gn/T/jetty-docbase.1256718696863237230.1248/]}
+2018-04-04 12:36:10.447  INFO 10762 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10762 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:36:10.450  INFO 10762 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:36:10.747  INFO 10762 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:36:10 PDT 2018]; root of context hierarchy
+2018-04-04 12:36:11.238  INFO 10762 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:36:12.282  INFO 10762 --- [restartedMain] e.j.JettyEmbeddedServletContainerFactory : Server initialized with port: 1248
+2018-04-04 12:36:12.286  INFO 10762 --- [restartedMain] org.eclipse.jetty.server.Server          : jetty-8.1.15.v20140411
+2018-04-04 12:36:12.318  INFO 10762 --- [restartedMain] application                              : Initializing Spring embedded WebApplicationContext
+2018-04-04 12:36:12.319  INFO 10762 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1576 ms
+2018-04-04 12:36:12.505  INFO 10762 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-04-04 12:36:12.507  INFO 10762 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-04-04 12:36:12.507  INFO 10762 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-04-04 12:36:12.507  INFO 10762 --- [restartedMain] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-04-04 12:36:12.508  INFO 10762 --- [restartedMain] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2018-04-04 12:36:12.508  INFO 10762 --- [restartedMain] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2018-04-04 12:36:12.544  INFO 10762 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : >>> Starting UPnP service...
+2018-04-04 12:36:12.544  INFO 10762 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : Using configuration: filesharingsystem.ClingUpnpServiceConfiguration
+2018-04-04 12:36:12.556  INFO 10762 --- [restartedMain] org.fourthline.cling.transport.Router    : Creating Router: org.fourthline.cling.transport.RouterImpl
+2018-04-04 12:36:12.565  INFO 10762 --- [restartedMain] o.f.c.transport.spi.MulticastReceiver    : Creating wildcard socket (for receiving multicast datagrams) on port: 1900
+2018-04-04 12:36:12.569  INFO 10762 --- [restartedMain] o.f.c.transport.spi.MulticastReceiver    : Joining multicast group: /239.255.255.250:1900 on network interface: en0
+2018-04-04 12:36:12.579  INFO 10762 --- [restartedMain] o.f.c.t.i.jetty.JettyServletContainer    : Registering UPnP servlet under context path: /upnp
+2018-04-04 12:36:12.581  INFO 10762 --- [restartedMain] o.f.cling.transport.spi.DatagramIO       : Creating bound socket (for datagram input/output) on: /206.87.19.74
+2018-04-04 12:36:12.583  INFO 10762 --- [cling-3] o.f.c.t.i.jetty.JettyServletContainer    : Starting Jetty server... 
+2018-04-04 12:36:12.583  INFO 10762 --- [cling-3] org.eclipse.jetty.server.Server          : jetty-8.1.15.v20140411
+2018-04-04 12:36:12.586  INFO 10762 --- [restartedMain] o.f.cling.transport.spi.StreamClient     : Starting Jetty HttpClient...
+2018-04-04 12:36:12.587  INFO 10762 --- [cling-3] o.e.jetty.server.AbstractConnector       : Started SocketConnector@206.87.19.74:59473
+2018-04-04 12:36:12.627  INFO 10762 --- [restartedMain] org.fourthline.cling.UpnpServiceImpl     : <<< UPnP service started successfully
+2018-04-04 12:36:12.898 ERROR 10762 --- [restartedMain] springbackend.Config                     : Error getting public ip
+
+javax.net.ssl.SSLException: Unrecognized SSL message, plaintext connection?
+	at sun.security.ssl.InputRecord.handleUnknownRecord(InputRecord.java:710) ~[na:1.8.0_91]
+	at sun.security.ssl.InputRecord.read(InputRecord.java:527) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:973) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1375) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1403) ~[na:1.8.0_91]
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1387) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:559) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:185) ~[na:1.8.0_91]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1513) ~[na:1.8.0_91]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441) ~[na:1.8.0_91]
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:254) ~[na:1.8.0_91]
+	at java.net.URL.openStream(URL.java:1045) ~[na:1.8.0_91]
+	at springbackend.Config.<init>(Config.java:20) ~[classes/:na]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) [na:1.8.0_91]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) [na:1.8.0_91]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) [na:1.8.0_91]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) [na:1.8.0_91]
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:142) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:122) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:271) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1193) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1095) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:36:13.243  INFO 10762 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7d3d2ff1, org.springframework.security.web.context.SecurityContextPersistenceFilter@e21db6e, org.springframework.security.web.header.HeaderWriterFilter@3a026d18, org.springframework.security.web.csrf.CsrfFilter@444d0197, org.springframework.security.web.authentication.logout.LogoutFilter@164d8ecd, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3c7551c9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e80b16, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7907dde6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6318d56, org.springframework.security.web.session.SessionManagementFilter@6683f49a, org.springframework.security.web.access.ExceptionTranslationFilter@2a196608, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4c00c2d9]
+2018-04-04 12:36:13.480  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:36:10 PDT 2018]; root of context hierarchy
+2018-04-04 12:36:13.684  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/upload],methods=[POST]}" onto public java.lang.String springbackend.ProcessController.upload(int,org.springframework.web.multipart.MultipartFile)
+2018-04-04 12:36:13.685  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/get-thumbnail/{id}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource> springbackend.ProcessController.getThumbnail(int,javax.servlet.http.HttpServletResponse)
+2018-04-04 12:36:13.686  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/process/download]}" onto public java.lang.String springbackend.ProcessController.download(int,org.springframework.web.servlet.mvc.support.RedirectAttributes)
+2018-04-04 12:36:13.687  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/account]}" onto public java.lang.String springbackend.ViewController.account()
+2018-04-04 12:36:13.687  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/{page}]}" onto public java.lang.String springbackend.ViewController.defaultPage(java.lang.String,org.springframework.ui.Model)
+2018-04-04 12:36:13.688  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/userProfile/{username}]}" onto public java.lang.String springbackend.ViewController.userProfile(java.lang.String,org.springframework.ui.Model)
+2018-04-04 12:36:13.688  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/video/{videoFile:.+}]}" onto public void springbackend.ViewController.video(java.lang.String,org.springframework.ui.Model,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException
+2018-04-04 12:36:13.688  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/ || /home]}" onto public java.lang.String springbackend.ViewController.home(org.springframework.ui.Model)
+2018-04-04 12:36:13.691  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2018-04-04 12:36:13.691  INFO 10762 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2018-04-04 12:36:13.721  INFO 10762 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:36:13.722  INFO 10762 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:36:13.764  INFO 10762 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-04 12:36:14.233  INFO 10762 --- [restartedMain] b.a.s.AuthenticationManagerConfiguration : 
+
+Using default security password: 12a22f9e-d43c-4621-986a-93088dcc70c2
+
+2018-04-04 12:36:14.314  INFO 10762 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2018-04-04 12:36:14.379  INFO 10762 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-04-04 12:36:14.403  INFO 10762 --- [restartedMain] application                              : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2018-04-04 12:36:14.403  INFO 10762 --- [restartedMain] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2018-04-04 12:36:14.416  INFO 10762 --- [restartedMain] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 12 ms
+2018-04-04 12:36:14.435  INFO 10762 --- [restartedMain] o.e.jetty.server.AbstractConnector       : Started SelectChannelConnector@0.0.0.0:1248
+2018-04-04 12:36:14.437  INFO 10762 --- [restartedMain] .s.b.c.e.j.JettyEmbeddedServletContainer : Jetty started on port(s) 1248
+2018-04-04 12:36:14.466  INFO 10762 --- [restartedMain] springbackend.Application                : Started Application in 4.563 seconds (JVM running for 5.117)
+2018-04-04 12:36:17.326  INFO 10762 --- [Thread-20] ationConfigEmbeddedWebApplicationContext : Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:36:10 PDT 2018]; root of context hierarchy
+2018-04-04 12:36:17.329  INFO 10762 --- [Thread-20] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-04-04 12:36:17.331  INFO 10762 --- [Thread-20] util.SeedManager                         : Saving seeds...
+2018-04-04 12:36:17.338  INFO 10762 --- [Thread-20] filesharingsystem.ClingPortMapper        : Removing port mappings...
+2018-04-04 12:36:17.356  INFO 10762 --- [Thread-20] org.eclipse.jetty.server.Server          : Graceful shutdown o.e.j.s.ServletContextHandler{/upnp,null}
+2018-04-04 12:36:18.361  INFO 10762 --- [Thread-20] o.e.jetty.server.handler.ContextHandler  : stopped o.e.j.s.ServletContextHandler{/upnp,null}
+2018-04-04 12:36:18.394  INFO 10762 --- [Thread-20] application                              : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2018-04-04 12:36:18.394  INFO 10762 --- [Thread-20] o.e.jetty.server.handler.ContextHandler  : stopped o.s.b.c.e.j.JettyEmbeddedWebAppContext{/,[file:/private/var/folders/rz/xt8mjnbs0f93c9d_mbwjw16m0000gn/T/jetty-docbase.580007645228927302.1248/]}
+2018-04-04 12:36:46.678  INFO 10767 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10767 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:36:46.680  INFO 10767 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:36:46.994  INFO 10767 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@8c6ea3c: startup date [Wed Apr 04 12:36:46 PDT 2018]; root of context hierarchy
+2018-04-04 12:36:47.498  INFO 10767 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:36:47.665  WARN 10767 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 17 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 17; columnNumber: 32; cvc-complex-type.2.4.a: Invalid content was found starting with element 'http'. One of '{"http://www.springframework.org/schema/beans":import, "http://www.springframework.org/schema/beans":alias, "http://www.springframework.org/schema/beans":bean, WC[##other:"http://www.springframework.org/schema/beans"]}' is expected.
+2018-04-04 12:36:47.673 ERROR 10767 --- [restartedMain] o.s.b.f.s.DefaultListableBeanFactory     : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@8c6ea3c: startup date [Wed Apr 04 12:36:46 PDT 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:414) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.destroySingletons(FactoryBeanRegistrySupport.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1030) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:36:47.681  INFO 10767 --- [restartedMain] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-04-04 12:36:47.686 ERROR 10767 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 17 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 17; columnNumber: 32; cvc-complex-type.2.4.a: Invalid content was found starting with element 'http'. One of '{"http://www.springframework.org/schema/beans":import, "http://www.springframework.org/schema/beans":alias, "http://www.springframework.org/schema/beans":bean, WC[##other:"http://www.springframework.org/schema/beans"]}' is expected.
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:399) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportedResources(ConfigurationClassBeanDefinitionReader.java:353) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:142) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:320) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:228) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:272) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:92) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:687) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:525) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+Caused by: org.xml.sax.SAXParseException: cvc-complex-type.2.4.a: Invalid content was found starting with element 'http'. One of '{"http://www.springframework.org/schema/beans":import, "http://www.springframework.org/schema/beans":alias, "http://www.springframework.org/schema/beans":bean, WC[##other:"http://www.springframework.org/schema/beans"]}' is expected.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.error(ErrorHandlerWrapper.java:134) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:396) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:284) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator$XSIErrorReporter.reportError(XMLSchemaValidator.java:452) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.reportSchemaError(XMLSchemaValidator.java:3230) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.handleStartElement(XMLSchemaValidator.java:1790) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.startElement(XMLSchemaValidator.java:740) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:380) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2787) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339) ~[na:1.8.0_91]
+	at org.springframework.beans.factory.xml.DefaultDocumentLoader.loadDocument(DefaultDocumentLoader.java:76) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadDocument(XmlBeanDefinitionReader.java:429) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:391) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	... 26 common frames omitted
+
+2018-04-04 12:37:31.425  INFO 10777 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10777 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:37:31.427  INFO 10777 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:37:31.722  INFO 10777 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:37:31 PDT 2018]; root of context hierarchy
+2018-04-04 12:37:32.183  INFO 10777 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:37:32.366  WARN 10777 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 24 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 24; columnNumber: 2; The markup in the document following the root element must be well-formed.
+2018-04-04 12:37:32.371 ERROR 10777 --- [restartedMain] o.s.b.f.s.DefaultListableBeanFactory     : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:37:31 PDT 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:414) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.destroySingletons(FactoryBeanRegistrySupport.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1030) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:37:32.380  INFO 10777 --- [restartedMain] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-04-04 12:37:32.385 ERROR 10777 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 24 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 24; columnNumber: 2; The markup in the document following the root element must be well-formed.
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:399) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportedResources(ConfigurationClassBeanDefinitionReader.java:353) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:142) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:320) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:228) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:272) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:92) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:687) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:525) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+Caused by: org.xml.sax.SAXParseException: The markup in the document following the root element must be well-formed.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:400) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1438) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$TrailingMiscDriver.next(XMLDocumentScannerImpl.java:1400) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339) ~[na:1.8.0_91]
+	at org.springframework.beans.factory.xml.DefaultDocumentLoader.loadDocument(DefaultDocumentLoader.java:76) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadDocument(XmlBeanDefinitionReader.java:429) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:391) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	... 26 common frames omitted
+
+2018-04-04 12:37:48.824  INFO 10781 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10781 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:37:48.825  INFO 10781 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:37:49.111  INFO 10781 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7a705896: startup date [Wed Apr 04 12:37:49 PDT 2018]; root of context hierarchy
+2018-04-04 12:37:49.570  INFO 10781 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:37:49.756  WARN 10781 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 24 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 24; columnNumber: 2; The markup in the document following the root element must be well-formed.
+2018-04-04 12:37:49.762 ERROR 10781 --- [restartedMain] o.s.b.f.s.DefaultListableBeanFactory     : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7a705896: startup date [Wed Apr 04 12:37:49 PDT 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:414) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.destroySingletons(FactoryBeanRegistrySupport.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1030) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:37:49.771  INFO 10781 --- [restartedMain] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-04-04 12:37:49.775 ERROR 10781 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 24 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 24; columnNumber: 2; The markup in the document following the root element must be well-formed.
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:399) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportedResources(ConfigurationClassBeanDefinitionReader.java:353) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:142) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:320) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:228) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:272) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:92) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:687) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:525) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+Caused by: org.xml.sax.SAXParseException: The markup in the document following the root element must be well-formed.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:400) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1438) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$TrailingMiscDriver.next(XMLDocumentScannerImpl.java:1400) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339) ~[na:1.8.0_91]
+	at org.springframework.beans.factory.xml.DefaultDocumentLoader.loadDocument(DefaultDocumentLoader.java:76) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadDocument(XmlBeanDefinitionReader.java:429) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:391) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	... 26 common frames omitted
+
+2018-04-04 12:39:12.247  INFO 10790 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10790 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:39:12.248  INFO 10790 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:39:12.546  INFO 10790 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2f4b4e19: startup date [Wed Apr 04 12:39:12 PDT 2018]; root of context hierarchy
+2018-04-04 12:39:13.014  INFO 10790 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:39:13.186  WARN 10790 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 14 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 14; columnNumber: 104; cvc-elt.1: Cannot find the declaration of element 'beans'.
+2018-04-04 12:39:13.191 ERROR 10790 --- [restartedMain] o.s.b.f.s.DefaultListableBeanFactory     : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2f4b4e19: startup date [Wed Apr 04 12:39:12 PDT 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:414) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.destroySingletons(FactoryBeanRegistrySupport.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1030) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:39:13.199  INFO 10790 --- [restartedMain] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-04-04 12:39:13.203 ERROR 10790 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 14 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 14; columnNumber: 104; cvc-elt.1: Cannot find the declaration of element 'beans'.
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:399) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportedResources(ConfigurationClassBeanDefinitionReader.java:353) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:142) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:320) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:228) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:272) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:92) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:687) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:525) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+Caused by: org.xml.sax.SAXParseException: cvc-elt.1: Cannot find the declaration of element 'beans'.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.error(ErrorHandlerWrapper.java:134) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:396) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:284) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.handleStartElement(XMLSchemaValidator.java:1900) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.startElement(XMLSchemaValidator.java:740) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:380) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl$NSContentDriver.scanRootElementHook(XMLNSDocumentScannerImpl.java:614) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:3135) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:880) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339) ~[na:1.8.0_91]
+	at org.springframework.beans.factory.xml.DefaultDocumentLoader.loadDocument(DefaultDocumentLoader.java:76) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadDocument(XmlBeanDefinitionReader.java:429) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:391) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	... 26 common frames omitted
+
+2018-04-04 12:40:17.241  INFO 10799 --- [restartedMain] springbackend.Application                : Starting Application on Levis-MacBook-Pro.local with PID 10799 (/Users/levimiller/Temp/notTV/mediabox/target/classes started by levimiller in /Users/levimiller/Temp/notTV/mediabox)
+2018-04-04 12:40:17.244  INFO 10799 --- [restartedMain] springbackend.Application                : No active profile set, falling back to default profiles: default
+2018-04-04 12:40:17.547  INFO 10799 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:40:17 PDT 2018]; root of context hierarchy
+2018-04-04 12:40:18.055  INFO 10799 --- [restartedMain] o.s.b.f.xml.XmlBeanDefinitionReader      : Loading XML bean definitions from class path resource [app-config.xml]
+2018-04-04 12:40:18.232  WARN 10799 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 13 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 13; columnNumber: 32; cvc-complex-type.2.4.c: The matching wildcard is strict, but no declaration can be found for element 'context:annotation-config'.
+2018-04-04 12:40:18.238 ERROR 10799 --- [restartedMain] o.s.b.f.s.DefaultListableBeanFactory     : Destroy method on bean with name 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory' threw an exception
+
+java.lang.IllegalStateException: ApplicationEventMulticaster not initialized - call 'refresh' before multicasting events via the context: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@19e4f8ff: startup date [Wed Apr 04 12:40:17 PDT 2018]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getApplicationEventMulticaster(AbstractApplicationContext.java:414) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.ApplicationListenerDetector.postProcessBeforeDestruction(ApplicationListenerDetector.java:97) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:253) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:578) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:554) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:961) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:523) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.destroySingletons(FactoryBeanRegistrySupport.java:230) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:968) [spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1030) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:556) [spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+
+2018-04-04 12:40:18.249  INFO 10799 --- [restartedMain] utoConfigurationReportLoggingInitializer : 
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2018-04-04 12:40:18.254 ERROR 10799 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException: Line 13 in XML document from class path resource [app-config.xml] is invalid; nested exception is org.xml.sax.SAXParseException; lineNumber: 13; columnNumber: 32; cvc-complex-type.2.4.c: The matching wildcard is strict, but no declaration can be found for element 'context:annotation-config'.
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:399) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportedResources(ConfigurationClassBeanDefinitionReader.java:353) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:142) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:116) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:320) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:228) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:272) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:92) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:687) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:525) ~[spring-context-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107) [spring-boot-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+	at springbackend.Application.main(Application.java:26) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.8.RELEASE.jar:1.5.8.RELEASE]
+Caused by: org.xml.sax.SAXParseException: cvc-complex-type.2.4.c: The matching wildcard is strict, but no declaration can be found for element 'context:annotation-config'.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.error(ErrorHandlerWrapper.java:134) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:396) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:284) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator$XSIErrorReporter.reportError(XMLSchemaValidator.java:452) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.reportSchemaError(XMLSchemaValidator.java:3230) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.handleStartElement(XMLSchemaValidator.java:1911) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.xs.XMLSchemaValidator.emptyElement(XMLSchemaValidator.java:760) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.scanStartElement(XMLNSDocumentScannerImpl.java:357) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2787) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243) ~[na:1.8.0_91]
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339) ~[na:1.8.0_91]
+	at org.springframework.beans.factory.xml.DefaultDocumentLoader.loadDocument(DefaultDocumentLoader.java:76) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadDocument(XmlBeanDefinitionReader.java:429) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:391) ~[spring-beans-4.3.12.RELEASE.jar:4.3.12.RELEASE]
+	... 26 common frames omitted
+

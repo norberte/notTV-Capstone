@@ -1,12 +1,12 @@
 import NavBar from '../NavBar.js';
-import CurrentUser from '../CurrentUser.js'
+import CurrentUser from '../CurrentUser.js';
 
 const React = require("react");
 const ReactDOM = require("react-dom");
 
 class Login extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             username: '',
             pass: ''
@@ -18,11 +18,11 @@ class Login extends React.Component {
     }
 
     handleChangePass(event){
-        this.setState({pass: event.target.value})
+        this.setState({pass: event.target.value});
     }
 
     handleChangeUsername(event){
-        this.setState({username: event.target.value})
+        this.setState({username: event.target.value});
     }
 
     //Handles submission of login form with a Post
@@ -31,20 +31,20 @@ class Login extends React.Component {
         event.preventDefault();
         //Begin post
         $.post({
-            url: config.secureServerUrl + '/upload/authenticateLogin',
+            url: config.serverUrl + '/upload/authenticate-login',
             data: {
-              username: this.state.username,
-              pass: this.state.pass
+                username: this.state.username,
+                pass: this.state.pass                
             },
             success: (response) => {
-              if (response != null) {
-                setGlobalUserState(response);
-                alert("Successfully Logged In!");
-                //Redirect to Browse?
-              } else {
-                alert("Authentication Failure");
-                console.log("Authentiction Failure");
-              }
+                if (response != null) {
+                    setGlobalUserState(response);
+                    alert("Successfully Logged In!");
+                    //Redirect to Browse?
+                } else {
+                    alert("Authentication Failure");
+                    console.log("Authentiction Failure");
+                }
             },
             error: (response) => {
                 alert("Authentiction Request Error");
@@ -63,20 +63,20 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <h1>Login to notTv</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Username:
-                        <input type = "text" name = "username" id = "username" value = {this.state.username} onChange = {this.handleChangeUsername} />
-                    </label>
-                    <br />
-                    <label>
-                        Password:
-                        <input type = "password" name = "pass" id = "pass" value = {this.state.pass} onChange = {this.handleChangePass} />
-                    </label>
-                    <br />
-                    <input type = "submit" value = "Submit" />
-                </form>
+              <h1>Login to notTv</h1>
+              <form onSubmit={this.handleSubmit}>
+                <label>
+                  Username:
+                  <input type = "text" name = "username" id = "username" value = {this.state.username} onChange = {this.handleChangeUsername} />
+                </label>
+                <br />
+                <label>
+                  Password:
+                  <input type = "password" name = "pass" id = "pass" value = {this.state.pass} onChange = {this.handleChangePass} />
+                </label>
+                <br />
+                <input type = "submit" value = "Submit" />
+              </form>
             </div>
         );
     }

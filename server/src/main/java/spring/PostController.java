@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -25,13 +24,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import spring.model.User;
 import spring.storage.StorageService;
 import spring.view.AccountForm;
 import spring.view.VideoForm;
@@ -231,36 +231,18 @@ public class PostController {
 
     //Receive POST from login.js and check hashed password matches hashed password in DB.
     //returns id of user if login is authorized. NULL if unnauthorized.
-    @PostMapping("authenticateLogin")
-    public Integer authenticateLogin(@RequestParam(value="username", required=false) String usernamePOST, @RequestParam(value="pass", required=false) String passPOST){
-        //Hash pass here
-        String hashedPassword = encoder.encode(passPOST);
-
+    @PostMapping("authenticate-login")
+    public User authenticateLogin(@RequestParam(value="email", required=true) String email, @RequestParam(value="password", required=true) String passPOST){
         //Query DB for password
-        final String passHash_query = "SELECT id FROM nottv_user WHERE password = ? AND username = ?";
+        final String passHash_query = "SELECT id, password FROM nottv_user WHERE email = ?";
+        User user = jdbc.query(passHash_query, new Object[] {email}, (rs) -> {
+            return new User(rs.getInt("id"), rs.getString("password"));
+        });
 
-        PreparedStatementCreator psc = new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(passHash_query);
-                ps.setString(1, hashedPassword);
-                ps.setString(2, usernamePOST);
-                return ps;
-            }
-        };
-
-        //Get Result Set and find match with hashed pass and matching username.
-        //if both match, make active user the username provided.
-        List<Integer> dbResults = this.jdbc.query(psc, (rs, row) -> new Integer(rs.getInt("id")));
-        if (dbResults.size() > 0) {
-            //Passwords are the same! set global state to have user with username as logged in.
-            return dbResults.get(0);
-        } else {
-            //Passwords do not match. Do not log in.
-            return null;
+        // If the given password matches the hashed password.
+        if(encoder.matches(passPOST, user.getPassword())) {
+            return user;
         }
+        return null;
     }
-
-
-
-
 }

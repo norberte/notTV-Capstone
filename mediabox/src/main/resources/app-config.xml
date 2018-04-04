@@ -15,9 +15,9 @@
 
   <bean id="Config" class="springbackend.Config">
     <!-- <property name="serverUrl" value="http://localhost:8080"/> -->
-    <constructor-arg name="serverUrl" value="https://35.160.102.229:1248"/> <!--serverUrl-->
-    <constructor-arg name="trackerUrl" value="https://35.160.102.229"/>      <!--trackerUrl-->
-    <constructor-arg name="trackerPort" value="6969"/>                       <!--tracker port-->
+    <constructor-arg value="https://35.160.102.229:1248"/> <!--serverUrl-->
+    <constructor-arg value="https://35.160.102.229"/>      <!--trackerUrl-->
+    <constructor-arg value="6969"/>                       <!--tracker port-->
   </bean>
 
   <!-- Storage setup  -->

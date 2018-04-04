@@ -1,13 +1,5 @@
 package controller;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.net.URL;
-
-import org.json.JSONArray;
-import org.junit.Test;
-
 public class ThumbnailControllersTest {
     /*
     @Test

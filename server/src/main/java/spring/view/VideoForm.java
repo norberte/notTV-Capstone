@@ -3,6 +3,10 @@ package spring.view;
 import java.io.Serializable;
 
 public class VideoForm implements Serializable{
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7308327148623297525L;
     String title;
     String description;
     int version;
