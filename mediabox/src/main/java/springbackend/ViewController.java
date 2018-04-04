@@ -62,11 +62,6 @@ public class ViewController {
         return "default_page";
     }
 
-    @RequestMapping("account")
-    public String account() {
-        return "account";
-    }
-
     @RequestMapping("userProfile/{username}")
     public String userProfile(@PathVariable("username") String username, Model model) {
         // public String userProfile() {

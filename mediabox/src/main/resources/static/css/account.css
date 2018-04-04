@@ -154,7 +154,6 @@ nav{
 
 figure{
     float: left;
-    width: 120px;
     height: 120px;
     padding: 2em;
     margin: 2em;
@@ -170,6 +169,11 @@ figcaption{
     position: absolute;
     width: 100%;
     background-color: #f7f7f7;
+    padding-left: 15px;
+}
+
+#accountDetails {
+    margin-bottom: 70px;
 }
 
 h1 {
