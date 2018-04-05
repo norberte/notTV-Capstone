@@ -78,7 +78,7 @@ class CategoryType extends React.Component {
         console.log(data);
         this.setState({
             categoryTypes: data,
-            restore: data
+            restore: JSON.parse(JSON.stringify(data)) // clone
         });
         }
     });
